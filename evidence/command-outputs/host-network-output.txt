@@ -6,3 +6,13 @@ Status: Downloaded newer image for httpd:2.4-alpine
 Network mode: host
 BLOCKED: host mode was configured, but localhost:80 was not reachable.
 On Docker Desktop, enable host networking in Settings if the feature is supported.
+
+Retry after identity-confirmation stage (2026-09-04):
+$ docker run -d --name apache-host --network host httpd:2.4-alpine
+60ba554abe7313f3949e65c7464ce3d247d55decb8a8056a7239b84689bb5d13
+$ docker ps --filter name=apache-host --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
+NAMES         STATUS          PORTS
+apache-host   Up 16 seconds
+$ curl -i --max-time 5 http://localhost/
+curl: (7) Failed to connect to localhost port 80 after 0 ms: Couldn't connect to server
+BLOCKED: Docker Desktop host mode still did not expose port 80 on this Mac; no success is claimed.

@@ -32,6 +32,29 @@ docker rm -f devops-hw-bind-mount
 
 The real three-network transcript is [docker-network-output.txt](../evidence/command-outputs/docker-network-output.txt), and the real bind-mount transcript is [bind-mount-output.txt](../evidence/command-outputs/bind-mount-output.txt). The host-mode attempt is truthfully recorded in [host-network-output.txt](../evidence/command-outputs/host-network-output.txt): `--network host` was configured, but Docker Desktop did not expose port 80 on this Mac.
 
+The captured network run produced these real results:
+
+```text
+NETWORK ID     NAME                     DRIVER    SCOPE
+06f00d727e26   devops_hw_backend_net    bridge    local
+6105662345a7   devops_hw_database_net   bridge    local
+70ced2d757b0   devops_hw_frontend_net   bridge    local
+
+PASS: backend reached database:3306.
+PASS: frontend cannot directly reach database:3306.
+PASS: expected connectivity and isolation were verified.
+```
+
+The bind-mount run also recorded a real before/after response and a no-restart proof:
+
+```text
+=== Before host edit ===
+<h1>Hello students</h1>
+=== After host edit; container was not restarted ===
+<h1>Hello students — updated through the host bind mount</h1>
+PASS: host edit appeared through the read-only container mount without restart.
+```
+
 ## Genuine bind-mount browser evidence
 
 ![Bind mount before edit](../evidence/screenshots/17-bind-mount-before.png)

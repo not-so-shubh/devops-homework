@@ -35,7 +35,7 @@ Status in this table reflects verification performed in the current environment.
 | Docker Network | Frontend/backend/MySQL across three networks with backend on two | `container-networking/docker-compose.yml` | Compose start and three network inspections | PASS |
 | Docker Network | DNS-based frontend-to-backend, backend-to-database, and isolation verification | `container-networking/verify.sh` | Both allowed paths and denied frontend/database path verified | PASS |
 | Docker Network | MySQL health check and documented demo-only credentials | `container-networking/docker-compose.yml` and README | Static review | PASS |
-| Docker Network | Apache on host network plus Linux/Desktop differences and port warning | `host-network/README.md` and guarded verifier | Port was free and `host` mode confirmed, but Docker Desktop did not expose port 80; enable feature or use Linux | MANUAL ACTION REQUIRED |
+| Docker Network | Apache on host network plus Linux/Desktop differences and port warning | `host-network/README.md` and guarded verifier | Initial and retry runs configured host mode, but Docker Desktop still did not expose port 80; enable feature or use Linux | MANUAL ACTION REQUIRED |
 | Docker Volume | Read-only Nginx bind mount, before/after change without restart, and restore | `bind-mount/` | Initial/updated curls passed without restart; tracked source restored | PASS |
 | Docker Network | Overlay, Swarm, VXLAN, discovery, ingress/user-defined, prerequisites, encryption, and commands | `overlay-network.md` | Documentation review; Swarm state intentionally unchanged | PASS |
 | Evidence | Real command outputs only | `evidence/command-outputs/` | Files generated from live commands | PASS |
@@ -49,4 +49,4 @@ Status in this table reflects verification performed in the current environment.
 
 1. Confirm that the name and enrollment inferred from Git configuration are the intended submission identity.
 2. Capture the remaining genuine terminal screenshots using `evidence/screenshots/README.md`; 9 of 18 browser/bind-mount PNGs are already present under `evidence/screenshots/`.
-3. Enable Docker Desktop host networking or run `docker-network/host-network/verify.sh` on native Linux, then capture its successful port-80 proof.
+3. If required by the evaluator, enable Docker Desktop host networking or run `docker-network/host-network/verify.sh` on native Linux, then capture its successful port-80 proof. The exact retry remains documented as BLOCKED on this Mac.
