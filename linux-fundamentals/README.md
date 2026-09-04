@@ -75,6 +75,16 @@ chmod +x link-practice.sh
 
 The genuine temporary-directory transcript is [linux-link-demo.txt](../evidence/command-outputs/linux-link-demo.txt). It shows inode numbers, reading through both link types, removal of the original filename, the surviving hard link, and the expected dangling symbolic link. The terminal screenshot slot is documented in [`evidence/screenshots/README.md`](../evidence/screenshots/README.md); no screenshot is claimed here because native terminal capture was unavailable.
 
+Real output excerpt:
+
+```text
+34160394 -rw-r--r-- 2 ... hard-link.txt
+34160394 -rw-r--r-- 2 ... original.txt
+34160395 lrwxr-xr-x 1 ... soft-link.txt -> original.txt
+EXPECTED: reading the symbolic link failed because original.txt is gone.
+PASS: link behavior matched expectations; cleanup will remove the temporary directory.
+```
+
 ## Relevant files and learning summary
 
 - [`link-practice.sh`](link-practice.sh) — idempotent, self-cleaning link demonstration

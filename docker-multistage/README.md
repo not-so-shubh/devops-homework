@@ -46,6 +46,15 @@ docker rm -f devops-multistage
 
 The real build transcript is [docker-multistage-build.txt](../evidence/command-outputs/docker-multistage-build.txt), and the real curl/`docker ps` proof is [docker-multistage-output.txt](../evidence/command-outputs/docker-multistage-output.txt).
 
+Real runtime evidence excerpt:
+
+```text
+URL: http://127.0.0.1:8080/
+Expected: Hello World from Docker multi-stage build
+NAMES               IMAGE                         STATUS                  PORTS
+devops-multistage   devops-multistage-app:local   Up Less than a second   127.0.0.1:8080->8080/tcp
+```
+
 ![Multi-stage application](../evidence/screenshots/12-multistage-browser.png)
 
 ## Relevant files and learning summary

@@ -49,6 +49,14 @@ NETWORK_EXTERNAL=1 ./collect-network-info.sh
 
 The script detects optional commands and continues with explicit `[SKIP]` lines. It does not edit network configuration. The collector's real output from this machine is [network-info.txt](../evidence/command-outputs/network-info.txt); addresses and interface names must be reviewed before public sharing.
 
+Real output sections included hostname, interfaces/addresses, routes, neighbor/ARP data, listening sockets, `/etc/hosts`, and resolver configuration, ending with:
+
+```text
+===== Listening sockets =====
+...
+PASS: available local networking information was collected.
+```
+
 ## Relevant files and learning summary
 
 - [`collect-network-info.sh`](collect-network-info.sh) — portable, tool-aware collector

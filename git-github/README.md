@@ -27,6 +27,19 @@ chmod +x git-practice-demo.sh
 
 The genuine transcript is [git-practice-output.txt](../evidence/command-outputs/git-practice-output.txt). It prints the before/after `commit -a` status, a runtime-generated selected commit hash, `git log --oneline --graph --all --decorate`, the cherry-picked content, and final status. Terminal screenshot slots 04 and 05 are listed in [`evidence/screenshots/README.md`](../evidence/screenshots/README.md); no PNG is claimed because native terminal capture was unavailable.
 
+Real output excerpt:
+
+```text
+Before git commit -a -m:
+ M tracked.txt
+?? untracked.txt
+After git commit -a -m (untracked.txt must remain):
+?? untracked.txt
+Selected feature commit: c7af93a308eff4958cc524ca395c72f6d026835d
+selected cherry-pick content
+PASS: commit -a and cherry-pick behaved as expected.
+```
+
 ## Relevant files and learning summary
 
 - [`git-practice-demo.sh`](git-practice-demo.sh) — disposable workflow; cleans only its own temp directory
