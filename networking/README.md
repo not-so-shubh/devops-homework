@@ -32,3 +32,27 @@ NETWORK_EXTERNAL=1 ./collect-network-info.sh
 ```
 
 On macOS, `ifconfig`, `netstat`, and `route` are used as fallbacks because Linux `ip`, `ss`, and `hostname -I` are normally unavailable.
+
+## Objective and task coverage
+
+This section meets the networking-fundamentals requirement by practicing host identity, interface/address inspection, routing, neighbor discovery, DNS, HTTP reachability, listening sockets, and host resolver files. The supplied project contained no exact instructor `devops-hero` URL, so no substitute repository is claimed.
+
+## Reproduce the exercise
+
+```bash
+chmod +x collect-network-info.sh
+./collect-network-info.sh
+
+# Optional public checks (DNS, ICMP, HTTPS, and a short trace):
+NETWORK_EXTERNAL=1 ./collect-network-info.sh
+```
+
+The script detects optional commands and continues with explicit `[SKIP]` lines. It does not edit network configuration. The collector's real output from this machine is [network-info.txt](../evidence/command-outputs/network-info.txt); addresses and interface names must be reviewed before public sharing.
+
+## Relevant files and learning summary
+
+- [`collect-network-info.sh`](collect-network-info.sh) — portable, tool-aware collector
+- [`networking-commands.md`](networking-commands.md) — command-by-command reference
+- [`../evidence/command-outputs/network-info.txt`](../evidence/command-outputs/network-info.txt) — genuine local output
+
+The key lesson is that an interface owns addresses, the route table chooses a next hop, DNS resolves names, and a listening socket is the process-facing endpoint that accepts TCP/UDP traffic. The same concepts explain service-name DNS and isolation in [Docker Networking](../docker-network/README.md).

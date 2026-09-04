@@ -5,6 +5,8 @@
 - **Name:** Shubh Jaiswal
 - **Enrollment Number:** 24BCS10601
 
+These values are the current local Git-config inference; no authoritative student record was found in this repository. Confirm them before the final push.
+
 ## Overview
 
 This repository is a reproducible submission for the DevOps Homework assignment. It combines concept notes with safe practice scripts, six containerized web applications, a genuine multi-stage build, Docker networking and volume exercises, real command-output evidence, and an automated verifier.

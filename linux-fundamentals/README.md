@@ -63,3 +63,23 @@ See also:
 - [adduser versus useradd](user-practice.md)
 - [journalctl practice](journalctl-practice.md)
 - [Linux command cheat sheet](linux-command-cheatsheet.md)
+
+## Objective, requirements, and evidence
+
+This section covers the assignment's soft-link/hard-link interview question, Ubuntu `adduser` versus `useradd`, systemd `journalctl`, and a categorized Linux command cheat sheet. The link practice is the executable component; account and journal instructions are deliberately documentation-only unless run in an isolated Linux lab.
+
+```bash
+chmod +x link-practice.sh
+./link-practice.sh
+```
+
+The genuine temporary-directory transcript is [linux-link-demo.txt](../evidence/command-outputs/linux-link-demo.txt). It shows inode numbers, reading through both link types, removal of the original filename, the surviving hard link, and the expected dangling symbolic link. The terminal screenshot slot is documented in [`evidence/screenshots/README.md`](../evidence/screenshots/README.md); no screenshot is claimed here because native terminal capture was unavailable.
+
+## Relevant files and learning summary
+
+- [`link-practice.sh`](link-practice.sh) — idempotent, self-cleaning link demonstration
+- [`user-practice.md`](user-practice.md) — accurate Ubuntu/Debian account-management guidance
+- [`journalctl-practice.md`](journalctl-practice.md) — systemd journal commands and macOS limitation
+- [`linux-command-cheatsheet.md`](linux-command-cheatsheet.md) — purpose, syntax, and explanation for required commands
+
+The key lesson is the inode distinction: a symbolic link stores a path and can dangle, whereas a hard link is another directory entry for the same inode and survives removal of another name.

@@ -2,6 +2,8 @@
 
 Do not screenshot source code and label it runtime proof. Each capture below must show the real command/page/state described. Keep tokens, unrelated terminal history, personal paths, and private network details out of frame where practical.
 
+Current status: 9/18 genuine PNGs are present (`06`–`12` and `17`–`18`). The terminal-only captures (`01`–`05` and `13`–`15`) remain manual because native terminal capture was unavailable; `16` is additionally blocked by Docker Desktop host-network behavior on this Mac.
+
 ## 01 — Linux links
 
 - File: `01-linux-links.png`

@@ -39,7 +39,7 @@ Status in this table reflects verification performed in the current environment.
 | Docker Volume | Read-only Nginx bind mount, before/after change without restart, and restore | `bind-mount/` | Initial/updated curls passed without restart; tracked source restored | PASS |
 | Docker Network | Overlay, Swarm, VXLAN, discovery, ingress/user-defined, prerequisites, encryption, and commands | `overlay-network.md` | Documentation review; Swarm state intentionally unchanged | PASS |
 | Evidence | Real command outputs only | `evidence/command-outputs/` | Files generated from live commands | PASS |
-| Evidence | Exact 18-item screenshot checklist | `evidence/screenshots/README.md` | No screenshots fabricated | MANUAL ACTION REQUIRED |
+| Evidence | Exact 18-item screenshot checklist | `evidence/screenshots/README.md` | 9 genuine browser/bind-mount PNGs captured; terminal/native captures remain unavailable | MANUAL ACTION REQUIRED |
 | Global | Required-tree, Bash, demos, Docker, curl assertions, cleanup, and summary verifier | `scripts/verify-all.sh` | Live run: 12 PASS, 0 FAIL, 0 BLOCKED/SKIP | PASS |
 | Global | Scoped cleanup only; no global prune | `scripts/cleanup.sh` | Syntax/static review | PASS |
 | Quality | Ignore dependencies, builds, environments, data, IDE files, secrets | `.gitignore` and `.dockerignore` files | Repository audit | PASS |
@@ -48,5 +48,5 @@ Status in this table reflects verification performed in the current environment.
 ## Manual gates before submission
 
 1. Confirm that the name and enrollment inferred from Git configuration are the intended submission identity.
-2. Capture genuine screenshots using `evidence/screenshots/README.md`.
+2. Capture the remaining genuine terminal screenshots using `evidence/screenshots/README.md`; 9 of 18 browser/bind-mount PNGs are already present under `evidence/screenshots/`.
 3. Enable Docker Desktop host networking or run `docker-network/host-network/verify.sh` on native Linux, then capture its successful port-80 proof.

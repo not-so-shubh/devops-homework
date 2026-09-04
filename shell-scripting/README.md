@@ -53,3 +53,18 @@ PASS: system information collected successfully.
 ```
 
 Values differ by machine and execution time. A real run from this environment is stored under `evidence/command-outputs/`.
+
+## Objective and task coverage
+
+The script satisfies the homework's system-information requirements: current date, hostname, username, disk usage, running processes, variables, `read -p`, `mkdir -p`, `touch`, and `ps aux >` redirection. It rejects path-like input and keeps automated output in a caller-supplied temporary base when requested.
+
+## Actual verification and evidence
+
+The final piped-input run is [shell-script-output.txt](../evidence/command-outputs/shell-script-output.txt). It contains the real date/host/user, `df -h` output, a PID/command process summary, the generated report path, and the success line. The terminal-only slot is described in the [screenshot checklist](../evidence/screenshots/README.md#02--shell-script); no PNG is claimed because native terminal capture was unavailable.
+
+## Relevant files and learning summary
+
+- [`system-info.sh`](system-info.sh) — executable Bash implementation with safe quoting and validation
+- [`../evidence/command-outputs/shell-script-output.txt`](../evidence/command-outputs/shell-script-output.txt) — genuine captured output
+
+The main lesson is to separate data collection from presentation, quote every path-bearing variable, and use redirection deliberately so a full process snapshot is retained while a safer summary is printed.
