@@ -1,0 +1,32 @@
+=== System Information ===
+Current date : Fri Sep  4 20:30:05 IST 2026
+Hostname     : Shubhs-MacBook-Air-2.local
+Current user : shubhjaiswal
+
+=== Disk Usage ===
+Filesystem        Size    Used   Avail Capacity iused ifree %iused  Mounted on
+/dev/disk3s1s1   460Gi    12Gi   146Gi     8%    459k  1.5G    0%   /
+devfs            198Ki   198Ki     0Bi   100%     686     0  100%   /dev
+/dev/disk3s6     460Gi   3.0Gi   146Gi     3%       3  1.5G    0%   /System/Volumes/VM
+/dev/disk3s2     460Gi   8.5Gi   146Gi     6%    1.5k  1.5G    0%   /System/Volumes/Preboot
+/dev/disk3s4     460Gi   2.3Mi   146Gi     1%      64  1.5G    0%   /System/Volumes/Update
+/dev/disk1s2     500Mi   6.0Mi   482Mi     2%       1  4.9M    0%   /System/Volumes/xarts
+/dev/disk1s1     500Mi   6.0Mi   482Mi     2%      32  4.9M    0%   /System/Volumes/iSCPreboot
+/dev/disk1s3     500Mi   1.6Mi   482Mi     1%     100  4.9M    0%   /System/Volumes/Hardware
+/dev/disk3s5     460Gi   290Gi   146Gi    67%    2.2M  1.5G    0%   /System/Volumes/Data
+map auto_home      0Bi     0Bi     0Bi   100%       0     0     -   /System/Volumes/Data/home
+
+=== Running Process Summary (PID and command) ===
+    1 /sbin/launchd
+  233 /usr/libexec/replayd
+  515 /usr/libexec/logd
+  517 /usr/libexec/UserEventAgent
+  519 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/FSEvents.framework/Versions/A/Support/fseventsd
+  520 /System/Library/PrivateFrameworks/MediaRemote.framework/Support/mediaremoted
+  523 /usr/sbin/systemstats
+  527 /usr/libexec/configd
+  529 /System/Library/CoreServices/powerd.bundle/powerd
+  530 /usr/libexec/IOMFB_bics_daemon
+
+Full process list saved to: /var/folders/nc/cb1dsz612ms5y410zv_f423c0000gn/T//devops-homework-verify.SubI7Q/automated-output/running-processes.txt
+PASS: system information collected successfully.

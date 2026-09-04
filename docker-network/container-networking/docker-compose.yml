@@ -1,0 +1,53 @@
+services:
+  frontend:
+    image: nginx:1.27-alpine
+    volumes:
+      - ./frontend/index.html:/usr/share/nginx/html/index.html:ro
+    ports:
+      - "${HOST_BIND_ADDRESS:-127.0.0.1}:${FRONTEND_HOST_PORT:-8090}:80"
+    networks:
+      - frontend_net
+    depends_on:
+      - backend
+
+  backend:
+    image: nginx:1.27-alpine
+    volumes:
+      - ./backend/index.html:/usr/share/nginx/html/index.html:ro
+    networks:
+      - frontend_net
+      - backend_net
+    depends_on:
+      database:
+        condition: service_healthy
+
+  database:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: demo-root-password
+      MYSQL_DATABASE: homework
+      MYSQL_USER: homework
+      MYSQL_PASSWORD: demo-password
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
+    networks:
+      - backend_net
+      - database_net
+    volumes:
+      - database_data:/var/lib/mysql
+
+networks:
+  frontend_net:
+    name: devops_hw_frontend_net
+  backend_net:
+    name: devops_hw_backend_net
+  database_net:
+    name: devops_hw_database_net
+
+volumes:
+  database_data:
+    name: devops_hw_mysql_data

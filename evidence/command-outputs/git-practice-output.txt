@@ -1,0 +1,52 @@
+Initialized empty Git repository in /private/var/folders/nc/cb1dsz612ms5y410zv_f423c0000gn/T/devops-git-practice.dzqeqo/.git/
+Temporary repository: /var/folders/nc/cb1dsz612ms5y410zv_f423c0000gn/T//devops-git-practice.dzqeqo
+[main (root-commit) 6f9c44e] Initialize practice repository
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+[main 123429c] Add tracked demonstration file
+ 1 file changed, 1 insertion(+)
+ create mode 100644 tracked.txt
+[main 5c140b9] Document main branch workflow
+ 1 file changed, 1 insertion(+)
+ create mode 100644 main-notes.txt
+
+=== commit -a demonstration ===
+Before git commit -a -m:
+ M tracked.txt
+?? untracked.txt
+[main 6055478] Update already tracked file
+ 1 file changed, 1 insertion(+)
+After git commit -a -m (untracked.txt must remain):
+?? untracked.txt
+Switched to a new branch 'feature-demo'
+[feature-demo 7d17d05] Add first feature
+ 1 file changed, 1 insertion(+)
+ create mode 100644 feature-one.txt
+[feature-demo c7af93a] Add selected feature
+ 1 file changed, 1 insertion(+)
+ create mode 100644 selected-feature.txt
+
+Selected feature commit: c7af93a308eff4958cc524ca395c72f6d026835d
+Switched to branch 'main'
+[main 9b7587e] Add selected feature
+ Date: Fri Sep 4 20:30:06 2026 +0530
+ 1 file changed, 1 insertion(+)
+ create mode 100644 selected-feature.txt
+
+=== Graph after cherry-pick ===
+* c7af93a (feature-demo) Add selected feature
+* 7d17d05 Add first feature
+| * 9b7587e (HEAD -> main) Add selected feature
+|/
+* 6055478 Update already tracked file
+* 5c140b9 Document main branch workflow
+* 123429c Add tracked demonstration file
+* 6f9c44e Initialize practice repository
+
+=== Verify selected content ===
+selected cherry-pick content
+
+=== Final status (the untracked demo file intentionally remains) ===
+## main
+?? untracked.txt
+PASS: commit -a and cherry-pick behaved as expected.

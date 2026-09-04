@@ -1,0 +1,7 @@
+403efaf45fae7a55a62823004612fec21c3d9d059e97604fa3005d9079f34bed
+URL: http://127.0.0.1:8080/
+Expected: Hello World from Docker multi-stage build
+Response: <!doctype html><html lang="en"><head><meta charset="utf-8"><title>Multi-stage Hello</title></head><body><main><h1>Hello World from Docker multi-stage build</h1></main></body></html>
+
+NAMES               IMAGE                         STATUS                  PORTS
+devops-multistage   devops-multistage-app:local   Up Less than a second   127.0.0.1:8080->8080/tcp

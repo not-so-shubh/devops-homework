@@ -1,0 +1,65 @@
+URL: http://127.0.0.1:23000/
+Expected: Hello World from Node.js
+Response: <!doctype html><html lang="en"><head><meta charset="utf-8"><title>Node.js Hello</title></head><body><main><h1>Hello World from Node.js</h1></main></body></html>
+
+URL: http://127.0.0.1:23100/
+Expected: Hello World from Python
+Response: <!doctype html><html lang='en'><head><meta charset='utf-8'><title>Python Hello</title></head><body><main><h1>Hello World from Python</h1></main></body></html>
+
+URL: http://127.0.0.1:23200/
+Expected: Hello World from Java
+Response: <!doctype html><html lang='en'><head><meta charset='utf-8'><title>Java Hello</title></head><body><main><h1>Hello World from Java</h1></main></body></html>
+
+URL: http://127.0.0.1:23300/
+Expected: Hello World from Apache
+Response: <!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Apache Hello</title>
+  </head>
+  <body>
+    <main><h1>Hello World from Apache</h1></main>
+  </body>
+</html>
+
+URL: http://127.0.0.1:23400/
+Expected: Hello World from React
+Response: <!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Hello</title>
+    <script type="module" crossorigin src="/assets/index-BtgPDhVO.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BVO0n4Rl.css">
+  </head>
+  <body>
+    <!-- Static fallback keeps health checks meaningful before React initializes. -->
+    <div id="root"><main><h1>Hello World from React</h1></main></div>
+  </body>
+</html>
+
+URL: http://127.0.0.1:23500/
+Expected: Hello World from Nginx
+Response: <!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nginx Hello</title>
+  </head>
+  <body>
+    <main><h1>Hello World from Nginx</h1></main>
+  </body>
+</html>
+
+=== docker compose ps ===
+NAME                              IMAGE                          COMMAND                  SERVICE   CREATED        STATUS        PORTS
+devops-hw-fundamentals-apache-1   devops-homework-apache:local   "httpd-foreground"       apache    1 second ago   Up 1 second   127.0.0.1:23300->80/tcp
+devops-hw-fundamentals-java-1     devops-homework-java:local     "/__cacert_entrypoin…"   java      1 second ago   Up 1 second   127.0.0.1:23200->8080/tcp
+devops-hw-fundamentals-nginx-1    devops-homework-nginx:local    "/docker-entrypoint.…"   nginx     1 second ago   Up 1 second   127.0.0.1:23500->80/tcp
+devops-hw-fundamentals-nodejs-1   devops-homework-nodejs:local   "docker-entrypoint.s…"   nodejs    1 second ago   Up 1 second   127.0.0.1:23000->3000/tcp
+devops-hw-fundamentals-python-1   devops-homework-python:local   "gunicorn --bind 0.0…"   python    1 second ago   Up 1 second   127.0.0.1:23100->5000/tcp
+devops-hw-fundamentals-react-1    devops-homework-react:local    "/docker-entrypoint.…"   react     1 second ago   Up 1 second   127.0.0.1:23400->80/tcp

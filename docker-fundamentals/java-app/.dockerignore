@@ -1,0 +1,6 @@
+*.class
+target
+build
+.git
+.DS_Store
+README.md

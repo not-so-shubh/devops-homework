@@ -1,0 +1,18 @@
+c28dd2acf6d145efb5e1a701cd35b034c44c4929b08c9deb795f55f0d86f3dbd
+Started devops-hw-bind-mount at http://localhost:23700/
+=== Before host edit ===
+<!doctype html>
+<html lang="en">
+  <head><meta charset="utf-8"><title>Bind Mount</title></head>
+  <body><h1>Hello students</h1></body>
+</html>
+
+=== After host edit; container was not restarted ===
+<!doctype html>
+<html lang="en">
+  <head><meta charset="utf-8"><title>Bind Mount Updated</title></head>
+  <body><h1>Hello students — updated through the host bind mount</h1></body>
+</html>
+
+PASS: host edit appeared through the read-only container mount without restart.
+devops-hw-bind-mount

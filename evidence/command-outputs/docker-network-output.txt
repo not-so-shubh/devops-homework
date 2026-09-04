@@ -1,0 +1,82 @@
+ Network devops_hw_backend_net Creating
+ Network devops_hw_backend_net Created
+ Network devops_hw_frontend_net Creating
+ Network devops_hw_frontend_net Created
+ Network devops_hw_database_net Creating
+ Network devops_hw_database_net Created
+ Volume devops_hw_mysql_data Creating
+ Volume devops_hw_mysql_data Created
+ Container devops-hw-network-database-1 Creating
+ Container devops-hw-network-database-1 Created
+ Container devops-hw-network-backend-1 Creating
+ Container devops-hw-network-backend-1 Created
+ Container devops-hw-network-frontend-1 Creating
+ Container devops-hw-network-frontend-1 Created
+ Container devops-hw-network-database-1 Starting
+ Container devops-hw-network-database-1 Started
+ Container devops-hw-network-database-1 Waiting
+ Container devops-hw-network-database-1 Healthy
+ Container devops-hw-network-backend-1 Starting
+ Container devops-hw-network-backend-1 Started
+ Container devops-hw-network-frontend-1 Starting
+ Container devops-hw-network-frontend-1 Started
+Waiting for MySQL health check...
+NAME                           IMAGE               COMMAND                  SERVICE    CREATED         STATUS                   PORTS
+devops-hw-network-backend-1    nginx:1.27-alpine   "/docker-entrypoint.…"   backend    6 seconds ago   Up Less than a second    80/tcp
+devops-hw-network-database-1   mysql:8.4           "docker-entrypoint.s…"   database   6 seconds ago   Up 5 seconds (healthy)   3306/tcp, 33060/tcp
+devops-hw-network-frontend-1   nginx:1.27-alpine   "/docker-entrypoint.…"   frontend   6 seconds ago   Up Less than a second    127.0.0.1:23600->80/tcp
+PASS: networking lab is running and MySQL is healthy.
+=== Project networks ===
+NETWORK ID     NAME                     DRIVER    SCOPE
+06f00d727e26   devops_hw_backend_net    bridge    local
+6105662345a7   devops_hw_database_net   bridge    local
+70ced2d757b0   devops_hw_frontend_net   bridge    local
+
+=== Inspect devops_hw_frontend_net ===
+{"66ce271edf99adb4e773096d520c36820e0d52df16084520ef86a80aedcbf5e0":{"Name":"devops-hw-network-frontend-1","EndpointID":"a429d8a9b9ba978f00b1b14e09d0fa7942fd16527e60a7af62365a6c4e59ebda","MacAddress":"86:b6:e7:45:54:91","IPv4Address":"172.22.0.3/16","IPv6Address":""},"a3dfdb3caab3e068f7817018426fc8f98ecef1251a127f7a33b91046649d8be3":{"Name":"devops-hw-network-backend-1","EndpointID":"a54c5b2bc2742c45c3c07e401b1cfd15ed39aa486b308409d477f1ef770ef9c2","MacAddress":"8a:35:3c:a6:14:f5","IPv4Address":"172.22.0.2/16","IPv6Address":""}}
+
+=== Inspect devops_hw_backend_net ===
+{"99ef7ca492b205c3a7251c57c30902208ff1bb92e076630db3e2858452c02bde":{"Name":"devops-hw-network-database-1","EndpointID":"8f47b7bb5c01eac2afe1ba8804ce2d2ae10fc21b880a35bf87535962a9dec40f","MacAddress":"ba:7b:22:48:3a:59","IPv4Address":"172.21.0.2/16","IPv6Address":""},"a3dfdb3caab3e068f7817018426fc8f98ecef1251a127f7a33b91046649d8be3":{"Name":"devops-hw-network-backend-1","EndpointID":"d3b47a3411538c4be16faaf61dd662fa9bf6883435ba2f54099c341491f13c83","MacAddress":"22:25:e5:13:27:03","IPv4Address":"172.21.0.3/16","IPv6Address":""}}
+
+=== Inspect devops_hw_database_net ===
+{"99ef7ca492b205c3a7251c57c30902208ff1bb92e076630db3e2858452c02bde":{"Name":"devops-hw-network-database-1","EndpointID":"4e76b36ddef3cbe7b5cfb34b1edfd150deef81c6fdc5a82e78a6c5810ac059f7","MacAddress":"c2:24:32:4d:0a:79","IPv4Address":"172.23.0.2/16","IPv6Address":""}}
+
+=== Frontend -> backend by service DNS ===
+<!doctype html>
+<html lang="en">
+  <head><meta charset="utf-8"><title>Backend</title></head>
+  <body><h1>Hello from the backend service</h1></body>
+</html>
+
+=== Backend -> database TCP/3306 by service DNS ===
+PASS: backend reached database:3306.
+
+=== Database health ===
+mysqladmin: [Warning] Using a password on the command line interface can be insecure.
+mysqld is alive
+
+=== Frontend isolation from database ===
+PASS: frontend cannot directly reach database:3306.
+
+PASS: expected connectivity and isolation were verified.
+ Container devops-hw-network-frontend-1 Stopping
+ Container devops-hw-network-frontend-1 Stopped
+ Container devops-hw-network-frontend-1 Removing
+ Container devops-hw-network-frontend-1 Removed
+ Container devops-hw-network-backend-1 Stopping
+ Container devops-hw-network-backend-1 Stopped
+ Container devops-hw-network-backend-1 Removing
+ Container devops-hw-network-backend-1 Removed
+ Container devops-hw-network-database-1 Stopping
+ Container devops-hw-network-database-1 Stopped
+ Container devops-hw-network-database-1 Removing
+ Container devops-hw-network-database-1 Removed
+ Volume devops_hw_mysql_data Removing
+ Network devops_hw_database_net Removing
+ Network devops_hw_frontend_net Removing
+ Network devops_hw_backend_net Removing
+ Volume devops_hw_mysql_data Removed
+ Network devops_hw_backend_net Removed
+ Network devops_hw_frontend_net Removed
+ Network devops_hw_database_net Removed
+Removed the networking lab's containers, three networks, and demo volume.

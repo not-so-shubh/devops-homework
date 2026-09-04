@@ -1,0 +1,28 @@
+Practice directory: /var/folders/nc/cb1dsz612ms5y410zv_f423c0000gn/T//devops-link-practice.pHl5gZ
+
+1. All three names (the hard link shares the original inode):
+34153675 -rw-r--r--@ 2 shubhjaiswal  staff  29 Sep  4 20:30 /var/folders/nc/cb1dsz612ms5y410zv_f423c0000gn/T//devops-link-practice.pHl5gZ/hard-link.txt
+34153675 -rw-r--r--@ 2 shubhjaiswal  staff  29 Sep  4 20:30 /var/folders/nc/cb1dsz612ms5y410zv_f423c0000gn/T//devops-link-practice.pHl5gZ/original.txt
+34153676 lrwxr-xr-x@ 1 shubhjaiswal  staff  12 Sep  4 20:30 /var/folders/nc/cb1dsz612ms5y410zv_f423c0000gn/T//devops-link-practice.pHl5gZ/soft-link.txt -> original.txt
+
+2. Detailed original-file metadata:
+16777234 34153675 -rw-r--r-- 2 shubhjaiswal staff 0 29 "Sep  4 20:30:05 2026" "Sep  4 20:30:05 2026" "Sep  4 20:30:05 2026" "Sep  4 20:30:05 2026" 4096 8 0 /var/folders/nc/cb1dsz612ms5y410zv_f423c0000gn/T//devops-link-practice.pHl5gZ/original.txt
+
+3. Symbolic link stores this target path:
+original.txt
+
+4. Read through each link:
+soft: Hello through a Linux inode.
+hard: Hello through a Linux inode.
+
+5. Remove only the original filename with unlink:
+34153675 -rw-r--r--@ 1 shubhjaiswal  staff  29 Sep  4 20:30 /var/folders/nc/cb1dsz612ms5y410zv_f423c0000gn/T//devops-link-practice.pHl5gZ/hard-link.txt
+34153676 lrwxr-xr-x@ 1 shubhjaiswal  staff  12 Sep  4 20:30 /var/folders/nc/cb1dsz612ms5y410zv_f423c0000gn/T//devops-link-practice.pHl5gZ/soft-link.txt -> original.txt
+
+6. Hard link still reads the inode data:
+Hello through a Linux inode.
+
+7. Symbolic link is now dangling:
+EXPECTED: reading the symbolic link failed because original.txt is gone.
+
+PASS: link behavior matched expectations; cleanup will remove the temporary directory.
