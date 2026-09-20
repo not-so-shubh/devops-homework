@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-canary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp-canary
+      track: canary
+  template:
+    metadata:
+      labels:
+        app: myapp-canary
+        track: canary
+    spec:
+      containers:
+        - name: app
+          image: busybox:1.36
+          command: ["sh", "-c", "mkdir -p /www; echo 'CANARY v2' > /www/index.html; httpd -f -p 8080 -h /www"]
+          ports:
+            - containerPort: 8080

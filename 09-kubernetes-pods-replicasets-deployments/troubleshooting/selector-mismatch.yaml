@@ -1,0 +1,19 @@
+# INTENTIONALLY INVALID FOR THE TROUBLESHOOTING LAB.
+# spec.selector.matchLabels does not match template labels.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: selector-error-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: selector-a
+  template:
+    metadata:
+      labels:
+        app: selector-b
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.27-alpine

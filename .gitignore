@@ -11,6 +11,7 @@
 !.env.example
 *.pem
 *.key
+*.crt
 
 # Node/Python/Java build artifacts
 node_modules/
@@ -24,11 +25,16 @@ venv/
 *.class
 
 # Test and runtime output
-shell-scripting/system-info-output/
-shell-scripting/.verification-output/
+02-shell-scripting/system-info-output/
+02-shell-scripting/.verification-output/
 *.log
 coverage/
 
 # Docker/container data
 docker-data/
 mysql-data/
+
+# Kubernetes local-only files
+kubeconfig*
+tls.key
+tls.crt
