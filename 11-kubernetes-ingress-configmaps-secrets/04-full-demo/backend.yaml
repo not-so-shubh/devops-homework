@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yatri-backend
+  labels:
+    app: yatri-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      component: yatri-backend
+  template:
+    metadata:
+      labels:
+        app: yatri-app
+        component: yatri-backend
+    spec:
+      containers:
+        - name: backend
+          image: python:3.12-alpine
+          command:
+            - python
+            - -c
+            - |
+              import os
+              from http.server import BaseHTTPRequestHandler, HTTPServer
+              class Handler(BaseHTTPRequestHandler):
+                  def do_GET(self):
+                      body=(f"ENVIRONMENT: {os.getenv('ENVIRONMENT')}\n"
+                            f"LOG_LEVEL: {os.getenv('LOG_LEVEL')}\n"
+                            f"DEFAULT_CURRENCY: {os.getenv('DEFAULT_CURRENCY')}\n"
+                            f"POSTGRES_USER: {os.getenv('POSTGRES_USER')}\n").encode()
+                      self.send_response(200)
+                      self.send_header('Content-Type','text/plain')
+                      self.end_headers()
+                      self.wfile.write(body)
+              HTTPServer(('0.0.0.0',8080), Handler).serve_forever()
+          envFrom:
+            - configMapRef:
+                name: yatri-app-config
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: yatri-db-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: yatri-db-secret
+                  key: POSTGRES_PASSWORD
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: yatri-backend
+  labels:
+    app: yatri-app
+spec:
+  selector:
+    component: yatri-backend
+  ports:
+    - port: 8080
+      targetPort: 8080

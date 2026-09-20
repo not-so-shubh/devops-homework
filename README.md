@@ -5,118 +5,79 @@
 - **Name:** Shubh Jaiswal
 - **Enrollment Number:** 24BCS10601
 
-These values are the current local Git-config inference; no authoritative student record was found in this repository. Confirm them before the final push.
-
 ## Overview
 
-This repository is a reproducible submission for the DevOps Homework assignment. It combines concept notes with safe practice scripts, six containerized web applications, a genuine multi-stage build, Docker networking and volume exercises, real command-output evidence, and an automated verifier.
+This repository contains the cumulative DevOps homework submission. Sections 1–7 cover Linux, shell scripting, networking, Git, Docker, images, networking, and volumes. Sections 8–11 extend the same repository with Kubernetes fundamentals, workload controllers, Services/networking, ConfigMaps, Secrets, and Ingress.
 
-Source assignment: [DevOps Homework (Google Docs)](https://docs.google.com/document/d/1cjXFYf2Thm8cBEN-0C48B-v02cj3jGLd47lcO18prHE/edit?tab=t.0)
-
-The supplied project directory was empty and was not a Git repository. No instructor-provided `devops-hero` or multi-stage repository URL was present in the supplied files, so the networking and multi-stage exercises are complete local equivalents rather than invented external references.
+The repository is intentionally organized as one numbered sequence so every lecture can be reviewed from a single submission URL. Runtime evidence is kept separate from source files: existing Docker evidence is preserved under `evidence/`, while Kubernetes screenshots must be captured from the real Minikube cluster and saved in the relevant section's `screenshots/` directory.
 
 ## Repository Structure
 
 ```text
 .
-├── linux-fundamentals/    # Links, users, journalctl, command reference
-├── shell-scripting/       # Interactive system-information script
-├── networking/            # Networking notes and portable collector
-├── git-github/            # Disposable commit/cherry-pick demonstration
-├── docker-fundamentals/   # Six Hello World applications and Compose
-├── docker-multistage/     # Genuine Go build/runtime multi-stage image
-├── docker-network/        # Networks, host mode, bind mounts, overlay notes
-├── evidence/              # Genuine command outputs and screenshot checklist
-├── scripts/               # Full verification and scoped cleanup
-└── AUDIT.md               # Requirement-by-requirement submission audit
+├── 01-linux-fundamentals/
+├── 02-shell-scripting/
+├── 03-networking-fundamentals/
+├── 04-git-github/
+├── 05-docker-fundamentals/
+├── 06-dockerfiles-images/
+├── 07-docker-networking-volumes/
+├── 08-kubernetes-fundamentals/
+├── 09-kubernetes-pods-replicasets-deployments/
+├── 10-kubernetes-networking-services/
+├── 11-kubernetes-ingress-configmaps-secrets/
+├── evidence/
+├── scripts/
+├── AUDIT.md
+└── README.md
 ```
-
-## Prerequisites
-
-- Ubuntu or another Linux distribution with Bash, Git, and `curl`
-- Docker Engine and Docker Compose v2 for container exercises
-- Common Linux networking tools (`ip`, `ss`, `ping`, `dig`) for full networking output
-
-Docker Desktop on macOS can run the build, Compose, bridge-network, and bind-mount exercises. Linux-only commands such as `journalctl`, `ip`, and host networking behave differently or may be unavailable on macOS; those differences are called out in the relevant notes.
 
 ## Sections
 
-| # | Objective | Folder | Completion |
-|---:|---|---|---|
-| 1 | Linux links, users, logs, and command fluency | [Linux Fundamentals](linux-fundamentals/) | Implemented; Linux-only commands documented |
-| 2 | Bash variables, input, files, redirection, and process reporting | [Shell Scripting](shell-scripting/) | Implemented and locally runnable |
-| 3 | Interfaces, addresses, routes, DNS, ports, and sockets | [Networking](networking/) | Implemented; output depends on host tools |
-| 4 | `commit -a` and cherry-pick workflow | [Git/GitHub](git-github/) | Implemented in a disposable repository |
-| 5 | Six containerized Hello World web applications | [Docker Fundamentals](docker-fundamentals/) | Implemented and runtime verified |
-| 6 | Multi-stage image build and deployment | [Docker Multi-Stage](docker-multistage/) | Implemented and runtime verified on port 8080 |
-| 7 | Docker networks, host mode, bind mounts, and overlay | [Docker Networking](docker-network/) | Bridge/bind labs passed; Desktop host mode needs enablement |
+| # | Section | Main topics |
+|---:|---|---|
+| 1 | [Linux Fundamentals](01-linux-fundamentals/) | Links, users, `journalctl`, Linux command practice |
+| 2 | [Shell Scripting](02-shell-scripting/) | Variables, input, files, redirection, process reporting |
+| 3 | [Networking Fundamentals](03-networking-fundamentals/) | Interfaces, routes, DNS, sockets, troubleshooting commands |
+| 4 | [Git & GitHub](04-git-github/) | `commit -a`, branches, cherry-pick workflow |
+| 5 | [Docker Fundamentals](05-docker-fundamentals/) | Node, Python, Java, Apache, React, and Nginx containers |
+| 6 | [Dockerfiles & Images](06-dockerfiles-images/) | Multi-stage image builds and deployment verification |
+| 7 | [Docker Networking & Volumes](07-docker-networking-volumes/) | Bridge/host/overlay networking and bind mounts |
+| 8 | [Kubernetes Fundamentals](08-kubernetes-fundamentals/) | Minikube lifecycle and Kubernetes architecture |
+| 9 | [Pods, ReplicaSets & Deployments](09-kubernetes-pods-replicasets-deployments/) | Pod lifecycle, probes, controllers, rollout strategies, troubleshooting |
+| 10 | [Kubernetes Networking & Services](10-kubernetes-networking-services/) | ClusterIP, NodePort, LoadBalancer, ExternalName, headless Services, DNS |
+| 11 | [Ingress, ConfigMaps & Secrets](11-kubernetes-ingress-configmaps-secrets/) | Configuration, Secrets, Ingress routing, TLS, full-stack demo |
 
-## Quick Start
+## Verification
+
+Run the repository-level static/syntax verifier from the repository root:
 
 ```bash
 chmod +x scripts/verify-all.sh scripts/cleanup.sh
 ./scripts/verify-all.sh
 ```
 
-Run all six basic web applications with their default host ports:
+The verifier checks the required 1–11 structure, Bash syntax, the safe Linux/Git demonstrations, Docker Compose configuration when Docker is available, and Kubernetes YAML syntax when a local YAML parser is available. It does **not** pretend that Minikube labs ran when they did not.
 
-```bash
-cd docker-fundamentals
-docker compose up --build -d
-docker compose ps
-```
+For Kubernetes runtime verification, start Minikube and follow the commands in Sections 8–11. Capture the required screenshots only from your own terminal/cluster.
 
-The default endpoints are Node `3000`, Python `5000`, Java `8081`, Apache `8082`, React `8083`, and Nginx `8084` on `localhost`. Each host port can be overridden with the environment variables documented in [Docker Fundamentals](docker-fundamentals/README.md).
+## Evidence Policy
 
-## Verification
+- Existing command output under `evidence/command-outputs/` is historical runtime evidence from the earlier Sections 1–7 verification.
+- Never paste sample output into the repository and present it as captured runtime evidence.
+- Kubernetes screenshot placeholders/checklists are provided, but screenshots must be generated on the real machine.
+- Credentials used in Kubernetes manifests are deliberately lab-only placeholders and must never be replaced with real credentials.
 
-`scripts/verify-all.sh` checks required files, validates every Bash script, runs the Linux, shell, and Git demonstrations, and—when a working Docker daemon is available—builds, starts, curls, and cleans up the Docker exercises. Its summary distinguishes `PASS`, `FAIL`, and `BLOCKED/SKIP`; Docker is never reported as passing if its daemon cannot be reached.
+## Platform Notes
 
-Generated command evidence is indexed in [evidence/README.md](evidence/README.md). The detailed compliance result is in [AUDIT.md](AUDIT.md).
-
-## Docker Cleanup
-
-Stop only resources created by this project:
-
-```bash
-./scripts/cleanup.sh
-```
-
-The script deliberately does not run global prune commands and does not remove unrelated containers, networks, volumes, or images.
-
-## Evidence
-
-Real textual outputs produced in this environment are stored in [evidence/command-outputs](evidence/command-outputs/). Machine-specific values naturally differ. Do not treat example command blocks in documentation as captured evidence.
-
-## Screenshot Checklist
-
-Screenshots must show real running commands and applications. Follow the exact capture instructions in [evidence/screenshots/README.md](evidence/screenshots/README.md); no synthetic screenshots are included.
-
-## Key Concepts Learned
-
-- Names, inodes, and the failure behavior of symbolic versus hard links
-- Safe Bash input handling, quoting, file creation, and output redirection
-- How interfaces, routes, DNS, ports, sockets, and ARP/neighbor tables fit together
-- The precise staging behavior of `git commit -a` and selective history transfer with cherry-pick
-- Small, non-root-friendly application images and production static serving
-- Build-stage separation, container DNS, network segmentation, and persistent host-mounted content
-
-## Interview Questions / Revision Notes
-
-1. Why can a hard link survive removal of another filename while a symbolic link becomes dangling?
-2. Why does `git commit -a` ignore a brand-new file?
-3. Why should application containers bind to `0.0.0.0` rather than only `127.0.0.1`?
-4. How does a multi-stage Dockerfile reduce runtime image contents and attack surface?
-5. Why can the frontend resolve `backend` but not `database` in the segmented Compose topology?
-6. When is an overlay network required instead of a bridge network?
+The repository is usable on macOS with Docker Desktop and Minikube. A few host-networking behaviors differ from native Linux. In particular, Minikube's Docker driver on macOS may require `minikube service ... --url`, `minikube tunnel`, or Ingress-specific routing instead of assuming that a NodePort is reachable directly through the Minikube container IP.
 
 ## Submission Checklist
 
-- [x] All seven assignment sections implemented
-- [x] Safe practice and verification scripts included
-- [x] Exact Hello World strings implemented
-- [x] No secrets, dependency directories, container data, or nested Git repositories included
-- [x] Requirement audit included
-- [ ] Confirm that the name/enrollment detected from local Git configuration are the intended submission identity
-- [ ] Capture the required screenshots using the checklist
-- [ ] Review environment-specific `BLOCKED` items in `AUDIT.md` and evidence
+- [x] Sections 1–7 retained and normalized into numbered folders.
+- [x] Root documentation and verifier updated for the 1–11 structure.
+- [x] Kubernetes manifests and task documentation prepared for Sections 8–11.
+- [ ] Run Sections 8–11 on the local Minikube cluster.
+- [ ] Capture every required Kubernetes screenshot from genuine command output.
+- [ ] Re-run `./scripts/verify-all.sh` after all screenshots are added.
+- [ ] Confirm the student name and enrollment number before final submission.
