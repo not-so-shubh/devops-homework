@@ -23,6 +23,13 @@ spec:
     - host: api.campus.local
       http:
         paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: campus-backend
+                port:
+                  number: 8080
           - path: /
             pathType: Prefix
             backend:
