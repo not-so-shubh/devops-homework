@@ -4,6 +4,11 @@ metadata:
   name: curl-client
 spec:
   containers:
-    - name: curl
-      image: curlimages/curl:8.10.1
-      command: ["sh", "-c", "sleep 3600"]
+    - name: tools
+      image: alpine:3.20
+      command:
+        - sh
+        - -c
+        - |
+          apk add --no-cache curl bind-tools >/dev/null
+          sleep 3600

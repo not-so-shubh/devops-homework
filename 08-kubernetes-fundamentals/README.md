@@ -1,25 +1,50 @@
 # 08 — Kubernetes Fundamentals
 
-This section covers the Lecture 9 Minikube setup and Kubernetes architecture work.
+**Student:** Shubh Jaiswal  
+**Enrollment:** 24BCS10601  
+**Course:** SST DevOps & Cloud [SWE]  
+**Lecture mapping:** Lecture 9
 
-## Task 1 — Verify Minikube and kubectl
+This section follows the Lecture 9 assignment: verify the local Kubernetes tooling, execute the complete Minikube cluster lifecycle, and document Kubernetes control-plane and worker-node architecture. Runtime output below must be generated on the student's own machine; sample version numbers or IP addresses are not treated as evidence.
+
+---
+
+## Task 1 — Minikube Installation & Environment Setup
+
+**One-line description:** Verify that `minikube` and `kubectl` are installed and available from the shell.
+
+### Commands
 
 ```bash
 minikube version
 kubectl version --client
 ```
 
-Capture the real output as `screenshots/01-version-check.png`.
+### Terminal output
 
-## Task 2 — Start the cluster
+Run the commands above and capture the real version output from this Mac. Do not paste the example versions from the assignment document.
+
+### Screenshot placeholder
+
+`./screenshots/01-version-check.png`
+
+---
+
+## Task 2 — Minikube Cluster Lifecycle Execution
+
+**One-line description:** Start the local cluster, verify every Minikube component and the Kubernetes node, then stop the cluster cleanly.
+
+### Start
 
 ```bash
 minikube start
 ```
 
-Capture `screenshots/02-minikube-start.png`.
+**Terminal output:** capture the real successful cluster-start output.
 
-## Task 3 — Verify health and node readiness
+**Screenshot placeholder:** `./screenshots/02-minikube-start.png`
+
+### Verify cluster health
 
 ```bash
 minikube status
@@ -27,42 +52,99 @@ kubectl cluster-info
 kubectl get nodes -o wide
 ```
 
-Capture `screenshots/03-minikube-status.png`.
+Success means Minikube reports the host, kubelet and API server as running and `kubectl get nodes` reports the node as `Ready`.
 
-## Task 4 — Stop the cluster
+**Screenshot placeholder:** `./screenshots/03-minikube-status.png`
+
+### Stop cleanly
 
 ```bash
 minikube stop
 minikube status
 ```
 
-Capture `screenshots/04-minikube-stop.png`.
+**Terminal output:** capture the real stop/status output from the local cluster.
 
-## Task 5 — Kubernetes architecture
+**Screenshot placeholder:** `./screenshots/04-minikube-stop.png`
 
-### Control plane
+> Start Minikube again before continuing with Sections 09–11.
 
-- **kube-apiserver** — API front door used by kubectl and internal controllers.
-- **etcd** — strongly consistent key-value store containing cluster state.
-- **kube-scheduler** — assigns unscheduled Pods to suitable nodes.
-- **kube-controller-manager** — runs reconciliation loops that continuously move current state toward desired state.
+---
 
-### Worker node
+## Task 3 — Kubernetes Architecture & Core Components
 
-- **kubelet** — node agent that receives PodSpecs and ensures containers are running.
-- **kube-proxy** — implements Service networking rules on each node.
-- **Container runtime** — runs containers through the CRI, commonly containerd or CRI-O.
-- **Pod** — smallest Kubernetes deployable unit; one or more containers share networking and volumes.
+Kubernetes uses a control plane to store desired state and make cluster-wide decisions, while worker-node components run and network application Pods.
 
-### Interaction flow
+### Control Plane
+
+| Component | Responsibility |
+|---|---|
+| `kube-apiserver` | REST API front door for `kubectl`, controllers, schedulers and other clients. It validates API requests and exposes cluster state. |
+| `etcd` | Strongly consistent key-value store containing Kubernetes API state. |
+| `kube-scheduler` | Finds unscheduled Pods and assigns them to suitable nodes using resources, constraints, affinity/anti-affinity and other scheduling rules. |
+| `kube-controller-manager` | Runs reconciliation loops such as Deployment, ReplicaSet and node controllers so actual state moves toward desired state. |
+| `cloud-controller-manager` | Integrates Kubernetes with cloud-provider APIs for infrastructure such as routes and load balancers; a local Minikube lab does not depend on a public-cloud implementation. |
+
+### Worker Node
+
+| Component | Responsibility |
+|---|---|
+| `kubelet` | Node agent that watches assigned PodSpecs and asks the container runtime to keep their containers running. |
+| Container runtime | Runs containers through the Kubernetes CRI; common runtimes include containerd and CRI-O. |
+| `kube-proxy` | Implements Service traffic forwarding/routing rules on nodes. |
+| Pod | Smallest deployable Kubernetes unit; its containers share the Pod network namespace and can share volumes. |
+
+### What happens when a manifest is applied
 
 ```text
-kubectl -> kube-apiserver -> etcd
-                     |-> scheduler
-                     |-> controller-manager
-                     |-> kubelet -> container runtime -> Pods
-                                      |
-                                   kube-proxy
+kubectl
+   |
+   v
+kube-apiserver <----> etcd
+   |
+   +----> scheduler chooses a node
+   |
+   +----> controllers reconcile desired state
+                    |
+                    v
+                 kubelet
+                    |
+                    v
+            container runtime
+                    |
+                    v
+                   Pod
 ```
 
-Do not paste example version/IP output into this README. The screenshots must come from the real machine.
+A typical flow is:
+
+1. `kubectl apply` sends the object to `kube-apiserver`.
+2. The API server validates the request and stores desired state in `etcd`.
+3. The scheduler assigns an unscheduled Pod to a node.
+4. The node's kubelet asks the container runtime to create the containers.
+5. Controllers continuously observe the API and reconcile failures or changes.
+6. Service networking components route traffic to eligible Pods.
+
+### Architecture verification commands
+
+When Minikube is running:
+
+```bash
+kubectl get pods -n kube-system -o wide
+kubectl get nodes -o wide
+kubectl cluster-info
+```
+
+These commands connect the written architecture to the components visible in the local cluster.
+
+---
+
+## Submission evidence checklist
+
+- [ ] `screenshots/01-version-check.png` — actual Minikube + kubectl versions.
+- [ ] `screenshots/02-minikube-start.png` — successful local cluster start.
+- [ ] `screenshots/03-minikube-status.png` — running components and a `Ready` node.
+- [ ] `screenshots/04-minikube-stop.png` — clean Minikube stop/status.
+- [x] Control-plane and worker-node architecture documented above.
+
+No terminal transcript or screenshot in this section should be copied from another student's repository.
