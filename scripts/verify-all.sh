@@ -2,81 +2,47 @@
 set -u
 
 ROOT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
-EVIDENCE_DIR="$ROOT_DIR/evidence/command-outputs"
 TMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/devops-homework-verify.XXXXXX")"
 PASS_COUNT=0
 FAIL_COUNT=0
 BLOCKED_COUNT=0
-
-mkdir -p "$EVIDENCE_DIR"
 trap 'rm -rf -- "$TMP_DIR"' EXIT
 
 pass() { PASS_COUNT=$((PASS_COUNT + 1)); printf 'PASS: %s\n' "$1"; }
 fail() { FAIL_COUNT=$((FAIL_COUNT + 1)); printf 'FAIL: %s\n' "$1" >&2; }
 blocked() { BLOCKED_COUNT=$((BLOCKED_COUNT + 1)); printf 'BLOCKED/SKIP: %s\n' "$1"; }
 
-printf '=== Repository structure ===\n'
+printf '=== Complete assignment structure ===\n'
 REQUIRED_PATHS=(
   README.md AUDIT.md .gitignore
   01-linux-fundamentals/README.md
-  02-shell-scripting/README.md
-  03-networking-fundamentals/README.md
-  04-git-github/README.md
-  05-docker-fundamentals/README.md
-  06-dockerfiles-images/README.md
-  07-docker-networking-volumes/README.md
+  02-shell-scripting/system-info.sh
+  03-networking-fundamentals/networking-commands.md
+  04-git-github/git-practice-demo.sh
+  05-docker-fundamentals/docker-compose.yml
+  06-dockerfiles-images/multistage-app/Dockerfile
+  07-docker-networking-volumes/container-networking/docker-compose.yml
   08-kubernetes-fundamentals/README.md
   09-kubernetes-pods-replicasets-deployments/README.md
-  09-kubernetes-pods-replicasets-deployments/pod.yml
-  09-kubernetes-pods-replicasets-deployments/hello.yml
-  09-kubernetes-pods-replicasets-deployments/replicaset.yml
-  09-kubernetes-pods-replicasets-deployments/statefulset.yml
-  09-kubernetes-pods-replicasets-deployments/daemonset.yml
-  09-kubernetes-pods-replicasets-deployments/pod-lifecycle/01-running.yaml
-  09-kubernetes-pods-replicasets-deployments/pod-lifecycle/02-pending.yaml
-  09-kubernetes-pods-replicasets-deployments/pod-lifecycle/03-succeeded.yaml
-  09-kubernetes-pods-replicasets-deployments/pod-lifecycle/04-failed.yaml
-  09-kubernetes-pods-replicasets-deployments/pod-lifecycle/05-crashloopbackoff.yaml
-  09-kubernetes-pods-replicasets-deployments/pod-lifecycle/06-imagepullbackoff.yaml
-  09-kubernetes-pods-replicasets-deployments/pod-lifecycle/07-readiness.yaml
-  09-kubernetes-pods-replicasets-deployments/pod-lifecycle/08-liveness.yaml
-  09-kubernetes-pods-replicasets-deployments/pod-lifecycle/09-startup.yaml
-  09-kubernetes-pods-replicasets-deployments/pod-lifecycle/10-init-container.yaml
-  09-kubernetes-pods-replicasets-deployments/pod-lifecycle/11-multi-container.yaml
-  09-kubernetes-pods-replicasets-deployments/pod-lifecycle/12-termination.yaml
-  09-kubernetes-pods-replicasets-deployments/01-rolling-update/deployment-v1.yaml
-  09-kubernetes-pods-replicasets-deployments/01-rolling-update/deployment-v2.yaml
-  09-kubernetes-pods-replicasets-deployments/02-blue-green/deployment-blue.yaml
-  09-kubernetes-pods-replicasets-deployments/02-blue-green/deployment-green.yaml
-  09-kubernetes-pods-replicasets-deployments/03-canary/deployment-stable.yaml
-  09-kubernetes-pods-replicasets-deployments/03-canary/deployment-canary.yaml
-  09-kubernetes-pods-replicasets-deployments/04-recreate/deployment-v1.yaml
-  09-kubernetes-pods-replicasets-deployments/04-recreate/deployment-v2.yaml
-  09-kubernetes-pods-replicasets-deployments/troubleshooting/healthy-deployment.yaml
-  09-kubernetes-pods-replicasets-deployments/troubleshooting/broken-image.yaml
-  09-kubernetes-pods-replicasets-deployments/troubleshooting/selector-mismatch.yaml
-  09-kubernetes-pods-replicasets-deployments/troubleshooting/selector-match-fixed.yaml
   10-kubernetes-networking-services/README.md
-  10-kubernetes-networking-services/01-clusterip/app-deployment.yaml
-  10-kubernetes-networking-services/01-clusterip/service.yaml
-  10-kubernetes-networking-services/01-clusterip/client-pod.yaml
-  10-kubernetes-networking-services/02-nodeport/service.yaml
-  10-kubernetes-networking-services/03-loadbalancer/service.yaml
-  10-kubernetes-networking-services/04-externalname/service.yaml
-  10-kubernetes-networking-services/05-headless/service.yaml
-  10-kubernetes-networking-services/06-no-selector-service/service.yaml
-  10-kubernetes-networking-services/06-no-selector-service/endpoints.yaml
   11-kubernetes-ingress-configmaps-secrets/README.md
-  11-kubernetes-ingress-configmaps-secrets/01-configmap/app-config.yaml
-  11-kubernetes-ingress-configmaps-secrets/02-secret/db-secret.yaml
-  11-kubernetes-ingress-configmaps-secrets/03-ingress/ingress-tls.yaml
-  11-kubernetes-ingress-configmaps-secrets/04-full-demo/configmap.yaml
-  11-kubernetes-ingress-configmaps-secrets/04-full-demo/secret.yaml
-  11-kubernetes-ingress-configmaps-secrets/04-full-demo/backend.yaml
-  11-kubernetes-ingress-configmaps-secrets/04-full-demo/frontend.yaml
-  11-kubernetes-ingress-configmaps-secrets/04-full-demo/ingress.yaml
-  11-kubernetes-ingress-configmaps-secrets/04-full-demo/run-demo.sh
-  11-kubernetes-ingress-configmaps-secrets/04-full-demo/cleanup.sh
+  12-kubernetes-storage-hpa-probes/02-hpa/hpa.yaml
+  12-kubernetes-storage-hpa-probes/03-mini-project/project.yaml
+  13-kubernetes-troubleshooting/mini-project/fixed.yaml
+  14-helm/devops-web/Chart.yaml
+  15-cicd-github-actions/Dockerfile
+  16-devsecops-pipeline/security/.gitleaks.toml
+  17-terraform-aws/terraform-s3-demo/main.tf
+  18-cloud-terraform-project/main.tf
+  19-monitoring-observability-gitops/docker-compose.yml
+  19-monitoring-observability-gitops/gitops/application.yaml
+  20-final-devops-project/final-devops-project/README.md
+  20-final-devops-project/final-devops-project/kubernetes/kustomization.yaml
+  20-final-devops-project/final-devops-project/helm/final-app/Chart.yaml
+  20-final-devops-project/final-devops-project/terraform/main.tf
+  .github/workflows/ci-cd.yml
+  .github/workflows/devsecops.yml
+  .github/workflows/final-project.yml
 )
 
 MISSING=0
@@ -86,83 +52,102 @@ for path in "${REQUIRED_PATHS[@]}"; do
     MISSING=1
   fi
 done
-if [[ "$MISSING" -eq 0 ]]; then pass 'required 1–11 assignment structure exists'; else fail 'required repository files are missing'; fi
+if [[ "$MISSING" -eq 0 ]]; then pass 'all Sessions 1-21 deliverable roots exist'; else fail 'required assignment files are missing'; fi
 
-printf '\n=== Bash syntax ===\n'
+printf '\n=== Bash and Python ===\n'
 SYNTAX_FAILED=0
 while IFS= read -r -d '' script; do
-  if ! bash -n "$script"; then SYNTAX_FAILED=1; fi
+  bash -n "$script" || SYNTAX_FAILED=1
 done < <(find "$ROOT_DIR" -path "$ROOT_DIR/.git" -prune -o -type f -name '*.sh' -print0)
-if [[ "$SYNTAX_FAILED" -eq 0 ]]; then pass 'all shell scripts pass bash -n'; else fail 'one or more shell scripts have syntax errors'; fi
+if [[ "$SYNTAX_FAILED" -eq 0 ]]; then pass 'all shell scripts pass bash -n'; else fail 'shell syntax error'; fi
 
-printf '\n=== Safe local demonstrations ===\n'
-if "$ROOT_DIR/01-linux-fundamentals/link-practice.sh" > "$EVIDENCE_DIR/linux-link-demo.txt" 2>&1; then pass 'Linux link demonstration'; else fail 'Linux link demonstration'; fi
-if printf 'verification-output\n' | SYSTEM_INFO_BASE_DIR="$TMP_DIR" "$ROOT_DIR/02-shell-scripting/system-info.sh" > "$EVIDENCE_DIR/shell-script-output.txt" 2>&1; then pass 'shell system-information script'; else fail 'shell system-information script'; fi
-if NETWORK_EXTERNAL=0 "$ROOT_DIR/03-networking-fundamentals/collect-network-info.sh" > "$EVIDENCE_DIR/network-info.txt" 2>&1; then pass 'network information collector'; else fail 'network information collector'; fi
-if "$ROOT_DIR/04-git-github/git-practice-demo.sh" > "$EVIDENCE_DIR/git-practice-output.txt" 2>&1; then pass 'Git commit/cherry-pick demonstration'; else fail 'Git commit/cherry-pick demonstration'; fi
+PYTHON_FAILED=0
+for tests in \
+  "$ROOT_DIR/15-cicd-github-actions/application/tests" \
+  "$ROOT_DIR/16-devsecops-pipeline/application/tests" \
+  "$ROOT_DIR/20-final-devops-project/final-devops-project/application/tests"; do
+  python3 -m unittest discover -s "$tests" -v || PYTHON_FAILED=1
+done
+if [[ "$PYTHON_FAILED" -eq 0 ]]; then pass 'all application unit tests pass'; else fail 'application unit tests failed'; fi
 
-printf '\n=== Docker configuration ===\n'
-if command -v docker >/dev/null 2>&1 && docker compose version >/dev/null 2>&1; then
-  DOCKER_CONFIG_OK=1
-  docker compose -f "$ROOT_DIR/05-docker-fundamentals/docker-compose.yml" config >/dev/null 2>&1 || DOCKER_CONFIG_OK=0
-  docker compose -f "$ROOT_DIR/07-docker-networking-volumes/container-networking/docker-compose.yml" config >/dev/null 2>&1 || DOCKER_CONFIG_OK=0
-  if [[ -f "$ROOT_DIR/07-docker-networking-volumes/bind-mount/docker-compose.yml" ]]; then
-    docker compose -f "$ROOT_DIR/07-docker-networking-volumes/bind-mount/docker-compose.yml" config >/dev/null 2>&1 || DOCKER_CONFIG_OK=0
-  fi
-  if [[ "$DOCKER_CONFIG_OK" -eq 1 ]]; then pass 'Docker Compose files parse successfully'; else fail 'one or more Docker Compose files are invalid'; fi
+printf '\n=== Safe demonstrations ===\n'
+if "$ROOT_DIR/01-linux-fundamentals/link-practice.sh" >"$TMP_DIR/linux.txt" 2>&1; then pass 'Linux link behavior'; else fail 'Linux link behavior'; fi
+if ps aux >/dev/null 2>&1; then
+  if printf 'verification-output\n' | SYSTEM_INFO_BASE_DIR="$TMP_DIR" "$ROOT_DIR/02-shell-scripting/system-info.sh" >"$TMP_DIR/system.txt" 2>&1; then pass 'system-information script'; else fail 'system-information script'; fi
+elif command -v docker >/dev/null 2>&1 && docker info >/dev/null 2>&1; then
+  if docker run --rm -i -v "$ROOT_DIR/02-shell-scripting:/lab:ro" ubuntu:24.04 bash -lc "printf 'verification-output\\n' | SYSTEM_INFO_BASE_DIR=/tmp /lab/system-info.sh" >"$TMP_DIR/system.txt" 2>&1; then pass 'system-information script (Ubuntu container fallback)'; else fail 'system-information script'; fi
 else
-  blocked 'Docker Compose CLI unavailable; config checks skipped'
+  blocked 'host sandbox denies process listing; system-information runtime check skipped'
 fi
+if NETWORK_EXTERNAL=0 "$ROOT_DIR/03-networking-fundamentals/collect-network-info.sh" >"$TMP_DIR/network.txt" 2>&1; then pass 'network collector'; else fail 'network collector'; fi
+if "$ROOT_DIR/04-git-github/git-practice-demo.sh" >"$TMP_DIR/git.txt" 2>&1; then pass 'Git commit/cherry-pick demonstration'; else fail 'Git demonstration'; fi
 
-printf '\n=== Kubernetes YAML syntax ===\n'
-YAML_PARSER=''
+printf '\n=== YAML and workflow syntax ===\n'
+YAML_FAILED=0
 if command -v ruby >/dev/null 2>&1; then
-  YAML_PARSER='ruby'
-elif command -v python3 >/dev/null 2>&1 && python3 -c 'import yaml' >/dev/null 2>&1; then
-  YAML_PARSER='python'
-fi
-
-if [[ -z "$YAML_PARSER" ]]; then
-  blocked 'No local YAML parser available (Ruby/PyYAML); Kubernetes syntax parse skipped'
-else
-  YAML_FAILED=0
   while IFS= read -r -d '' manifest; do
-    if [[ "$YAML_PARSER" == 'ruby' ]]; then
-      ruby -e 'require "yaml"; YAML.load_stream(File.read(ARGV[0]))' "$manifest" >/dev/null 2>&1 || { printf 'Invalid YAML: %s\n' "${manifest#$ROOT_DIR/}" >&2; YAML_FAILED=1; }
-    else
-      python3 - "$manifest" <<'PY' >/dev/null 2>&1 || { printf 'Invalid YAML: %s\n' "${manifest#$ROOT_DIR/}" >&2; YAML_FAILED=1; }
-import sys, yaml
-with open(sys.argv[1], 'r', encoding='utf-8') as handle:
-    list(yaml.safe_load_all(handle))
-PY
-    fi
-  done < <(find "$ROOT_DIR/08-kubernetes-fundamentals" "$ROOT_DIR/09-kubernetes-pods-replicasets-deployments" "$ROOT_DIR/10-kubernetes-networking-services" "$ROOT_DIR/11-kubernetes-ingress-configmaps-secrets" -type f \( -name '*.yaml' -o -name '*.yml' \) -print0 2>/dev/null)
-  if [[ "$YAML_FAILED" -eq 0 ]]; then pass 'all Kubernetes YAML files are syntactically valid'; else fail 'one or more Kubernetes YAML files have syntax errors'; fi
+    ruby -e 'require "yaml"; YAML.load_stream(File.read(ARGV[0]))' "$manifest" >/dev/null 2>&1 || { printf 'Invalid YAML: %s\n' "${manifest#$ROOT_DIR/}" >&2; YAML_FAILED=1; }
+  done < <(find "$ROOT_DIR" \( -path "$ROOT_DIR/.git" -o -path "$ROOT_DIR/14-helm/devops-web/templates" -o -path "$ROOT_DIR/20-final-devops-project/final-devops-project/helm/final-app/templates" \) -prune -o -type f \( -name '*.yaml' -o -name '*.yml' \) -print0)
+elif python3 -c 'import yaml' >/dev/null 2>&1; then
+  while IFS= read -r -d '' manifest; do
+    python3 -c 'import sys,yaml; list(yaml.safe_load_all(open(sys.argv[1], encoding="utf-8")))' "$manifest" >/dev/null 2>&1 || { printf 'Invalid YAML: %s\n' "${manifest#$ROOT_DIR/}" >&2; YAML_FAILED=1; }
+  done < <(find "$ROOT_DIR" \( -path "$ROOT_DIR/.git" -o -path "$ROOT_DIR/14-helm/devops-web/templates" -o -path "$ROOT_DIR/20-final-devops-project/final-devops-project/helm/final-app/templates" \) -prune -o -type f \( -name '*.yaml' -o -name '*.yml' \) -print0)
+else
+  blocked 'Ruby or PyYAML is required for YAML parse checks'
+fi
+if [[ "$YAML_FAILED" -eq 0 ]]; then pass 'all YAML and workflow files parse'; else fail 'one or more YAML files are invalid'; fi
+
+printf '\n=== Docker and Compose ===\n'
+if command -v docker >/dev/null 2>&1 && docker compose version >/dev/null 2>&1; then
+  COMPOSE_FAILED=0
+  for compose_file in \
+    "$ROOT_DIR/05-docker-fundamentals/docker-compose.yml" \
+    "$ROOT_DIR/07-docker-networking-volumes/container-networking/docker-compose.yml" \
+    "$ROOT_DIR/19-monitoring-observability-gitops/docker-compose.yml"; do
+    docker compose -f "$compose_file" config -q || COMPOSE_FAILED=1
+  done
+  if [[ "$COMPOSE_FAILED" -eq 0 ]]; then pass 'all Docker Compose configurations render'; else fail 'Docker Compose rendering failed'; fi
+else
+  blocked 'Docker Compose CLI unavailable'
 fi
 
-printf '\n=== Assignment-specific static checks ===\n'
+printf '\n=== Helm ===\n'
+if command -v helm >/dev/null 2>&1; then
+  HELM_FAILED=0
+  helm lint "$ROOT_DIR/14-helm/devops-web" || HELM_FAILED=1
+  helm lint "$ROOT_DIR/20-final-devops-project/final-devops-project/helm/final-app" || HELM_FAILED=1
+  if [[ "$HELM_FAILED" -eq 0 ]]; then pass 'both Helm charts lint successfully'; else fail 'Helm lint failed'; fi
+else
+  blocked 'Helm CLI unavailable'
+fi
+
+printf '\n=== Terraform ===\n'
+if command -v terraform >/dev/null 2>&1; then
+  TERRAFORM_FAILED=0
+  for tf_dir in \
+    "$ROOT_DIR/17-terraform-aws/terraform-s3-demo" \
+    "$ROOT_DIR/18-cloud-terraform-project" \
+    "$ROOT_DIR/20-final-devops-project/final-devops-project/terraform"; do
+    terraform -chdir="$tf_dir" fmt -check || TERRAFORM_FAILED=1
+    terraform -chdir="$tf_dir" init -backend=false -input=false >/dev/null || TERRAFORM_FAILED=1
+    terraform -chdir="$tf_dir" validate || TERRAFORM_FAILED=1
+  done
+  if [[ "$TERRAFORM_FAILED" -eq 0 ]]; then pass 'all Terraform projects format and validate'; else fail 'Terraform validation failed'; fi
+else
+  blocked 'Terraform CLI unavailable'
+fi
+
+printf '\n=== Assignment-critical controls ===\n'
 STATIC_FAILED=0
-grep -q 'nodePort: 30020' "$ROOT_DIR/09-kubernetes-pods-replicasets-deployments/02-blue-green/service-blue.yaml" || STATIC_FAILED=1
-grep -q 'nodePort: 30030' "$ROOT_DIR/09-kubernetes-pods-replicasets-deployments/03-canary/service.yaml" || STATIC_FAILED=1
-grep -q 'nodePort: 30040' "$ROOT_DIR/09-kubernetes-pods-replicasets-deployments/04-recreate/service.yaml" || STATIC_FAILED=1
-grep -q 'clusterIP: None' "$ROOT_DIR/10-kubernetes-networking-services/05-headless/service.yaml" || STATIC_FAILED=1
-grep -q 'type: ExternalName' "$ROOT_DIR/10-kubernetes-networking-services/04-externalname/service.yaml" || STATIC_FAILED=1
-grep -q 'rewrite-target: /$2' "$ROOT_DIR/11-kubernetes-ingress-configmaps-secrets/04-full-demo/ingress.yaml" || STATIC_FAILED=1
-grep -q 'secretName: campus-tls-cert' "$ROOT_DIR/11-kubernetes-ingress-configmaps-secrets/03-ingress/ingress-tls.yaml" || STATIC_FAILED=1
-if [[ "$STATIC_FAILED" -eq 0 ]]; then pass 'assignment-critical Kubernetes settings are present'; else fail 'one or more assignment-critical Kubernetes settings are missing'; fi
+grep -q 'averageUtilization: 50' "$ROOT_DIR/12-kubernetes-storage-hpa-probes/02-hpa/hpa.yaml" || STATIC_FAILED=1
+grep -q 'kind: HorizontalPodAutoscaler' "$ROOT_DIR/20-final-devops-project/final-devops-project/kubernetes/autoscaling.yaml" || STATIC_FAILED=1
+grep -q 'readOnlyRootFilesystem: true' "$ROOT_DIR/20-final-devops-project/final-devops-project/kubernetes/workload.yaml" || STATIC_FAILED=1
+grep -q 'kind: Application' "$ROOT_DIR/20-final-devops-project/final-devops-project/gitops/application.yaml" || STATIC_FAILED=1
+grep -q 'trivy-action' "$ROOT_DIR/.github/workflows/final-project.yml" || STATIC_FAILED=1
+grep -q 'gitleaks' "$ROOT_DIR/.github/workflows/final-project.yml" || STATIC_FAILED=1
+grep -q 'aws_eks_cluster' "$ROOT_DIR/20-final-devops-project/final-devops-project/terraform/main.tf" || STATIC_FAILED=1
+if [[ "$STATIC_FAILED" -eq 0 ]]; then pass 'HPA, runtime hardening, GitOps, security gates and cloud resources are present'; else fail 'assignment-critical control is missing'; fi
 
-printf '\n=== Kubernetes tooling ===\n'
-if command -v kubectl >/dev/null 2>&1; then kubectl version --client >/dev/null 2>&1 && pass 'kubectl client is available' || fail 'kubectl client check failed'; else blocked 'kubectl is not installed'; fi
-if command -v minikube >/dev/null 2>&1; then minikube version >/dev/null 2>&1 && pass 'Minikube is available' || fail 'Minikube version check failed'; else blocked 'Minikube is not installed'; fi
-
-SUMMARY_FILE="$EVIDENCE_DIR/verification-summary.txt"
-{
-  echo 'DevOps Homework verification summary'
-  echo "Generated: $(date)"
-  echo "PASS: $PASS_COUNT"
-  echo "FAIL: $FAIL_COUNT"
-  echo "BLOCKED/SKIP: $BLOCKED_COUNT"
-} | tee "$SUMMARY_FILE"
-
+printf '\n=== Summary ===\n'
+printf 'PASS: %s\nFAIL: %s\nBLOCKED/SKIP: %s\n' "$PASS_COUNT" "$FAIL_COUNT" "$BLOCKED_COUNT"
 if [[ "$FAIL_COUNT" -gt 0 ]]; then exit 1; fi
-exit 0

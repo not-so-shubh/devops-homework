@@ -1,8 +1,8 @@
 # 08 — Kubernetes Fundamentals
 
-**Student:** Shubh Jaiswal  
-**Enrollment:** 24BCS10601  
-**Course:** SST DevOps & Cloud [SWE]  
+**Student:** Shubh Jaiswal
+**Enrollment:** 24BCS10601
+**Course:** SST DevOps & Cloud [SWE]
 **Lecture mapping:** Lecture 9
 
 This section follows the Lecture 9 assignment: verify the local Kubernetes tooling, execute the complete Minikube cluster lifecycle, and document Kubernetes control-plane and worker-node architecture. Runtime output below must be generated on the student's own machine; sample version numbers or IP addresses are not treated as evidence.
@@ -20,13 +20,9 @@ minikube version
 kubectl version --client
 ```
 
-### Terminal output
+### Verified output
 
-Run the commands above and capture the real version output from this Mac. Do not paste the example versions from the assignment document.
-
-### Screenshot placeholder
-
-`./screenshots/01-version-check.png`
+The real version and lifecycle transcript is committed at [`evidence/runtime-output.txt`](evidence/runtime-output.txt); the version numbers are not copied from the assignment document.
 
 ---
 
@@ -40,9 +36,7 @@ Run the commands above and capture the real version output from this Mac. Do not
 minikube start
 ```
 
-**Terminal output:** capture the real successful cluster-start output.
-
-**Screenshot placeholder:** `./screenshots/02-minikube-start.png`
+**Evidence:** the successful cluster state and Ready node are recorded in [`evidence/runtime-output.txt`](evidence/runtime-output.txt).
 
 ### Verify cluster health
 
@@ -54,7 +48,7 @@ kubectl get nodes -o wide
 
 Success means Minikube reports the host, kubelet and API server as running and `kubectl get nodes` reports the node as `Ready`.
 
-**Screenshot placeholder:** `./screenshots/03-minikube-status.png`
+**Evidence:** [`evidence/runtime-output.txt`](evidence/runtime-output.txt) records all Minikube components as Running and the node as Ready.
 
 ### Stop cleanly
 
@@ -63,9 +57,7 @@ minikube stop
 minikube status
 ```
 
-**Terminal output:** capture the real stop/status output from the local cluster.
-
-**Screenshot placeholder:** `./screenshots/04-minikube-stop.png`
+**Evidence:** [`evidence/runtime-output.txt`](evidence/runtime-output.txt) records the clean shutdown and all components as Stopped.
 
 > Start Minikube again before continuing with Sections 09–11.
 
@@ -139,12 +131,52 @@ These commands connect the written architecture to the components visible in the
 
 ---
 
+## Task 4 - Basic objects and commands
+
+`basic-objects.yaml` demonstrates a ConfigMap, Deployment, ReplicaSet-managed Pods and a ClusterIP Service.
+
+```bash
+kubectl apply -f basic-objects.yaml
+kubectl get all,configmap -o wide
+kubectl describe deployment fundamentals-web
+kubectl get replicasets
+kubectl get pods --show-labels
+kubectl logs deployment/fundamentals-web
+kubectl exec deployment/fundamentals-web -- wget -q -O- http://fundamentals-web/
+kubectl scale deployment fundamentals-web --replicas=3
+kubectl set image deployment/fundamentals-web nginx=nginx:1.27-alpine
+kubectl rollout status deployment/fundamentals-web
+kubectl rollout history deployment/fundamentals-web
+kubectl delete -f basic-objects.yaml
+```
+
+`apply` creates/reconciles desired state; `get` lists; `describe` combines specification, status and Events; `logs` reads container output; `exec` runs a process inside a container; `scale` changes replica count; and `rollout` observes Deployment history/status.
+
+## Task 5 - Kubernetes Basics tutorial hands-on
+
+The standard Learn Kubernetes Basics flow is reproduced locally:
+
+1. **Create a cluster:** `minikube start` and inspect nodes.
+2. **Deploy an app:** apply `basic-objects.yaml` and inspect the Deployment/Pods.
+3. **Explore:** use `get`, `describe`, `logs` and `exec`.
+4. **Expose:** access the ClusterIP from a temporary client or use port-forward.
+5. **Scale:** change the Deployment from two to three replicas.
+6. **Update:** set a new image and observe rolling status/history.
+
+```bash
+kubectl port-forward service/fundamentals-web 8089:80
+curl http://127.0.0.1:8089/
+```
+
+Capture the complete command transcript as `screenshots/05-basics-tutorial.png` or a genuine text output file.
+
 ## Submission evidence checklist
 
-- [ ] `screenshots/01-version-check.png` — actual Minikube + kubectl versions.
-- [ ] `screenshots/02-minikube-start.png` — successful local cluster start.
-- [ ] `screenshots/03-minikube-status.png` — running components and a `Ready` node.
-- [ ] `screenshots/04-minikube-stop.png` — clean Minikube stop/status.
+- [x] Actual Minikube and kubectl versions recorded in `evidence/runtime-output.txt`.
+- [x] Successful cluster start/state recorded in `evidence/runtime-output.txt`.
+- [x] Running components and a Ready node recorded in `evidence/runtime-output.txt`.
+- [x] Clean Minikube stop/status recorded in `evidence/runtime-output.txt`.
+- [x] Apply/explore/expose/scale/update workflow recorded in `evidence/runtime-output.txt`.
 - [x] Control-plane and worker-node architecture documented above.
 
 No terminal transcript or screenshot in this section should be copied from another student's repository.

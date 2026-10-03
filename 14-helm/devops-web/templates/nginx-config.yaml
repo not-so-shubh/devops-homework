@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "devops-web.fullname" . }}-nginx
+data:
+  nginx.conf: |
+    pid /var/run/nginx.pid;
+    events { worker_connections 128; }
+    http {
+      include /etc/nginx/mime.types;
+      access_log /dev/stdout;
+      error_log /dev/stderr;
+      server {
+        listen 8080;
+        location / { root /usr/share/nginx/html; index index.html; }
+      }
+    }

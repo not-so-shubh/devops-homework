@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-client-service-and-dns
+  namespace: session14
+spec:
+  podSelector:
+    matchLabels: {role: client}
+  policyTypes: ["Egress"]
+  egress:
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - {protocol: UDP, port: 53}
+        - {protocol: TCP, port: 53}
+        - {protocol: TCP, port: 80}
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: network-client
+  namespace: session14
+  labels: {role: client}
+spec:
+  containers:
+    - name: client
+      image: curlimages/curl:8.12.1
+      command: ["sh", "-c", "sleep 3600"]

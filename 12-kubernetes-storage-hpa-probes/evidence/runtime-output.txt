@@ -1,0 +1,27 @@
+Runtime validation — 2026-10-04
+
+Cluster: minikube / Kubernetes v1.37.0
+Namespace: session13
+
+Storage:
+- emptyDir pod Ready; writer/reader shared a generated timestamp.
+- hostPath pod Ready.
+- manual-pvc-demo pod Ready; PV and PVC Bound; read "persistent-data".
+- dynamic-pvc-demo pod Ready; PVC Bound; read "dynamically-provisioned".
+
+Mini-project:
+- Deployment session13-project reached 2/2 Ready.
+- PVC session13-data Bound.
+- In-cluster HTTP response: <h1>Session 13 Kubernetes Mini Project</h1>
+
+HPA:
+NAME      TARGETS         MINPODS  MAXPODS  REPLICAS
+hpa-web   cpu: 210%/50%   1        10       5
+
+Conditions:
+- AbleToScale=True / ReadyForNewScale
+- ScalingActive=True / ValidMetricFound
+- ScalingLimited=False / DesiredWithinRange
+
+Event:
+SuccessfulRescale — New size: 5; CPU utilization above target.

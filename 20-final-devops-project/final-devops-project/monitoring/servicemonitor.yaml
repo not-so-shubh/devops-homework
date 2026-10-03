@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: final-app
+  namespace: monitoring
+spec:
+  namespaceSelector:
+    matchNames: ["final-devops"]
+  selector:
+    matchLabels: {app: final-app}
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s

@@ -1,0 +1,135 @@
+name: DevSecOps Pipeline
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "16-devsecops-pipeline/**"
+      - ".github/workflows/devsecops.yml"
+  pull_request:
+    paths:
+      - "16-devsecops-pipeline/**"
+      - ".github/workflows/devsecops.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+  security-events: write
+
+env:
+  IMAGE: ghcr.io/${{ github.repository_owner }}/devsecops-demo
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.13"}
+      - run: python -m unittest discover -s 16-devsecops-pipeline/application/tests -v
+
+  sast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.13"}
+      - run: pip install bandit[toml]
+      - name: Bandit SAST gate
+        run: bandit -r 16-devsecops-pipeline/application -lll -iii -f json -o bandit.json
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with: {name: bandit-report, path: bandit.json}
+
+  sca:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.13"}
+      - run: pip install pip-audit
+      - name: Dependency vulnerability gate
+        run: pip-audit -r 16-devsecops-pipeline/requirements.txt --strict
+
+  secret-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: 16-devsecops-pipeline/security/.gitleaks.toml
+
+  container-scan:
+    runs-on: ubuntu-latest
+    needs: unit-test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: 16-devsecops-pipeline
+          push: false
+          load: true
+          tags: devsecops-demo:${{ github.sha }}
+      - name: Trivy image gate
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          image-ref: devsecops-demo:${{ github.sha }}
+          format: sarif
+          output: trivy.sarif
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: "1"
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with: {name: trivy-report, path: trivy.sarif}
+
+  security-gate:
+    runs-on: ubuntu-latest
+    needs: [unit-test, sast, sca, secret-scan, container-scan]
+    steps:
+      - run: echo "All build, test and security gates passed."
+
+  publish:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: security-gate
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: 16-devsecops-pipeline
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:${{ github.sha }}
+            ${{ env.IMAGE }}:latest
+
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.ENABLE_DEVSECOPS_DEPLOY == 'true'
+    runs-on: ubuntu-latest
+    needs: publish
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/setup-kubectl@v4
+      - name: Configure cluster access
+        env: {KUBE_CONFIG_DATA: "${{ secrets.KUBE_CONFIG }}"}
+        run: |
+          printf '%s' "$KUBE_CONFIG_DATA" | base64 --decode > "$RUNNER_TEMP/kubeconfig"
+          chmod 600 "$RUNNER_TEMP/kubeconfig"
+          echo "KUBECONFIG=$RUNNER_TEMP/kubeconfig" >> "$GITHUB_ENV"
+      - name: Deploy scanned image
+        run: |
+          kubectl apply -f 16-devsecops-pipeline/kubernetes/namespace.yaml
+          kubectl apply -f 16-devsecops-pipeline/kubernetes/application.yaml
+          kubectl set image deployment/devsecops-demo app=${{ env.IMAGE }}:${{ github.sha }} -n devsecops
+          kubectl rollout status deployment/devsecops-demo -n devsecops --timeout=180s

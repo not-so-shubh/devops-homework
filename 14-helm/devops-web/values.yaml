@@ -1,0 +1,39 @@
+replicaCount: 2
+
+image:
+  repository: nginx
+  tag: 1.27-alpine
+  pullPolicy: IfNotPresent
+
+page:
+  title: DevOps Homework
+  message: Helm mini-project revision 1
+
+service:
+  type: NodePort
+  port: 80
+  nodePort: 30050
+
+ingress:
+  enabled: false
+  className: nginx
+  host: helm.local
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 60
+
+resources:
+  requests:
+    cpu: 20m
+    memory: 32Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 101
+  fsGroup: 101

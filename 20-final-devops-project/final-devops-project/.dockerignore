@@ -1,0 +1,13 @@
+.git
+.github
+.terraform
+**/.terraform
+**/__pycache__
+**/.pytest_cache
+*.tfstate*
+evidence
+helm
+kubernetes
+monitoring
+terraform
+troubleshooting

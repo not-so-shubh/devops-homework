@@ -1,83 +1,60 @@
-# DevOps Homework
+# Complete DevOps Homework Portfolio
 
-## Student Information
+**Student:** Shubh Jaiswal
+**Enrollment Number:** 24BCS10601
 
-- **Name:** Shubh Jaiswal
-- **Enrollment Number:** 24BCS10601
+This public repository implements the complete assignment path from Linux fundamentals through a final cloud-native DevSecOps project. Every practical section contains executable source/configuration, reproduction commands, cleanup instructions and an evidence location. Runtime output is kept separate from explanatory samples so a reviewer can distinguish actual execution from documentation.
 
-## Overview
+## Assignment map
 
-This repository contains the cumulative DevOps homework submission. Sections 1–7 cover Linux, shell scripting, networking, Git, Docker, images, networking, and volumes. Sections 8–11 extend the same repository with Kubernetes fundamentals, workload controllers, Services/networking, ConfigMaps, Secrets, and Ingress.
+| Repository section | PDF assignment coverage |
+|---|---|
+| [`01-linux-fundamentals`](01-linux-fundamentals/) | Links, account creation, journalctl and command practice |
+| [`02-shell-scripting`](02-shell-scripting/) | Interactive system-information script and process redirection |
+| [`03-networking-fundamentals`](03-networking-fundamentals/) | Linux networking commands, output and explanations |
+| [`04-git-github`](04-git-github/) | `commit -a`, branches, log and cherry-pick |
+| [`05-docker-fundamentals`](05-docker-fundamentals/) | Six Hello World applications and Dockerfiles |
+| [`06-dockerfiles-images`](06-dockerfiles-images/) | Multi-stage build, port 8080 and deployment evidence |
+| [`07-docker-networking-volumes`](07-docker-networking-volumes/) | Three networks, host mode, bind mounts and overlay research |
+| [`08-kubernetes-fundamentals`](08-kubernetes-fundamentals/) | Minikube, architecture, objects and Kubernetes tutorial |
+| [`09-kubernetes-pods-replicasets-deployments`](09-kubernetes-pods-replicasets-deployments/) | Session 10: lifecycle and four deployment strategies |
+| [`10-kubernetes-networking-services`](10-kubernetes-networking-services/) | Session 11: five Service types, FQDN and CoreDNS |
+| [`11-kubernetes-ingress-configmaps-secrets`](11-kubernetes-ingress-configmaps-secrets/) | Session 12: ConfigMaps, Secrets, Ingress and troubleshooting |
+| [`12-kubernetes-storage-hpa-probes`](12-kubernetes-storage-hpa-probes/) | Session 13: storage, HPA, probes and mini-project |
+| [`13-kubernetes-troubleshooting`](13-kubernetes-troubleshooting/) | Session 14: eight failure modes and troubleshooting mini-project |
+| [`14-helm`](14-helm/) | Session 15: chart, commands, upgrades, rollback and Helm test |
+| [`15-cicd-github-actions`](15-cicd-github-actions/) | Session 16: application, tests, image, CI/CD and artifacts |
+| [`16-devsecops-pipeline`](16-devsecops-pipeline/) | Session 17: SAST, SCA, secrets, image scan and security gate |
+| [`17-terraform-aws`](17-terraform-aws/) | Session 18: S3 project and five AWS service studies |
+| [`18-cloud-terraform-project`](18-cloud-terraform-project/) | Session 19: VPC, subnet, Security Group, EC2 and S3 |
+| [`19-monitoring-observability-gitops`](19-monitoring-observability-gitops/) | Session 20: metrics, logs, traces, alerts and GitOps |
+| [`20-final-devops-project`](20-final-devops-project/final-devops-project/) | Session 21: complete application-to-cloud final project |
 
-The repository is intentionally organized as one numbered sequence so every lecture can be reviewed from a single submission URL. Runtime evidence is kept separate from source files: existing Docker evidence is preserved under `evidence/`, while Kubernetes screenshots must be captured from the real Minikube cluster and saved in the relevant section's `screenshots/` directory.
-
-## Repository Structure
-
-```text
-.
-├── 01-linux-fundamentals/
-├── 02-shell-scripting/
-├── 03-networking-fundamentals/
-├── 04-git-github/
-├── 05-docker-fundamentals/
-├── 06-dockerfiles-images/
-├── 07-docker-networking-volumes/
-├── 08-kubernetes-fundamentals/
-├── 09-kubernetes-pods-replicasets-deployments/
-├── 10-kubernetes-networking-services/
-├── 11-kubernetes-ingress-configmaps-secrets/
-├── evidence/
-├── scripts/
-├── AUDIT.md
-└── README.md
-```
-
-## Sections
-
-| # | Section | Main topics |
-|---:|---|---|
-| 1 | [Linux Fundamentals](01-linux-fundamentals/) | Links, users, `journalctl`, Linux command practice |
-| 2 | [Shell Scripting](02-shell-scripting/) | Variables, input, files, redirection, process reporting |
-| 3 | [Networking Fundamentals](03-networking-fundamentals/) | Interfaces, routes, DNS, sockets, troubleshooting commands |
-| 4 | [Git & GitHub](04-git-github/) | `commit -a`, branches, cherry-pick workflow |
-| 5 | [Docker Fundamentals](05-docker-fundamentals/) | Node, Python, Java, Apache, React, and Nginx containers |
-| 6 | [Dockerfiles & Images](06-dockerfiles-images/) | Multi-stage image builds and deployment verification |
-| 7 | [Docker Networking & Volumes](07-docker-networking-volumes/) | Bridge/host/overlay networking and bind mounts |
-| 8 | [Kubernetes Fundamentals](08-kubernetes-fundamentals/) | Minikube lifecycle and Kubernetes architecture |
-| 9 | [Pods, ReplicaSets & Deployments](09-kubernetes-pods-replicasets-deployments/) | Pod lifecycle, probes, controllers, rollout strategies, troubleshooting |
-| 10 | [Kubernetes Networking & Services](10-kubernetes-networking-services/) | ClusterIP, NodePort, LoadBalancer, ExternalName, headless Services, DNS |
-| 11 | [Ingress, ConfigMaps & Secrets](11-kubernetes-ingress-configmaps-secrets/) | Configuration, Secrets, Ingress routing, TLS, full-stack demo |
-
-## Verification
-
-Run the repository-level static/syntax verifier from the repository root:
+## End-to-end verification
 
 ```bash
 chmod +x scripts/verify-all.sh scripts/cleanup.sh
 ./scripts/verify-all.sh
 ```
 
-The verifier checks the required 1–11 structure, Bash syntax, the safe Linux/Git demonstrations, Docker Compose configuration when Docker is available, and Kubernetes YAML syntax when a local YAML parser is available. It does **not** pretend that Minikube labs ran when they did not.
+The verifier checks required structure, shell/Python syntax, unit tests, Compose rendering, Kubernetes YAML, Helm charts, Terraform formatting/validation when the CLI is available, and security-sensitive settings. Runtime exercises use the section READMEs because they intentionally create containers, cluster resources or cloud infrastructure.
 
-For Kubernetes runtime verification, start Minikube and follow the commands in Sections 8–11. Capture the required screenshots only from your own terminal/cluster.
+## GitHub Actions
 
-## Evidence Policy
+- [CI/CD demo](.github/workflows/ci-cd.yml)
+- [DevSecOps pipeline](.github/workflows/devsecops.yml)
+- [Final project pipeline](.github/workflows/final-project.yml)
 
-- Existing command output under `evidence/command-outputs/` is historical runtime evidence from the earlier Sections 1–7 verification.
-- Never paste sample output into the repository and present it as captured runtime evidence.
-- Kubernetes screenshot placeholders/checklists are provided, but screenshots must be generated on the real machine.
-- Credentials used in Kubernetes manifests are deliberately lab-only placeholders and must never be replaced with real credentials.
+All workflows follow least-privilege permissions. Publishing uses the short-lived `GITHUB_TOKEN`; cluster deployment is disabled unless the documented variable and namespace-scoped kubeconfig secret are configured.
 
-## Platform Notes
+## Evidence policy
 
-The repository is usable on macOS with Docker Desktop and Minikube. A few host-networking behaviors differ from native Linux. In particular, Minikube's Docker driver on macOS may require `minikube service ... --url`, `minikube tunnel`, or Ingress-specific routing instead of assuming that a NodePort is reachable directly through the Minikube container IP.
+- `evidence/command-outputs/` contains genuine local execution transcripts.
+- Browser screenshots and terminal captures are stored in the relevant `evidence/` or `screenshots/` directories.
+- Examples in documentation are never presented as observed output.
+- Real credentials, private keys, kubeconfigs, Terraform state and cloud account identifiers must not be committed.
+- AWS apply/destroy and GitHub-hosted pipeline screenshots must come from the student's authorized account.
 
-## Submission Checklist
+## Safety and cleanup
 
-- [x] Sections 1–7 retained and normalized into numbered folders.
-- [x] Root documentation and verifier updated for the 1–11 structure.
-- [x] Kubernetes manifests and task documentation prepared for Sections 8–11.
-- [ ] Run Sections 8–11 on the local Minikube cluster.
-- [ ] Capture every required Kubernetes screenshot from genuine command output.
-- [ ] Re-run `./scripts/verify-all.sh` after all screenshots are added.
-- [ ] Confirm the student name and enrollment number before final submission.
+Each lab uses scoped names/namespaces. Cleanup scripts remove only homework resources and never run global Docker or Kubernetes prune operations. Terraform plans must be reviewed before apply; billable AWS resources must be destroyed when the evidence is captured.

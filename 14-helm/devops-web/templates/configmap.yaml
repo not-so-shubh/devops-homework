@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "devops-web.fullname" . }}
+  labels:
+    {{- include "devops-web.labels" . | nindent 4 }}
+data:
+  index.html: |
+    <!doctype html>
+    <html><head><title>{{ .Values.page.title }}</title></head>
+    <body><h1>{{ .Values.page.title }}</h1><p>{{ .Values.page.message }}</p></body></html>

@@ -1,0 +1,42 @@
+Runtime validation — 2026-10-04
+
+Cluster: minikube / Kubernetes v1.37.0
+
+Tool versions:
+minikube version: v1.39.0
+kubectl client version: v1.34.1
+Kustomize version: v5.7.1
+
+Healthy cluster state:
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+node minikube: Ready, control-plane, v1.37.0, 192.168.49.2
+
+deployment.apps/basics-web created
+service/basics-web created
+deployment "basics-web" successfully rolled out
+
+In-cluster service request:
+<h1>Kubernetes Basics Tutorial Complete</h1>
+
+Scale exercise:
+deployment.apps/basics-web scaled
+3/3 replicas became Ready
+
+Rolling update exercise:
+deployment.apps/basics-web env updated
+deployment "basics-web" successfully rolled out
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+
+Resources were deleted after validation.
+
+Clean lifecycle shutdown:
+1 node stopped.
+host: Stopped
+kubelet: Stopped
+apiserver: Stopped
+kubeconfig: Stopped

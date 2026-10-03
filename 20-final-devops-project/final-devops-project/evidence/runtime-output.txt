@@ -1,0 +1,22 @@
+Runtime validation — 2026-10-04
+
+Local image final-devops-project:test was loaded into minikube and installed
+through the final-app Helm chart in namespace final-devops.
+
+Deployment final-app: 2/2 Ready
+PVC final-app-data: Bound, 1Gi, ReadWriteOnce
+Service final-app: ClusterIP port 80 -> app port 8080
+HPA: CPU target 60%, minimum 2, maximum 8
+Helm chart test: Succeeded; /health returned {"status":"healthy"}
+
+Application endpoints:
+- /health returned success
+- /ready returned success via the readiness probe
+- /metrics returned final_app_up 1 and final_app_requests_total
+
+Security posture exercised by the running pods:
+- runAsNonRoot
+- seccomp RuntimeDefault
+- privilege escalation disabled
+- all Linux capabilities dropped
+- read-only root filesystem with writable /tmp and persistent /data mounts

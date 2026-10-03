@@ -1,0 +1,11 @@
+title = "Final DevOps project secret policy"
+[extend]
+useDefault = true
+[[allowlists]]
+description = "Explicit lab-only placeholder manifests"
+regexTarget = "match"
+regexes = ['''lab-only-placeholder''']
+
+[[allowlists]]
+description = "Historical Session 12 training Secret contains documented non-production values"
+paths = ['''11-kubernetes-ingress-configmaps-secrets/02-secret/db-secret\.yaml''']

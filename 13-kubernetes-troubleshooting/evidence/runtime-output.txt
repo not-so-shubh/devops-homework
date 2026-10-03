@@ -1,0 +1,39 @@
+Runtime validation — 2026-10-04
+
+Cluster: minikube / Kubernetes v1.37.0
+Namespace: session14
+
+Broken scenarios observed together:
+
+1. crashloop-demo: Error/BackOff; process exited and restart count increased.
+2. imagepull-demo: ImagePullBackOff; Events reported the nonexistent tag was not found.
+3. pending-demo: Pending; FailedScheduling reported insufficient CPU and memory.
+4. containercreating-demo: ContainerCreating; FailedMount reported missing-config not found.
+5. service-demo: workload Running but Service endpoints were empty because selector app=wrong-label did not match.
+6. dns-demo: Error after looking up missing-service.session14.svc.cluster.local.
+7. network-client: Running with deny-client-egress selecting the client.
+8. configuration-demo: CreateContainerConfigError; ConfigMap lacked key APP_MODE.
+
+All corrected manifests were then applied. The six long-running Pods became
+Ready, service-demo became Available, and dns-demo completed successfully.
+
+Verified fixed behavior:
+- service-demo and dns-service endpoints: 10.244.0.14:80
+- DNS lookup resolved dns-service.session14.svc.cluster.local
+- configuration-demo logged: production
+- in-cluster request to service-demo returned the Nginx welcome page
+- the allow-client-service-and-dns NetworkPolicy replaced the deny policy
+
+Mini-project before fix:
+- Deployment: 0/2 Ready
+- Service selector: app=wrong-app
+- Endpoints: none
+- Readiness probe path: /not-present
+
+Mini-project after fix:
+- Deployment: 2/2 Ready
+- Service selector: app=session14-mini
+- Endpoints: two Ready pod addresses on port 80
+- In-cluster request returned the Nginx welcome page
+
+The session14 namespace was deleted after validation.

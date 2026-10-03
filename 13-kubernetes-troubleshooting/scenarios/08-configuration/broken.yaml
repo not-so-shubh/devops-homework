@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-settings
+  namespace: session14
+data:
+  MODE: production
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: configuration-demo
+  namespace: session14
+spec:
+  containers:
+    - name: app
+      image: busybox:1.36
+      command: ["sh", "-c", "echo $APP_MODE; sleep 3600"]
+      env:
+        - name: APP_MODE
+          valueFrom:
+            configMapKeyRef:
+              name: app-settings
+              key: APP_MODE

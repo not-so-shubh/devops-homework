@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fundamentals-content
+data:
+  index.html: "<h1>Kubernetes Basics Tutorial Complete</h1>"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fundamentals-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels: {app: fundamentals-web}
+  template:
+    metadata:
+      labels: {app: fundamentals-web}
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.27-alpine
+          ports: [{containerPort: 80}]
+          readinessProbe: {httpGet: {path: /, port: 80}}
+          volumeMounts:
+            - {name: content, mountPath: /usr/share/nginx/html}
+      volumes:
+        - name: content
+          configMap: {name: fundamentals-content}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fundamentals-web
+spec:
+  selector: {app: fundamentals-web}
+  ports: [{port: 80, targetPort: 80}]

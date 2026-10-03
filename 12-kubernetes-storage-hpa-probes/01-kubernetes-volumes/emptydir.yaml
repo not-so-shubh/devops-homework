@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: emptydir-demo
+  namespace: session13
+spec:
+  containers:
+    - name: writer
+      image: busybox:1.36
+      command: ["sh", "-c", "while true; do date > /shared/message.txt; sleep 5; done"]
+      volumeMounts:
+        - name: shared
+          mountPath: /shared
+    - name: reader
+      image: busybox:1.36
+      command: ["sh", "-c", "while true; do cat /shared/message.txt 2>/dev/null || true; sleep 5; done"]
+      volumeMounts:
+        - name: shared
+          mountPath: /shared
+          readOnly: true
+  volumes:
+    - name: shared
+      emptyDir: {}

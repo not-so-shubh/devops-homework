@@ -1,0 +1,25 @@
+Runtime validation — 2026-10-04
+
+The full Docker Compose observability stack was started together and checked
+from the host. All eight services remained running:
+
+- Prometheus v3.5.0: /-/ready -> 200
+- Alertmanager v0.28.1: /-/ready -> 200
+- Grafana 12.1.1: /api/health -> 200, database=ok
+- Loki 3.5.3: /ready -> 200
+- Tempo 2.8.1: /ready -> 200
+- OpenTelemetry Collector 0.134.1: metrics endpoint -> 200
+- Promtail 3.5.3: discovered the running Docker targets
+- cAdvisor 0.52.1: /healthz -> 200 and container healthy
+
+Prometheus target discovery:
+alertmanager: up
+cadvisor: up
+otel-collector: up
+prometheus: up
+
+Grafana loaded its provisioned Prometheus, Loki, and Tempo data sources. Tempo
+was verified listening for OTLP on 0.0.0.0:4317 and 0.0.0.0:4318 so the
+collector can reach it across the Compose network.
+
+The stack was stopped and its disposable named volumes removed after the test.

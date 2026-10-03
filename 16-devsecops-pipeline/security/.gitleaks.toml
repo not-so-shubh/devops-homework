@@ -1,0 +1,11 @@
+title = "DevOps homework Gitleaks configuration"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Documented lab-only Kubernetes values"
+paths = [
+  '''11-kubernetes-ingress-configmaps-secrets/.*\.ya?ml''',
+  '''12-kubernetes-storage-hpa-probes/03-mini-project/.*\.ya?ml'''
+]

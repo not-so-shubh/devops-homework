@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: final-app-config
+  namespace: final-devops
+data:
+  APP_MESSAGE: "Final DevOps Project running on Kubernetes"
+  APP_ENV: "production"
+---
+# Lab-only placeholder. Production uses External Secrets/CSI and a managed secret store.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: final-app-secret
+  namespace: final-devops
+type: Opaque
+stringData:
+  DEMO_TOKEN: "lab-only-placeholder"

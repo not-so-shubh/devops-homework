@@ -1,0 +1,21 @@
+groups:
+  - name: devops-homework
+    rules:
+      - alert: ScrapeTargetDown
+        expr: up == 0
+        for: 2m
+        labels: {severity: critical}
+        annotations:
+          summary: "Prometheus target {{ $labels.job }} is down"
+      - alert: ContainerHighCPU
+        expr: rate(container_cpu_usage_seconds_total{name!=""}[5m]) > 0.8
+        for: 5m
+        labels: {severity: warning}
+        annotations:
+          summary: "Container CPU usage is high"
+      - alert: ContainerHighMemory
+        expr: container_memory_working_set_bytes{name!=""} > 536870912
+        for: 5m
+        labels: {severity: warning}
+        annotations:
+          summary: "Container working-set memory exceeds 512 MiB"

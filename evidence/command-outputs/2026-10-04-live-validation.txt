@@ -1,0 +1,114 @@
+DevOps Homework — live validation record
+Date: 2026-10-04 (Asia/Kolkata)
+
+This file records commands executed against the checked-in revision during the
+final completion pass. It is intentionally text evidence so the results remain
+searchable and reviewable in Git.
+
+Linux administration
+--------------------
+Environment: ubuntu:24.04 container
+Command flow: install adduser; create devopstest; inspect id/passwd; delete user
+Observed:
+  uid=1001(devopstest) gid=1001(devopstest) groups=1001(devopstest),100(users)
+  devopstest:x:1001:1001:,,,:/home/devopstest:/bin/bash
+  PASS: user created, inspected, and removed
+
+Kubernetes cluster
+------------------
+Cluster: minikube, Kubernetes v1.37.0, Docker driver
+Node: minikube Ready, internal IP 192.168.49.2
+Metrics API: metrics-server Available; kubectl top returned live pod metrics
+
+Kubernetes fundamentals
+-----------------------
+Applied 08-kubernetes-fundamentals/basic-objects.yaml.
+Observed two Ready web pods and successful in-cluster response:
+  <h1>Kubernetes Basics Tutorial Complete</h1>
+Scaled Deployment from 2 to 3 replicas, updated an environment variable,
+observed rolling update revisions 1 and 2, then removed the resources.
+
+Storage and HPA
+---------------
+Namespace: session13
+Observed emptyDir, hostPath, manual PV/PVC, and dynamic StorageClass examples.
+Read-back values included:
+  persistent-data
+  dynamically-provisioned
+PVCs were Bound. The mini-project Deployment reached 2/2 Ready and returned:
+  <h1>Session 13 Kubernetes Mini Project</h1>
+HPA result under generated traffic:
+  target: cpu 210% / 50%
+  replicas: scaled from 1 to 5
+  condition: ScalingActive=True, reason=ValidMetricFound
+  event: SuccessfulRescale — New size: 5
+
+Kubernetes troubleshooting
+--------------------------
+All eight broken states were reproduced in namespace session14: process crash,
+missing image, unschedulable resource request, missing ConfigMap volume, empty
+Service endpoints, failed DNS lookup, denied egress, and missing ConfigMap key.
+Every fixed manifest was then verified. Long-running Pods became Ready, the DNS
+job completed, configuration logged "production", both Services gained
+endpoints, and in-cluster HTTP requests succeeded. The mini-project moved from
+0/2 Ready with no endpoints to 2/2 Ready with two endpoints.
+
+Helm lifecycle
+--------------
+Chart: 14-helm/devops-web
+Namespace: session15
+  helm install: deployed, revision 1
+  helm test: Succeeded
+  in-cluster HTTP response: 200 OK
+  helm upgrades: revisions 2, 3, and 4
+  helm rollback: revision 5, Rollback to 3
+The release ended in deployed status with two Ready pods.
+
+Final-project Helm deployment
+-----------------------------
+Chart: 20-final-devops-project/final-devops-project/helm/final-app
+Namespace: final-devops
+Image: final-devops-project:test, loaded into minikube
+Observed:
+  Deployment final-app: 2/2 Ready
+  PVC final-app-data: Bound, 1Gi, standard StorageClass
+  HPA final-app: min=2, max=8, CPU target=60%
+  /health: successful HTTP response
+  /metrics included final_app_up 1 and final_app_requests_total
+
+Monitoring and observability
+----------------------------
+Started the eight-service Docker Compose stack. Prometheus, Alertmanager,
+Grafana, Loki, Tempo, OpenTelemetry Collector, Promtail and cAdvisor remained
+running. Health/readiness endpoints returned 200. Prometheus reported its
+prometheus, alertmanager, cadvisor and otel-collector targets as up. The stack
+was stopped and its disposable named volumes removed after validation.
+
+Application and container checks
+--------------------------------
+Python unit tests:
+  15-cicd-github-actions: 4 passed
+  16-devsecops-pipeline: 3 passed
+  20-final-devops-project: 4 passed
+Built and smoke-tested:
+  devops-homework-cicd:test
+  devsecops-demo:test
+  final-devops-project:test
+Trivy HIGH/CRITICAL findings for all three images: 0
+
+Security and infrastructure-as-code
+-----------------------------------
+Bandit: passed
+pip-audit: No known vulnerabilities found
+Gitleaks git-history scan: 0 leaks
+Gitleaks working-directory scan: 0 leaks
+Helm lint: both charts passed
+Terraform fmt/init/validate: passed for all three Terraform roots
+Docker Compose config: valid
+Repository YAML parse: valid
+
+Cloud boundary
+--------------
+Terraform apply was not run because it requires the student's AWS credentials,
+a globally unique S3 bucket name, and creates billable resources. The modules
+were initialized and validated locally without changing any AWS account.

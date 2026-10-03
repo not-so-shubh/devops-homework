@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: final-devops-project
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/not-so-shubh/devops-homework.git
+    targetRevision: main
+    path: 20-final-devops-project/final-devops-project/helm/final-app
+    helm:
+      valueFiles: [values.yaml]
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: final-devops
+  syncPolicy:
+    automated: {prune: true, selfHeal: true}
+    syncOptions: ["CreateNamespace=true"]

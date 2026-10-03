@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: session14-mini
+  namespace: session14
+  labels: {project: session14-mini}
+spec:
+  replicas: 2
+  selector:
+    matchLabels: {app: session14-mini}
+  template:
+    metadata:
+      labels: {app: session14-mini, project: session14-mini}
+    spec:
+      containers:
+        - name: web
+          image: nginx:1.27-alpine
+          readinessProbe:
+            httpGet: {path: /not-present, port: 80}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: session14-mini
+  namespace: session14
+  labels: {project: session14-mini}
+spec:
+  selector: {app: wrong-app}
+  ports: [{port: 80, targetPort: 80}]

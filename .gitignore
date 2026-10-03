@@ -38,3 +38,15 @@ mysql-data/
 kubeconfig*
 tls.key
 tls.crt
+
+# Terraform local state and plans
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+
+# Local security/build reports
+**/security/reports/
+*.sarif
+*.tar

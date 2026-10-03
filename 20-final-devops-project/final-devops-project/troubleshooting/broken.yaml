@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Namespace
+metadata: {name: final-troubleshooting}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: trouble-app, namespace: final-troubleshooting}
+spec:
+  replicas: 2
+  selector:
+    matchLabels: {app: trouble-app}
+  template:
+    metadata:
+      labels: {app: trouble-app}
+    spec:
+      containers:
+        - name: web
+          image: nginx:this-tag-does-not-exist
+          envFrom:
+            - configMapRef: {name: missing-config}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: trouble-app, namespace: final-troubleshooting}
+spec:
+  selector: {app: wrong-app}
+  ports: [{port: 80, targetPort: 80}]

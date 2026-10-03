@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dns-demo
+  namespace: session14
+spec:
+  restartPolicy: Never
+  containers:
+    - name: lookup
+      image: busybox:1.36
+      command: ["sh", "-c", "nslookup missing-service.session14.svc.cluster.local"]

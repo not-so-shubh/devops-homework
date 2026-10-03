@@ -1,35 +1,29 @@
-# Repository Audit
+# Completion Audit
 
-This audit separates **implementation** from **runtime evidence**. A file existing in Git is not proof that a Kubernetes command was executed. Existing Sections 1–7 had real verification evidence before this structural refactor; Sections 8–11 are prepared as runnable labs and still require genuine Minikube execution/screenshots on the student's machine.
+This audit distinguishes **implementation**, **local verification**, and **account-dependent evidence**. A repository file is not falsely treated as proof of a real cluster, workflow or AWS operation.
 
-| Section | Implementation state | Runtime evidence state |
+| Area | Implementation | Verification route |
 |---|---|---|
-| 01 — Linux Fundamentals | Complete | Existing evidence retained; rerun after refactor recommended |
-| 02 — Shell Scripting | Complete | Existing evidence retained; rerun after refactor recommended |
-| 03 — Networking Fundamentals | Complete | Existing evidence retained; host-dependent values vary |
-| 04 — Git & GitHub | Complete | Existing disposable-repo evidence retained |
-| 05 — Docker Fundamentals | Complete | Existing build/curl/browser evidence retained |
-| 06 — Dockerfiles & Images | Complete | Existing multi-stage evidence retained |
-| 07 — Docker Networking & Volumes | Complete | Bridge/bind-mount evidence retained; host networking remains platform-dependent |
-| 08 — Kubernetes Fundamentals | Manifests/docs/checklist complete | **Manual runtime evidence required** |
-| 09 — Pods, ReplicaSets & Deployments | Manifests/docs/checklist complete | **Manual runtime evidence required** |
-| 10 — Kubernetes Networking & Services | Manifests/docs/checklist complete | **Manual runtime evidence required** |
-| 11 — Ingress, ConfigMaps & Secrets | Manifests/scripts/docs/checklist complete | **Manual runtime evidence required** |
+| Linux, shell, networking and Git | Complete scripts and explanations | Repository verifier and captured command output |
+| Docker applications/builds/networking/volumes | Complete source, Dockerfiles and scoped labs | Compose builds, curl checks and browser/output evidence |
+| Kubernetes Sessions 9-14 | Complete manifests, commands, cleanup and failure scenarios | Minikube evidence scripts and section checklists |
+| Helm | Complete application chart and rollback workflow | `helm lint`, install/upgrade/rollback/test transcript |
+| CI/CD | Complete app, tests, Dockerfile, workflow, artifacts and optional CD | Local tests/build plus GitHub Actions run |
+| DevSecOps | Complete SAST, SCA, secret and image scanning gates | Local scanners plus GitHub Actions reports |
+| Terraform/AWS | Complete S3, EC2/VPC and optional EKS configurations | `fmt`, `validate`, reviewed account-authorized plan/apply/destroy |
+| Monitoring/observability | Complete Prometheus, Alertmanager, Grafana, Loki, Tempo and OTel configs | Compose health, targets, dashboards/logs/traces/alerts |
+| GitOps | Complete Argo CD Applications and desired state | Argo CD Sync/Healthy plus deliberate self-heal test |
+| Final project | Complete self-contained source-to-cloud implementation | Final workflow and end-to-end evidence checklist |
 
 ## Quality controls
 
-- Numbered top-level folders now match the cumulative course sequence.
-- No real credentials are stored in the repository; Kubernetes credentials are explicit lab placeholders.
-- TLS private keys/certificates, `.env` files, build artifacts, dependency folders, and local kubeconfig files are ignored.
-- The root verifier never reports Kubernetes runtime success merely because YAML files exist.
-- Intentionally broken manifests used for troubleshooting are clearly identified and excluded from semantic validation expectations.
-- Cleanup scripts are scoped to homework resources; no global Docker/Kubernetes prune is used.
+- Non-root/read-only/capability-dropped containers and resource limits in production examples.
+- Startup/readiness/liveness probes, HPA, storage, disruption budget and NetworkPolicy.
+- Immutable SHA image tags in deployment workflows and security gates before publishing.
+- Private/encrypted S3 resources, IMDSv2 and no public SSH in Terraform demos.
+- No real secret, TLS key, kubeconfig, Terraform state or access key is committed.
+- Every destructive cleanup targets a named container, namespace, Helm release or reviewed Terraform plan.
 
-## Manual gates before final submission
+## Account-dependent gates
 
-1. Run `./scripts/verify-all.sh` after pulling the repaired structure.
-2. Start Minikube and execute every task in Sections 8–11 in order.
-3. Save genuine screenshots in each section's `screenshots/` folder using the filenames listed in its README.
-4. Do not reuse another student's screenshots, terminal output, IP addresses, pod names, timestamps, or cluster versions.
-5. Review screenshots for accidental secrets or unrelated terminal history.
-6. Confirm the student identity shown in the root README.
+The following evidence cannot be manufactured locally: a successful GitHub-hosted run after pushing, GHCR package visibility, an authorized AWS apply/destroy and cloud console screenshots. Complete them only in the student's own accounts using the supplied commands, then add redacted evidence without credentials or private account details.

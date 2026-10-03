@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ .Release.Name }}-test
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  restartPolicy: Never
+  containers:
+    - name: curl
+      image: curlimages/curl:8.12.1
+      command: ["curl"]
+      args:
+        - --fail
+        - --retry
+        - "12"
+        - --retry-connrefused
+        - --retry-delay
+        - "2"
+        - --connect-timeout
+        - "3"
+        - --max-time
+        - "60"
+        - http://{{ .Release.Name }}:{{ .Values.service.port }}/health

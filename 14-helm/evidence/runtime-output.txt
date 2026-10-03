@@ -1,0 +1,21 @@
+Runtime validation — 2026-10-04
+
+Chart: devops-web 1.0.0
+Namespace: session15
+
+helm lint: passed
+helm install: deployed
+helm test: Succeeded
+HTTP response: 200 OK; page contained "Helm upgrade revision two"
+
+History after install, upgrades, and rollback:
+REVISION  STATUS      DESCRIPTION
+1         superseded  Install complete
+2         superseded  Upgrade complete
+3         superseded  Upgrade complete
+4         superseded  Upgrade complete
+5         deployed    Rollback to 3
+
+The chart was exercised with its default two replicas, ConfigMap-mounted page,
+NodePort Service, probes, non-root security context, read-only root filesystem,
+and a writable emptyDir for the Nginx PID/cache paths.

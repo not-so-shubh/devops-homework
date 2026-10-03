@@ -1,0 +1,147 @@
+name: Final DevOps Project
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "20-final-devops-project/**"
+      - ".github/workflows/final-project.yml"
+  pull_request:
+    paths:
+      - "20-final-devops-project/**"
+      - ".github/workflows/final-project.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+  security-events: write
+
+env:
+  PROJECT: 20-final-devops-project/final-devops-project
+  IMAGE: ghcr.io/${{ github.repository_owner }}/final-devops-project
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.13"}
+      - run: python -m py_compile "$PROJECT/application/app.py"
+      - run: python -m unittest discover -s "$PROJECT/application/tests" -v
+
+  source-security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.13"}
+      - run: pip install bandit pip-audit
+      - name: SAST
+        run: bandit -r "$PROJECT/application" -lll -iii
+      - name: SCA
+        run: pip-audit -r "$PROJECT/application/requirements.txt" --strict
+      - name: Secret scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: ${{ env.PROJECT }}/security/.gitleaks.toml
+
+  configuration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/setup-kubectl@v4
+      - uses: azure/setup-helm@v4
+      - uses: hashicorp/setup-terraform@v3
+      - name: Kubernetes schema/client validation
+        run: kubectl apply --dry-run=client -k "$PROJECT/kubernetes"
+      - name: Helm lint and render
+        run: |
+          helm lint "$PROJECT/helm/final-app"
+          helm template final-app "$PROJECT/helm/final-app" --namespace final-devops > /tmp/final-app.yaml
+          kubectl apply --dry-run=client -f /tmp/final-app.yaml
+      - name: Terraform formatting and validation
+        working-directory: 20-final-devops-project/final-devops-project/terraform
+        run: |
+          terraform fmt -check
+          terraform init -backend=false -input=false
+          terraform validate
+
+  container-security:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: 20-final-devops-project/final-devops-project
+          file: 20-final-devops-project/final-devops-project/docker/Dockerfile
+          load: true
+          push: false
+          tags: final-devops-project:${{ github.sha }}
+      - name: Container image security gate
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          image-ref: final-devops-project:${{ github.sha }}
+          format: sarif
+          output: final-trivy.sarif
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: "1"
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with: {name: final-trivy-report, path: final-trivy.sarif}
+
+  security-gate:
+    runs-on: ubuntu-latest
+    needs: [test, source-security, configuration, container-security]
+    steps:
+      - run: echo "Tests, SAST, SCA, secret scan, configuration validation and image scan passed."
+
+  publish:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: security-gate
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: 20-final-devops-project/final-devops-project
+          file: 20-final-devops-project/final-devops-project/docker/Dockerfile
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:${{ github.sha }}
+            ${{ env.IMAGE }}:latest
+
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.ENABLE_FINAL_DEPLOY == 'true'
+    runs-on: ubuntu-latest
+    needs: publish
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/setup-kubectl@v4
+      - uses: azure/setup-helm@v4
+      - name: Configure cluster access
+        env: {KUBE_CONFIG_DATA: "${{ secrets.KUBE_CONFIG }}"}
+        run: |
+          printf '%s' "$KUBE_CONFIG_DATA" | base64 --decode > "$RUNNER_TEMP/kubeconfig"
+          chmod 600 "$RUNNER_TEMP/kubeconfig"
+          echo "KUBECONFIG=$RUNNER_TEMP/kubeconfig" >> "$GITHUB_ENV"
+      - name: Helm deployment and verification
+        run: |
+          helm upgrade --install final-app "$PROJECT/helm/final-app" \
+            --namespace final-devops --create-namespace --wait --timeout 5m \
+            --set image.repository=${{ env.IMAGE }} --set image.tag=${{ github.sha }}
+          kubectl rollout status deployment/final-app -n final-devops --timeout=180s
+          helm test final-app -n final-devops
