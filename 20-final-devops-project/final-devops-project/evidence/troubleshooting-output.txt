@@ -1,0 +1,101 @@
+===== FINAL TROUBLESHOOTING BROKEN STATE =====
+namespace/final-troubleshooting created
+deployment.apps/trouble-app created
+service/trouble-app created
+Warning: v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+NAME                          READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                          SELECTOR
+deployment.apps/trouble-app   0/2     2            0           8s    web          nginx:this-tag-does-not-exist   app=trouble-app
+
+NAME                               READY   STATUS         RESTARTS   AGE   IP             NODE       NOMINATED NODE   READINESS GATES
+pod/trouble-app-55cdfb68fb-q7r2l   0/1     ErrImagePull   0          8s    10.244.0.206   minikube   <none>           <none>
+pod/trouble-app-55cdfb68fb-vd86d   0/1     ErrImagePull   0          8s    10.244.0.207   minikube   <none>           <none>
+
+NAME                  TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE   SELECTOR
+service/trouble-app   ClusterIP   10.101.100.193   <none>        80/TCP    8s    app=wrong-app
+
+NAME                    ENDPOINTS   AGE
+endpoints/trouble-app   <none>      8s
+Containers:
+  web:
+    Container ID:   
+    Image:          nginx:this-tag-does-not-exist
+    Image ID:       
+    Port:           <none>
+    Host Port:      <none>
+    State:          Waiting
+      Reason:       ErrImagePull
+    Ready:          False
+    Restart Count:  0
+    Environment Variables from:
+      missing-config  ConfigMap  Optional: false
+    Environment:      <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-qqvm8 (ro)
+Conditions:
+8s          Normal    Pulling             pod/trouble-app-55cdfb68fb-vd86d    Pulling image "nginx:this-tag-does-not-exist"
+8s          Normal    Pulling             pod/trouble-app-55cdfb68fb-q7r2l    Pulling image "nginx:this-tag-does-not-exist"
+8s          Normal    ScalingReplicaSet   deployment/trouble-app              Scaled up replica set trouble-app-55cdfb68fb from 0 to 2
+8s          Normal    SuccessfulCreate    replicaset/trouble-app-55cdfb68fb   Created pod: trouble-app-55cdfb68fb-q7r2l
+8s          Normal    SuccessfulCreate    replicaset/trouble-app-55cdfb68fb   Created pod: trouble-app-55cdfb68fb-vd86d
+8s          Normal    Scheduled           pod/trouble-app-55cdfb68fb-q7r2l    Successfully assigned final-troubleshooting/trouble-app-55cdfb68fb-q7r2l to minikube
+8s          Normal    Scheduled           pod/trouble-app-55cdfb68fb-vd86d    Successfully assigned final-troubleshooting/trouble-app-55cdfb68fb-vd86d to minikube
+6s          Warning   Failed              pod/trouble-app-55cdfb68fb-vd86d    Error: ErrImagePull
+6s          Warning   Failed              pod/trouble-app-55cdfb68fb-vd86d    Failed to pull image "nginx:this-tag-does-not-exist": rpc error: code = NotFound desc = failed to pull and unpack image "docker.io/library/nginx:this-tag-does-not-exist": failed to resolve reference "docker.io/library/nginx:this-tag-does-not-exist": docker.io/library/nginx:this-tag-does-not-exist: not found
+6s          Normal    BackOff             pod/trouble-app-55cdfb68fb-vd86d    Back-off pulling image "nginx:this-tag-does-not-exist"
+6s          Warning   Failed              pod/trouble-app-55cdfb68fb-vd86d    Error: ImagePullBackOff
+5s          Warning   Failed              pod/trouble-app-55cdfb68fb-q7r2l    Error: ImagePullBackOff
+5s          Normal    BackOff             pod/trouble-app-55cdfb68fb-q7r2l    Back-off pulling image "nginx:this-tag-does-not-exist"
+5s          Warning   Failed              pod/trouble-app-55cdfb68fb-q7r2l    Error: ErrImagePull
+5s          Warning   Failed              pod/trouble-app-55cdfb68fb-q7r2l    Failed to pull image "nginx:this-tag-does-not-exist": rpc error: code = NotFound desc = failed to pull and unpack image "docker.io/library/nginx:this-tag-does-not-exist": failed to resolve reference "docker.io/library/nginx:this-tag-does-not-exist": docker.io/library/nginx:this-tag-does-not-exist: not found
+===== EXPOSE IMAGE FAULT AFTER CONFIG DIAGNOSIS =====
+configmap/missing-config created
+NAME                           READY   STATUS             RESTARTS   AGE
+trouble-app-55cdfb68fb-q7r2l   0/1     ImagePullBackOff   0          18s
+trouble-app-55cdfb68fb-vd86d   0/1     ImagePullBackOff   0          18s
+Events:
+  Type     Reason     Age               From               Message
+  ----     ------     ----              ----               -------
+  Normal   Scheduled  18s               default-scheduler  Successfully assigned final-troubleshooting/trouble-app-55cdfb68fb-q7r2l to minikube
+  Normal   BackOff    15s               kubelet            Back-off pulling image "nginx:this-tag-does-not-exist"
+  Warning  Failed     15s               kubelet            Error: ImagePullBackOff
+  Normal   Pulling    1s (x2 over 18s)  kubelet            Pulling image "nginx:this-tag-does-not-exist"
+  Warning  Failed     0s (x2 over 15s)  kubelet            Failed to pull image "nginx:this-tag-does-not-exist": rpc error: code = NotFound desc = failed to pull and unpack image "docker.io/library/nginx:this-tag-does-not-exist": failed to resolve reference "docker.io/library/nginx:this-tag-does-not-exist": docker.io/library/nginx:this-tag-does-not-exist: not found
+  Warning  Failed     0s (x2 over 15s)  kubelet            Error: ErrImagePull
+Warning: v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+NAME          ENDPOINTS   AGE
+trouble-app   <none>      19s
+===== FINAL TROUBLESHOOTING FIXED STATE =====
+namespace/final-troubleshooting unchanged
+configmap/app-config created
+deployment.apps/trouble-app configured
+service/trouble-app configured
+Waiting for deployment "trouble-app" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "trouble-app" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "trouble-app" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "trouble-app" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "trouble-app" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "trouble-app" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "trouble-app" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "trouble-app" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "trouble-app" rollout to finish: 1 old replicas are pending termination...
+deployment "trouble-app" successfully rolled out
+Warning: v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+NAME                          READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES              SELECTOR
+deployment.apps/trouble-app   2/2     2            2           20s   web          nginx:1.27-alpine   app=trouble-app
+
+NAME                               READY   STATUS        RESTARTS   AGE   IP             NODE       NOMINATED NODE   READINESS GATES
+pod/trouble-app-54ff7785c9-97bn9   1/1     Running       0          1s    10.244.0.209   minikube   <none>           <none>
+pod/trouble-app-54ff7785c9-wg58n   1/1     Running       0          1s    10.244.0.208   minikube   <none>           <none>
+pod/trouble-app-55cdfb68fb-q7r2l   0/1     Terminating   0          20s   10.244.0.206   minikube   <none>           <none>
+
+NAME                  TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE   SELECTOR
+service/trouble-app   ClusterIP   10.101.100.193   <none>        80/TCP    20s   app=trouble-app
+
+NAME                    ENDPOINTS                         AGE
+endpoints/trouble-app   10.244.0.208:80,10.244.0.209:80   20s
+healthy
+All commands and output from this session will be recorded in container logs, including credentials and sensitive information passed through the command prompt.
+If you don't see a command prompt, try pressing enter.
+HTTP/1.1 200 OK
+PASS: missing ConfigMap, invalid image and Service selector mismatch were diagnosed and fixed.
+namespace "final-troubleshooting" deleted

@@ -19,3 +19,9 @@ groups:
         labels: {severity: warning}
         annotations:
           summary: "Container working-set memory exceeds 512 MiB"
+      - alert: HomeworkApplicationUnhealthy
+        expr: devops_homework_demo_health == 0
+        for: 0m
+        labels: {severity: critical}
+        annotations:
+          summary: "The assignment's synthetic application-health signal is unhealthy"

@@ -1,0 +1,114 @@
+
+===== OBSERVABILITY STACK START =====
+ Network session20-evidence_default Creating 
+ Network session20-evidence_default Created 
+ Volume session20-evidence_prometheus-data Creating 
+ Volume session20-evidence_prometheus-data Created 
+ Volume session20-evidence_grafana-data Creating 
+ Volume session20-evidence_grafana-data Created 
+ Volume session20-evidence_loki-data Creating 
+ Volume session20-evidence_loki-data Created 
+ Volume session20-evidence_tempo-data Creating 
+ Volume session20-evidence_tempo-data Created 
+ Container session20-evidence-tempo-1 Creating 
+ Container session20-evidence-prometheus-1 Creating 
+ Container session20-evidence-alertmanager-1 Creating 
+ Container session20-evidence-loki-1 Creating 
+ Container session20-evidence-cadvisor-1 Creating 
+ Container session20-evidence-cadvisor-1 Created 
+ Container session20-evidence-alertmanager-1 Created 
+ Container session20-evidence-tempo-1 Created 
+ Container session20-evidence-otel-collector-1 Creating 
+ Container session20-evidence-prometheus-1 Created 
+ Container session20-evidence-loki-1 Created 
+ Container session20-evidence-grafana-1 Creating 
+ Container session20-evidence-promtail-1 Creating 
+ Container session20-evidence-promtail-1 Created 
+ Container session20-evidence-otel-collector-1 Created 
+ Container session20-evidence-grafana-1 Created 
+ Container session20-evidence-tempo-1 Starting 
+ Container session20-evidence-prometheus-1 Starting 
+ Container session20-evidence-loki-1 Starting 
+ Container session20-evidence-cadvisor-1 Starting 
+ Container session20-evidence-alertmanager-1 Starting 
+ Container session20-evidence-loki-1 Started 
+ Container session20-evidence-promtail-1 Starting 
+ Container session20-evidence-prometheus-1 Started 
+ Container session20-evidence-alertmanager-1 Started 
+ Container session20-evidence-tempo-1 Started 
+ Container session20-evidence-otel-collector-1 Starting 
+ Container session20-evidence-grafana-1 Starting 
+ Container session20-evidence-cadvisor-1 Started 
+ Container session20-evidence-promtail-1 Started 
+ Container session20-evidence-otel-collector-1 Started 
+ Container session20-evidence-grafana-1 Started 
+HTTP 200: http://127.0.0.1:9090/-/ready
+HTTP 200: http://127.0.0.1:9093/-/ready
+curl: (56) Recv failure: Connection reset by peer
+HTTP 200: http://127.0.0.1:3001/api/health
+curl: (22) The requested URL returned error: 503
+curl: (22) The requested URL returned error: 503
+curl: (22) The requested URL returned error: 503
+curl: (22) The requested URL returned error: 503
+curl: (22) The requested URL returned error: 503
+curl: (22) The requested URL returned error: 503
+curl: (22) The requested URL returned error: 503
+curl: (22) The requested URL returned error: 503
+HTTP 200: http://127.0.0.1:3100/ready
+curl: (22) The requested URL returned error: 503
+curl: (22) The requested URL returned error: 503
+curl: (22) The requested URL returned error: 503
+curl: (22) The requested URL returned error: 503
+curl: (22) The requested URL returned error: 503
+curl: (22) The requested URL returned error: 503
+curl: (22) The requested URL returned error: 503
+curl: (22) The requested URL returned error: 503
+HTTP 200: http://127.0.0.1:3200/ready
+NAME                                  IMAGE                                          COMMAND                  SERVICE          CREATED          STATUS                    PORTS
+session20-evidence-alertmanager-1     prom/alertmanager:v0.28.1                      "/bin/alertmanager -…"   alertmanager     35 seconds ago   Up 34 seconds             0.0.0.0:9093->9093/tcp, [::]:9093->9093/tcp
+session20-evidence-cadvisor-1         gcr.io/cadvisor/cadvisor:v0.52.1               "/usr/bin/cadvisor -…"   cadvisor         35 seconds ago   Up 34 seconds (healthy)   0.0.0.0:8087->8080/tcp, [::]:8087->8080/tcp
+session20-evidence-grafana-1          grafana/grafana:12.1.1                         "/run.sh"                grafana          35 seconds ago   Up 34 seconds             0.0.0.0:3001->3000/tcp, [::]:3001->3000/tcp
+session20-evidence-loki-1             grafana/loki:3.5.3                             "/usr/bin/loki -conf…"   loki             35 seconds ago   Up 34 seconds             0.0.0.0:3100->3100/tcp, [::]:3100->3100/tcp
+session20-evidence-otel-collector-1   otel/opentelemetry-collector-contrib:0.134.1   "/otelcol-contrib --…"   otel-collector   35 seconds ago   Up 34 seconds             0.0.0.0:4317-4318->4317-4318/tcp, [::]:4317-4318->4317-4318/tcp, 0.0.0.0:8889->8889/tcp, [::]:8889->8889/tcp
+session20-evidence-prometheus-1       prom/prometheus:v3.5.0                         "/bin/prometheus --c…"   prometheus       35 seconds ago   Up 34 seconds             0.0.0.0:9090->9090/tcp, [::]:9090->9090/tcp
+session20-evidence-promtail-1         grafana/promtail:3.5.3                         "/usr/bin/promtail -…"   promtail         35 seconds ago   Up 34 seconds             
+session20-evidence-tempo-1            grafana/tempo:2.8.1                            "/tempo -config.file…"   tempo            35 seconds ago   Up 34 seconds             0.0.0.0:3200->3200/tcp, [::]:3200->3200/tcp
+
+===== PROMETHEUS TARGETS AND RULES =====
+alertmanager	up	http://alertmanager:9093/metrics
+cadvisor	up	http://cadvisor:8080/metrics
+otel-collector	up	http://otel-collector:8889/metrics
+prometheus	up	http://prometheus:9090/metrics
+devops-homework	ScrapeTargetDown	alerting	inactive
+devops-homework	ContainerHighCPU	alerting	inactive
+devops-homework	ContainerHighMemory	alerting	inactive
+devops-homework	HomeworkApplicationUnhealthy	alerting	inactive
+
+===== OTLP METRIC AND FIRING ALERT =====
+{"partialSuccess":{}}
+Prometheus metric devops_homework_demo_health=0
+Prometheus alert HomeworkApplicationUnhealthy=firing
+HomeworkApplicationUnhealthy	active	The assignment's synthetic application-health signal is unhealthy
+
+===== LOKI LOG QUERY =====
+container
+service_name
+session20-evidence-loki-1	level=info ts=2026-10-04T01:27:12.819805969Z caller=flush.go:304 component=ingester msg="flushing stream" user=fake fp=7b35c08c8a95271e immediate=false num_chunks=1 total_comp="69 kB" avg_comp="69 kB" total_uncomp="69 kB" avg_uncomp="69 kB" max_age=1 labels="{container=\\"minikube\\", service_name=\\"minikube\\"}"
+session20-evidence-loki-1	level=info ts=2026-10-04T01:26:56.778790044Z caller=recalculate_owned_streams.go:52 msg="completed recalculate owned streams job"
+session20-evidence-loki-1	level=info ts=2026-10-04T01:26:56.778767086Z caller=recalculate_owned_streams.go:63 msg="detected ring changes, re-evaluating streams ownership"
+session20-evidence-loki-1	level=info ts=2026-10-04T01:26:56.778668628Z caller=recalculate_owned_streams.go:49 msg="starting recalculate owned streams job"
+session20-evidence-otel-collector-1	2026-10-04T01:27:01.265Z\tinfo\tMetrics\t{"resource": {"service.instance.id": "d2c8c251-f755-46c9-9cfa-ec87cf305a17", "service.name": "otelcol-contrib", "service.version": "0.134.0"}, "otelcol.component.id": "debug", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "resource metrics": 1, "metrics": 1, "data points": 1}
+
+===== TEMPO TRACE QUERY =====
+{"partialSuccess":{}}
+Tempo trace 0123456789abcdef0123456789abcdef: assignment-evidence-request
+
+===== GRAFANA DATASOURCES AND DASHBOARD =====
+Loki	loki	http://loki:3100
+Prometheus	prometheus	http://prometheus:9090
+Tempo	tempo	http://tempo:3200
+DevOps Homework Observability	devops-homework-observability	/d/devops-homework-observability/devops-homework-observability
+PASS: metrics, alert delivery, logs, trace retrieval and dashboard provisioning were verified.
+
+===== STACK CLEANUP =====
+PASS: the disposable Compose stack and named volumes were removed.

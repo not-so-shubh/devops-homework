@@ -1,0 +1,72 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "percentunit"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "id": 1,
+      "targets": [{"expr": "sum(rate(container_cpu_usage_seconds_total{name!=\"\"}[5m]))", "refId": "A"}],
+      "title": "Container CPU utilization",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "bytes"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+      "id": 2,
+      "targets": [{"expr": "sum(container_memory_working_set_bytes{name!=\"\"})", "refId": "A"}],
+      "title": "Container memory working set",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"mappings": [{"options": {"0": {"color": "red", "text": "UNHEALTHY"}, "1": {"color": "green", "text": "HEALTHY"}}, "type": "value"}]}, "overrides": []},
+      "gridPos": {"h": 6, "w": 8, "x": 0, "y": 8},
+      "id": 3,
+      "targets": [{"expr": "devops_homework_demo_health", "refId": "A"}],
+      "title": "Application health",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {}, "overrides": []},
+      "gridPos": {"h": 6, "w": 8, "x": 8, "y": 8},
+      "id": 4,
+      "targets": [{"expr": "sum(up)", "refId": "A"}],
+      "title": "Healthy scrape targets",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "loki", "uid": "loki"},
+      "gridPos": {"h": 10, "w": 8, "x": 16, "y": 8},
+      "id": 5,
+      "options": {"dedupStrategy": "none", "enableInfiniteScrolling": false, "showCommonLabels": false, "showLabels": false, "showTime": true, "sortOrder": "Descending", "wrapLogMessage": true},
+      "targets": [{"expr": "{container=~\".+\"}", "refId": "A"}],
+      "title": "Docker application logs",
+      "type": "logs"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "gridPos": {"h": 4, "w": 16, "x": 0, "y": 14},
+      "id": 6,
+      "options": {"alertInstanceLabelFilter": "", "alertName": "", "dashboardAlerts": false, "folder": {"id": ""}, "groupBy": [], "groupMode": "default", "maxItems": 20, "sortOrder": 1, "stateFilter": {"error": true, "firing": true, "noData": true, "normal": true, "pending": true}},
+      "title": "Alert state",
+      "type": "alertlist"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 41,
+  "tags": ["devops-homework", "observability"],
+  "templating": {"list": []},
+  "time": {"from": "now-30m", "to": "now"},
+  "timezone": "browser",
+  "title": "DevOps Homework Observability",
+  "uid": "devops-homework-observability",
+  "version": 1
+}

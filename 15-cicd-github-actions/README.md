@@ -8,7 +8,7 @@ This project provides a dependency-free Python web service, unit tests, a harden
 ## CI vs CD
 
 - **Continuous Integration** validates every change by compiling, testing, linting and building it in a clean runner.
-- **Continuous Delivery/Deployment** publishes a verified immutable image and deploys it to an environment. This workflow publishes to GHCR on `main`; Kubernetes deployment runs only when the `KUBE_CONFIG` repository secret is configured.
+- **Continuous Delivery/Deployment** deploys the built image to an ephemeral Kind cluster on every run, verifies the health endpoint, and publishes a multi-architecture immutable image to GHCR on `main`. An additional external-cluster rollout is available only when the deployment secret is configured.
 
 ## Workflow model
 
@@ -21,11 +21,14 @@ push / pull request
   test and package ----> uploaded test artifact
         |
         v
-  Docker build
+  Docker build and image artifact
         |
-        +---- main branch ----> GHCR image
+        v
+  Kind Kubernetes smoke deployment + health check
+        |
+        +---- main branch ----> multi-architecture GHCR image
                                   |
-                                  +---- KUBE_CONFIG configured ----> Kubernetes rollout
+                                  +---- KUBE_CONFIG configured ----> external Kubernetes rollout
 ```
 
 ## Local verification
@@ -43,7 +46,7 @@ kubectl apply --dry-run=client -f kubernetes/
 
 ## GitHub configuration
 
-The workflow uses the built-in `GITHUB_TOKEN` with `packages: write` to publish `ghcr.io/<owner>/devops-homework`. CD requires one optional secret:
+The workflow uses the built-in `GITHUB_TOKEN` with `packages: write` to publish `ghcr.io/<owner>/devops-homework`. The ephemeral Kubernetes deployment requires no repository secret. External CD requires one optional secret:
 
 - `KUBE_CONFIG`: a base64-encoded, least-privilege kubeconfig for the target namespace.
 

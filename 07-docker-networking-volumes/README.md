@@ -7,7 +7,7 @@ This section contains four independent exercises:
 3. [Read-only Nginx bind mount with live host edits](bind-mount/)
 4. [Multi-host overlay network concepts and Swarm commands](overlay-network.md)
 
-The container-networking and bind-mount labs use distinctive project/container names and include scoped cleanup. The overlay lab is documentation-only because automatically changing a developer machine's Swarm state would be intrusive. Host mode is also manual because it may collide with an existing service on port 80.
+The container-networking and bind-mount labs use distinctive project/container names and include scoped cleanup. The overlay lab is documentation-only because automatically changing a developer machine's Swarm state would be intrusive. Host mode was verified against a disposable nested Linux Docker daemon so the native Linux behavior is demonstrated without changing the developer machine's Swarm state or occupying its port 80.
 
 ## Objective and task requirements
 
@@ -61,7 +61,7 @@ PASS: host edit appeared through the read-only container mount without restart.
 
 ![Bind mount after edit without restart](../evidence/screenshots/18-bind-mount-after.png)
 
-The after capture was taken against the same container ID with restart count zero. Native terminal-only network screenshots remain listed as manual in [`evidence/screenshots/README.md`](../evidence/screenshots/README.md).
+The after capture was taken against the same container ID with restart count zero. Docker networking, connectivity/isolation, and Linux host-mode captures are indexed in [`evidence/screenshots/README.md`](../evidence/screenshots/README.md).
 
 ## Relevant files and learning summary
 

@@ -1,20 +1,72 @@
-DevOps Homework verification summary
-Generated: Sun Oct 4 01:58 IST 2026
+=== Complete assignment structure ===
+PASS: all Sessions 1-21 deliverable roots exist
+
+=== Bash and Python ===
+PASS: all shell scripts pass bash -n
+test_health (test_app.ApplicationTests.test_health) ... ok
+test_home (test_app.ApplicationTests.test_home) ... ok
+test_metrics (test_app.ApplicationTests.test_metrics) ... ok
+test_unknown_path (test_app.ApplicationTests.test_unknown_path) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.000s
+
+OK
+test_health (test_app.DevSecOpsAppTests.test_health) ... ok
+test_missing (test_app.DevSecOpsAppTests.test_missing) ... ok
+test_root (test_app.DevSecOpsAppTests.test_root) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.000s
+
+OK
+test_health_and_readiness (test_app.FinalAppTests.test_health_and_readiness) ... ok
+test_home_contract (test_app.FinalAppTests.test_home_contract) ... ok
+test_not_found (test_app.FinalAppTests.test_not_found) ... ok
+test_prometheus_metrics (test_app.FinalAppTests.test_prometheus_metrics) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.000s
+
+OK
+PASS: all application unit tests pass
+
+=== Safe demonstrations ===
+PASS: Linux link behavior
+PASS: system-information script (Ubuntu container fallback)
+PASS: network collector
+PASS: Git commit/cherry-pick demonstration
+
+=== YAML and workflow syntax ===
+PASS: all YAML and workflow files parse
+
+=== Docker and Compose ===
+PASS: all Docker Compose configurations render
+
+=== Helm ===
+==> Linting /Users/shubhjaiswal/Documents/Codex/2026-10-04/https-github-com-not-so-shubh/work/devops-homework/14-helm/devops-web
+[INFO] Chart.yaml: icon is recommended
+
+1 chart(s) linted, 0 chart(s) failed
+==> Linting /Users/shubhjaiswal/Documents/Codex/2026-10-04/https-github-com-not-so-shubh/work/devops-homework/20-final-devops-project/final-devops-project/helm/final-app
+[INFO] Chart.yaml: icon is recommended
+
+1 chart(s) linted, 0 chart(s) failed
+PASS: both Helm charts lint successfully
+
+=== Terraform ===
+[32m[1mSuccess![0m The configuration is valid.
+[0m
+[32m[1mSuccess![0m The configuration is valid.
+[0m
+[32m[1mSuccess![0m The configuration is valid.
+[0m
+PASS: all Terraform projects format and validate
+
+=== Assignment-critical controls ===
+PASS: HPA, runtime hardening, GitOps, security gates and cloud resources are present
+
+=== Summary ===
 PASS: 12
 FAIL: 0
 BLOCKED/SKIP: 0
-
-Checks include assignment structure, Bash syntax, 11 Python unit tests, four
-safe demonstrations, YAML/workflow parsing, Docker Compose rendering, two Helm
-charts, three Terraform roots and assignment-critical security/runtime controls.
-
-Additional final checks:
-- actionlint: passed for all GitHub workflows
-- Gitleaks history scan: 0 leaks
-- Gitleaks working-directory scan: 0 leaks
-- git diff --check: passed
-- GitHub CI/CD Demo: success (run 37164772641)
-- GitHub DevSecOps Pipeline: success (run 37164772697)
-- GitHub Final DevOps Project: success (run 37164772654)
-- GHCR publish jobs: passed in all three hosted workflows
-- External Kubernetes deploy jobs: intentionally skipped (no credentials/opt-in)

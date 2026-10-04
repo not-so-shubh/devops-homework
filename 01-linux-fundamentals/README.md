@@ -73,7 +73,7 @@ chmod +x link-practice.sh
 ./link-practice.sh
 ```
 
-The genuine temporary-directory transcript is [linux-link-demo.txt](../evidence/command-outputs/linux-link-demo.txt). It shows inode numbers, reading through both link types, removal of the original filename, the surviving hard link, and the expected dangling symbolic link. The terminal screenshot slot is documented in [`evidence/screenshots/README.md`](../evidence/screenshots/README.md); no screenshot is claimed here because native terminal capture was unavailable.
+The genuine temporary-directory transcript is [linux-link-demo.txt](../evidence/command-outputs/linux-link-demo.txt). It shows inode numbers, reading through both link types, removal of the original filename, the surviving hard link, and the expected dangling symbolic link. A readable terminal-style capture rendered directly from that transcript is available as [01-linux-links.png](../evidence/screenshots/01-linux-links.png).
 
 Real output excerpt:
 

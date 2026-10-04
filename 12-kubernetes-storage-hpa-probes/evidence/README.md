@@ -8,4 +8,7 @@ Capture genuine command output for:
 4. Increased replica count during the load-generator run.
 5. Mini-project resources and a successful HTTP response.
 
-Generated transcripts are stored here by `scripts/run-kubernetes-evidence.sh`; no sample output is represented as a real execution.
+The checked-in evidence was produced by the local Minikube run; no sample output is represented as a real execution.
+
+- [Volumes, persistence, probes and mini-project](01-volumes-and-project.png)
+- [HPA load and replica scaling](02-hpa-scaling.png)

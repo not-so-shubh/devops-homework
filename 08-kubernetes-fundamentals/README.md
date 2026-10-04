@@ -168,7 +168,7 @@ kubectl port-forward service/fundamentals-web 8089:80
 curl http://127.0.0.1:8089/
 ```
 
-Capture the complete command transcript as `screenshots/05-basics-tutorial.png` or a genuine text output file.
+The complete tutorial command transcript is captured in `screenshots/05-basics-tutorial.png`.
 
 ## Submission evidence checklist
 

@@ -20,7 +20,8 @@ Code -> Build -> Unit Test -> SAST -> SCA -> Secret Scan
 | SCA | pip-audit | Known vulnerable dependencies fail the job |
 | Secret scan | Gitleaks | Verified secret patterns fail the job |
 | Container scan | Trivy | Unfixed HIGH/CRITICAL OS or library vulnerabilities fail the job |
-| Image publishing | GHCR + immutable SHA tag | Runs only after every security job succeeds |
+| Kubernetes smoke deployment | Ephemeral Kind cluster | Deploys the gated revision and verifies `/health` before publication |
+| Image publishing | GHCR + immutable SHA tag | Runs only after every security and deployment job succeeds |
 | Kubernetes admission posture | Non-root, dropped capabilities, read-only root FS, limits and probes | Manifest is statically validated before deployment |
 
 ## Local verification
@@ -38,6 +39,6 @@ kubectl apply --dry-run=client -f kubernetes/
 
 ## Secrets and registry
 
-The workflow uses only the short-lived built-in `GITHUB_TOKEN` to publish to GHCR. A Kubernetes deployment is gated by repository variable `ENABLE_DEVSECOPS_DEPLOY=true` and secret `KUBE_CONFIG`. The kubeconfig should grant only namespace-scoped deployment permissions. No cloud or registry password is committed.
+The workflow uses only the short-lived built-in `GITHUB_TOKEN` to publish a multi-architecture image to GHCR. It always proves deployment in an ephemeral Kind cluster. A second deployment to an external cluster is gated by repository variable `ENABLE_DEVSECOPS_DEPLOY=true` and secret `KUBE_CONFIG`. The kubeconfig should grant only namespace-scoped deployment permissions. No cloud or registry password is committed.
 
 SARIF and plain-text reports are uploaded as workflow artifacts even when a security job fails, making findings auditable. Production should also protect the environment with required reviewers and branch protection.

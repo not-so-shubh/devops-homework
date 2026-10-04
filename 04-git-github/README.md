@@ -25,7 +25,7 @@ chmod +x git-practice-demo.sh
 ./git-practice-demo.sh
 ```
 
-The genuine transcript is [git-practice-output.txt](../evidence/command-outputs/git-practice-output.txt). It prints the before/after `commit -a` status, a runtime-generated selected commit hash, `git log --oneline --graph --all --decorate`, the cherry-picked content, and final status. Terminal screenshot slots 04 and 05 are listed in [`evidence/screenshots/README.md`](../evidence/screenshots/README.md); no PNG is claimed because native terminal capture was unavailable.
+The genuine transcript is [git-practice-output.txt](../evidence/command-outputs/git-practice-output.txt). It prints the before/after `commit -a` status, a runtime-generated selected commit hash, `git log --oneline --graph --all --decorate`, the cherry-picked content, and final status. The matching terminal-style captures are [04-git-commit-a.png](../evidence/screenshots/04-git-commit-a.png) and [05-git-cherry-pick.png](../evidence/screenshots/05-git-cherry-pick.png).
 
 Real output excerpt:
 

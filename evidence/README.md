@@ -18,6 +18,7 @@ This directory preserves genuine runtime evidence from the earlier DevOps sectio
 | `docker-network-output.txt` | Section 07 network connectivity/isolation lab |
 | `bind-mount-output.txt` | Section 07 bind-mount before/after lab |
 | `host-network-output.txt` | Section 07 guarded host-network attempt |
+| `host-network-linux-output.txt` | Section 07 successful native-Linux host-network verification in a disposable daemon |
 | `verification-summary.txt` | Historical pre-refactor verifier summary; rerun the repaired verifier before relying on its totals |
 
 ## Kubernetes evidence
@@ -28,6 +29,11 @@ Kubernetes evidence belongs beside the Kubernetes section that generated it:
 - `09-kubernetes-pods-replicasets-deployments/screenshots/`
 - `10-kubernetes-networking-services/screenshots/`
 - `11-kubernetes-ingress-configmaps-secrets/screenshots/`
+- `12-kubernetes-storage-hpa-probes/evidence/`
+- `13-kubernetes-troubleshooting/evidence/`
+- `14-helm/evidence/`
+- `19-monitoring-observability-gitops/evidence/`
+- `20-final-devops-project/final-devops-project/evidence/`
 
 Do not copy example terminal output or another student's screenshots into these folders. Pod names, image IDs, cluster versions, IPs, node ages, timestamps, and rollout timing should come from the real local Minikube run.
 

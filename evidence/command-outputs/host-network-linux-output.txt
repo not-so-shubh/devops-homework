@@ -1,0 +1,28 @@
+Linux Docker host-network verification (disposable Docker-in-Docker daemon)
+
+$ docker run -d --privileged --name devops-hostnet-dind docker:27-dind --tls=false
+f2a8d19ec8a6b407976eacc25df5aee7db31e97a04ff129ad2d7a5c52fd1d8eb
+
+$ docker exec devops-hostnet-dind docker run -d --name apache-host --network host httpd:2.4-alpine
+b388c6bc3b15115fe9969653cf68f647475c23226d11c18f09f6d7246b09f86a
+
+$ docker exec devops-hostnet-dind docker inspect --format '{{.HostConfig.NetworkMode}}' apache-host
+host
+
+$ docker exec devops-hostnet-dind wget -qO- http://127.0.0.1/
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>It works! Apache httpd</title>
+</head>
+<body>
+<p>It works!</p>
+</body>
+</html>
+
+$ docker exec devops-hostnet-dind docker ps --filter name=apache-host --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
+NAMES         STATUS         PORTS
+apache-host   Up 9 seconds
+
+PASS: Apache used native Linux host networking and answered on 127.0.0.1:80.
+The outer Docker Desktop host-mode limitation remains documented separately in host-network-output.txt.

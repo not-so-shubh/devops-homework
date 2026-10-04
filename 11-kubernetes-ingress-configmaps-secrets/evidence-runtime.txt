@@ -1,0 +1,266 @@
+namespace/session12-evidence created
+namespace/ingress-lab created
+
+===== CONFIGMAP CREATION AND INJECTION =====
+configmap/yatri-app-config created
+secret/yatri-db-secret created
+deployment.apps/yatri-backend created
+service/yatri-backend created
+Waiting for deployment "yatri-backend" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "yatri-backend" rollout to finish: 1 of 2 updated replicas are available...
+deployment "yatri-backend" successfully rolled out
+NAME               DATA   AGE
+yatri-app-config   5      1s
+Name:         yatri-app-config
+Namespace:    session12-evidence
+Labels:       app=yatri-app
+Annotations:  <none>
+
+Data
+====
+DEFAULT_CURRENCY:
+----
+INR
+
+ENVIRONMENT:
+----
+production
+
+LOG_LEVEL:
+----
+INFO
+
+MAX_BOOKING_DAYS:
+----
+90
+
+PORT:
+----
+8080
+
+
+BinaryData
+====
+
+Events:  <none>
+DEFAULT_CURRENCY=INR
+ENVIRONMENT=production
+LOG_LEVEL=INFO
+
+===== CONFIGMAP LIVE UPDATE =====
+configmap/yatri-app-config patched
+Existing process environment: production
+deployment.apps/yatri-backend restarted
+Waiting for deployment "yatri-backend" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "yatri-backend" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "yatri-backend" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "yatri-backend" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "yatri-backend" rollout to finish: 1 old replicas are pending termination...
+deployment "yatri-backend" successfully rolled out
+New process environment: staging
+configmap/yatri-app-config patched
+deployment.apps/yatri-backend restarted
+Waiting for deployment "yatri-backend" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "yatri-backend" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "yatri-backend" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "yatri-backend" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "yatri-backend" rollout to finish: 1 old replicas are pending termination...
+deployment "yatri-backend" successfully rolled out
+
+===== SECRET AND BASE64 =====
+NAME              TYPE     DATA   AGE
+yatri-db-secret   Opaque   2      3s
+Name:         yatri-db-secret
+Namespace:    session12-evidence
+Labels:       app=yatri-app
+Annotations:  <none>
+
+Type:  Opaque
+
+Data
+====
+POSTGRES_PASSWORD:  14 bytes
+POSTGRES_USER:      11 bytes
+Decoded lab user: yatri_admin
+Decoded lab password: secretpassword
+With newline bytes: 73656372657470617373776f72640a
+Without newline bytes: 73656372657470617373776f7264
+Base64 is reversible encoding, not encryption; these values are lab-only.
+No resources found
+Standard native Kubernetes Secrets are in use.
+
+===== CONFIGMAP AND SECRET COMBINED =====
+DEFAULT_CURRENCY=INR
+ENVIRONMENT=production
+LOG_LEVEL=INFO
+POSTGRES_USER=yatri_admin
+pod/backend-probe created
+pod/backend-probe condition met
+ENVIRONMENT: staging
+LOG_LEVEL: INFO
+DEFAULT_CURRENCY: INR
+POSTGRES_USER: yatri_admin
+
+===== INGRESS RESOURCE AND CONTROLLER =====
+ingressclasses                                   networking.k8s.io/v1              false        IngressClass
+ingresses                           ing          networking.k8s.io/v1              true         Ingress
+NAME                                           READY   STATUS      RESTARTS   AGE
+pod/ingress-nginx-admission-create-m78l7       0/1     Completed   0          15m
+pod/ingress-nginx-admission-patch-h885x        0/1     Completed   0          15m
+pod/ingress-nginx-controller-d7cd8c989-6bptq   1/1     Running     0          15m
+
+NAME                                         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                      AGE
+service/ingress-nginx-controller             NodePort    10.104.174.172   <none>        80:30804/TCP,443:32437/TCP   15m
+service/ingress-nginx-controller-admission   ClusterIP   10.97.61.142     <none>        443/TCP                      15m
+pod/ingress-nginx-controller-d7cd8c989-6bptq condition met
+pod/ingress-client created
+pod/ingress-client condition met
+Minikube IP: 192.168.49.2
+Host routing is tested without modifying /etc/hosts by sending explicit Host headers.
+
+===== PATH ROUTING FULL DEMO =====
+deployment.apps/yatri-frontend created
+service/yatri-frontend created
+ingress.networking.k8s.io/yatri-ingress created
+Waiting for deployment "yatri-frontend" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "yatri-frontend" rollout to finish: 1 of 2 updated replicas are available...
+deployment "yatri-frontend" successfully rolled out
+NAME            CLASS   HOSTS         ADDRESS   PORTS   AGE
+yatri-ingress   nginx   yatri.local             80      0s
+Name:             yatri-ingress
+Labels:           app=yatri-app
+Namespace:        session12-evidence
+Address:          
+Ingress Class:    nginx
+Default backend:  <default>
+Rules:
+  Host         Path  Backends
+  ----         ----  --------
+  yatri.local  
+               /api(/|$)(.*)   yatri-backend:8080 (10.244.0.158:8080,10.244.0.159:8080)
+               /(.*)           yatri-frontend:80 (10.244.0.163:80,10.244.0.162:80)
+Annotations:   nginx.ingress.kubernetes.io/rewrite-target: /$2
+               nginx.ingress.kubernetes.io/use-regex: true
+Events:
+  Type    Reason  Age   From                      Message
+  ----    ------  ----  ----                      -------
+  Normal  Sync    0s    nginx-ingress-controller  Scheduled for sync
+<title>Welcome to nginx!</title>
+ENVIRONMENT: production
+LOG_LEVEL: INFO
+DEFAULT_CURRENCY: INR
+POSTGRES_USER: yatri_admin
+
+===== HOST AND HYBRID ROUTING =====
+deployment.apps/campus-frontend created
+service/campus-frontend created
+deployment.apps/campus-backend created
+service/campus-backend created
+Waiting for deployment "campus-frontend" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "campus-frontend" rollout to finish: 1 of 2 updated replicas are available...
+deployment "campus-frontend" successfully rolled out
+deployment "campus-backend" successfully rolled out
+ingress.networking.k8s.io/campus-host-ingress created
+NAME                  CLASS   HOSTS                                  ADDRESS   PORTS   AGE
+campus-host-ingress   nginx   portal.campus.local,api.campus.local             80      0s
+<title>Welcome to nginx!</title>
+campus backend
+ingress.networking.k8s.io "campus-host-ingress" deleted from session12-evidence namespace
+ingress.networking.k8s.io/campus-hybrid-ingress created
+NAME                    CLASS   HOSTS                                  ADDRESS   PORTS   AGE
+campus-hybrid-ingress   nginx   portal.campus.local,api.campus.local             80      0s
+campus backend
+
+===== TLS INGRESS =====
+secret/campus-tls-cert created
+ingress.networking.k8s.io "campus-hybrid-ingress" deleted from session12-evidence namespace
+ingress.networking.k8s.io/campus-ingress-tls created
+NAME              TYPE                DATA   AGE
+campus-tls-cert   kubernetes.io/tls   2      0s
+NAME                 CLASS   HOSTS                                  ADDRESS   PORTS     AGE
+campus-ingress-tls   nginx   portal.campus.local,api.campus.local             80, 443   0s
+HTTP/2 200 
+
+===== TROUBLESHOOTING BEFORE =====
+configmap/session12-trouble created
+deployment.apps/session12-trouble created
+service/session12-trouble created
+ingress.networking.k8s.io/session12-trouble created
+NAME                                     READY   STATUS                       RESTARTS   AGE
+pod/session12-trouble-55747cd496-mbhqk   0/1     CreateContainerConfigError   0          8s
+
+NAME                        TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
+service/session12-trouble   ClusterIP   10.96.159.73   <none>        80/TCP    8s
+
+NAME                                          CLASS   HOSTS           ADDRESS   PORTS   AGE
+ingress.networking.k8s.io/session12-trouble   nginx   trouble.local             80      8s
+Containers:
+  web:
+    Container ID:   
+    Image:          nginx:1.27-alpine
+    Image ID:       
+    Port:           <none>
+    Host Port:      <none>
+    State:          Waiting
+      Reason:       CreateContainerConfigError
+    Ready:          False
+    Restart Count:  0
+    Environment:
+      APP_MODE:  <set to the key 'APP_MODE' of config map 'session12-trouble'>  Optional: false
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-tmsvl (ro)
+Conditions:
+LAST SEEN   TYPE      REASON              OBJECT                                    MESSAGE
+9s          Normal    Scheduled           pod/session12-trouble-55747cd496-mbhqk    Successfully assigned ingress-lab/session12-trouble-55747cd496-mbhqk to minikube
+9s          Normal    SuccessfulCreate    replicaset/session12-trouble-55747cd496   Created pod: session12-trouble-55747cd496-mbhqk
+9s          Normal    ScalingReplicaSet   deployment/session12-trouble              Scaled up replica set session12-trouble-55747cd496 from 0 to 1
+9s          Normal    Sync                ingress/session12-trouble                 Scheduled for sync
+8s          Normal    Pulled              pod/session12-trouble-55747cd496-mbhqk    Container image "nginx:1.27-alpine" already present on machine and can be accessed by the pod
+8s          Warning   Failed              pod/session12-trouble-55747cd496-mbhqk    Error: couldn't find key APP_MODE in ConfigMap ingress-lab/session12-trouble
+
+===== TROUBLESHOOTING AFTER =====
+configmap/session12-trouble configured
+deployment.apps/session12-trouble configured
+service/session12-trouble unchanged
+ingress.networking.k8s.io/session12-trouble configured
+Waiting for deployment "session12-trouble" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "session12-trouble" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "session12-trouble" rollout to finish: 1 old replicas are pending termination...
+deployment "session12-trouble" successfully rolled out
+NAME                                     READY   STATUS        RESTARTS   AGE
+pod/session12-trouble-55747cd496-mbhqk   0/1     Terminating   0          10s
+pod/session12-trouble-776d68cbd9-mrdf9   1/1     Running       0          1s
+
+NAME                        TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
+service/session12-trouble   ClusterIP   10.96.159.73   <none>        80/TCP    10s
+
+NAME                                          CLASS   HOSTS           ADDRESS   PORTS   AGE
+ingress.networking.k8s.io/session12-trouble   nginx   trouble.local             80      10s
+production
+curl: (7) Failed to connect to session12-trouble.ingress-lab.svc.cluster.local port 80 after 0 ms: Could not connect to server
+HTTP/1.1 200 OK
+
+===== SESSION 12 RESULT =====
+NAME                         DATA   AGE
+configmap/yatri-app-config   5      40s
+
+NAME                     TYPE     DATA   AGE
+secret/yatri-db-secret   Opaque   2      40s
+
+NAME                                      CLASS   HOSTS         ADDRESS        PORTS   AGE
+ingress.networking.k8s.io/yatri-ingress   nginx   yatri.local   192.168.49.2   80      33s
+
+NAME                             READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/yatri-backend    2/2     2            2           40s
+deployment.apps/yatri-frontend   2/2     2            2           33s
+
+NAME                     TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+service/yatri-backend    ClusterIP   10.103.2.231   <none>        8080/TCP   40s
+service/yatri-frontend   ClusterIP   10.96.1.140    <none>        80/TCP     33s
+
+NAME                                  READY   STATUS    RESTARTS   AGE
+pod/yatri-backend-94b785fdd-7l7zm     1/1     Running   0          38s
+pod/yatri-backend-94b785fdd-ldr4g     1/1     Running   0          37s
+pod/yatri-frontend-78d7c777d9-5gc6j   1/1     Running   0          33s
+pod/yatri-frontend-78d7c777d9-wm5r2   1/1     Running   0          33s
+PASS: ConfigMap, Secret, path/host/hybrid/TLS Ingress and broken/fixed troubleshooting were exercised.

@@ -60,7 +60,7 @@ The script satisfies the homework's system-information requirements: current dat
 
 ## Actual verification and evidence
 
-The final piped-input run is [shell-script-output.txt](../evidence/command-outputs/shell-script-output.txt). It contains the real date/host/user, `df -h` output, a PID/command process summary, the generated report path, and the success line. The terminal-only slot is described in the [screenshot checklist](../evidence/screenshots/README.md#02--shell-script); no PNG is claimed because native terminal capture was unavailable.
+The final piped-input run is [shell-script-output.txt](../evidence/command-outputs/shell-script-output.txt). It contains the real date/host/user, `df -h` output, a PID/command process summary, the generated report path, and the success line. A readable terminal-style capture rendered directly from that transcript is available as [02-shell-script.png](../evidence/screenshots/02-shell-script.png).
 
 Real output excerpt:
 

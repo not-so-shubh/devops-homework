@@ -1,0 +1,259 @@
+namespace/session11-evidence created
+
+===== PORT ARCHITECTURE =====
+KIND:       Pod
+VERSION:    v1
+
+FIELD: containerPort <integer>
+
+
+DESCRIPTION:
+    Number of port to expose on the pod's IP address. This must be a valid port
+    number, 0 < x < 65536.
+    
+
+KIND:       Service
+VERSION:    v1
+
+FIELD: ports <[]ServicePort>
+
+
+DESCRIPTION:
+    The list of ports that are exposed by this service. More info:
+    https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ServicePort contains information on service's port.
+    
+FIELDS:
+  appProtocol	<string>
+    The application protocol for this port. This is used as a hint for
+    implementations to offer richer behavior for protocols that they understand.
+    This field follows standard Kubernetes label syntax. Valid values are
+    either:
+    
+    * Un-prefixed protocol names - reserved for IANA standard service names (as
+    per RFC-6335 and https://www.iana.org/assignments/service-names).
+    
+    * Kubernetes-defined prefixed names:
+      * 'kubernetes.io/h2c' - HTTP/2 prior knowledge over cleartext as described
+    in
+    https://www.rfc-editor.org/rfc/rfc9113.html#name-starting-http-2-with-prior-
+      * 'kubernetes.io/ws'  - WebSocket over cleartext as described in
+    https://www.rfc-editor.org/rfc/rfc6455
+      * 'kubernetes.io/wss' - WebSocket over TLS as described in
+    https://www.rfc-editor.org/rfc/rfc6455
+    
+    * Other protocols should use implementation-defined prefixed names such as
+    mycompany.com/my-custom-protocol.
+
+  name	<string>
+    The name of this port within the service. This must be a DNS_LABEL. All
+
+===== CLUSTERIP SERVICE AND FQDN =====
+deployment.apps/web-app-clusterip created
+pod/curl-client created
+service/web-service-clusterip created
+Waiting for deployment "web-app-clusterip" rollout to finish: 0 of 3 updated replicas are available...
+Waiting for deployment "web-app-clusterip" rollout to finish: 1 of 3 updated replicas are available...
+Waiting for deployment "web-app-clusterip" rollout to finish: 2 of 3 updated replicas are available...
+deployment "web-app-clusterip" successfully rolled out
+pod/curl-client condition met
+NAME                                 READY   STATUS    RESTARTS   AGE   IP             NODE       NOMINATED NODE   READINESS GATES
+web-app-clusterip-6ccf84dc4f-7qh8t   1/1     Running   0          3s    10.244.0.112   minikube   <none>           <none>
+web-app-clusterip-6ccf84dc4f-dj5j5   1/1     Running   0          3s    10.244.0.111   minikube   <none>           <none>
+web-app-clusterip-6ccf84dc4f-z9mvm   1/1     Running   0          3s    10.244.0.110   minikube   <none>           <none>
+NAME                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+web-service-clusterip   ClusterIP   10.101.191.58   <none>        8080/TCP   3s
+NAME                          ADDRESSTYPE   PORTS   ENDPOINTS                                AGE
+web-service-clusterip-4q5rk   IPv4          80      10.244.0.111,10.244.0.110,10.244.0.112   3s
+<title>Welcome to nginx!</title>
+<title>Welcome to nginx!</title>
+
+===== NODEPORT SERVICE =====
+deployment.apps/web-app-nodeport created
+service/web-service-nodeport created
+Waiting for deployment "web-app-nodeport" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "web-app-nodeport" rollout to finish: 1 of 2 updated replicas are available...
+deployment "web-app-nodeport" successfully rolled out
+NAME                   TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE   SELECTOR
+web-service-nodeport   NodePort   10.108.161.37   <none>        80:30080/TCP   1s    app=web-nodeport
+NAME                         ADDRESSTYPE   PORTS   ENDPOINTS                   AGE
+web-service-nodeport-md6vh   IPv4          80      10.244.0.114,10.244.0.113   1s
+NodePort address: http://192.168.49.2:30080
+curl: (7) Failed to connect to web-service-nodeport port 80 after 0 ms: Could not connect to server
+HTTP/1.1 200 OK
+
+===== LOADBALANCER SERVICE =====
+deployment.apps/web-app-loadbalancer created
+service/web-service-loadbalancer created
+Waiting for deployment "web-app-loadbalancer" rollout to finish: 0 of 3 updated replicas are available...
+Waiting for deployment "web-app-loadbalancer" rollout to finish: 1 of 3 updated replicas are available...
+Waiting for deployment "web-app-loadbalancer" rollout to finish: 2 of 3 updated replicas are available...
+deployment "web-app-loadbalancer" successfully rolled out
+NAME                       TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE   SELECTOR
+web-service-loadbalancer   LoadBalancer   10.102.195.179   <pending>     80:32063/TCP   1s    app=web-loadbalancer
+NAME                             ADDRESSTYPE   PORTS   ENDPOINTS                                AGE
+web-service-loadbalancer-n7mv8   IPv4          80      10.244.0.117,10.244.0.116,10.244.0.115   1s
+curl: (7) Failed to connect to web-service-loadbalancer port 80 after 0 ms: Could not connect to server
+HTTP/1.1 200 OK
+Minikube exposes the LoadBalancer data path locally; a public cloud assigns the external IP.
+
+===== EXTERNALNAME AND COREDNS =====
+pod/dns-test-client created
+service/external-database-service created
+pod/dns-test-client condition met
+NAME                        TYPE           CLUSTER-IP   EXTERNAL-IP      PORT(S)   AGE   SELECTOR
+external-database-service   ExternalName   <none>       api.github.com   <none>    3s    <none>
+;; Got recursion not available from 10.96.0.10
+Server:		10.96.0.10
+Address:	10.96.0.10#53
+
+external-database-service.session11-evidence.svc.cluster.local	canonical name = api.github.com.
+Name:	api.github.com
+Address: 20.207.73.85
+
+HTTP/2 400 
+TLS verification is intentionally bypassed for the alias test because api.github.com presents its canonical hostname certificate.
+
+===== HEADLESS SERVICE AND POD FQDN =====
+statefulset.apps/web-stateful created
+pod/headless-dns-client created
+service/web-service-headless created
+Waiting for 3 pods to be ready...
+Waiting for 2 pods to be ready...
+Waiting for 2 pods to be ready...
+Waiting for 1 pods to be ready...
+Waiting for 1 pods to be ready...
+partitioned roll out complete: 3 new pods have been updated...
+pod/headless-dns-client condition met
+NAME                   TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+web-service-headless   ClusterIP   None         <none>        80/TCP    3s
+NAME             READY   STATUS    RESTARTS   AGE   IP             NODE       NOMINATED NODE   READINESS GATES
+web-stateful-0   1/1     Running   0          3s    10.244.0.120   minikube   <none>           <none>
+web-stateful-1   1/1     Running   0          3s    10.244.0.121   minikube   <none>           <none>
+web-stateful-2   1/1     Running   0          2s    10.244.0.122   minikube   <none>           <none>
+;; Got recursion not available from 10.96.0.10
+Server:		10.96.0.10
+Address:	10.96.0.10#53
+
+Name:	web-service-headless.session11-evidence.svc.cluster.local
+Address: 10.244.0.120
+Name:	web-service-headless.session11-evidence.svc.cluster.local
+Address: 10.244.0.121
+Name:	web-service-headless.session11-evidence.svc.cluster.local
+Address: 10.244.0.122
+;; Got recursion not available from 10.96.0.10
+
+;; Got recursion not available from 10.96.0.10
+Server:		10.96.0.10
+Address:	10.96.0.10#53
+
+Name:	web-stateful-0.web-service-headless.session11-evidence.svc.cluster.local
+Address: 10.244.0.120
+;; Got recursion not available from 10.96.0.10
+
+HTTP/1.1 200 OK
+
+===== SELECTORLESS SERVICE =====
+service/external-legacy-db created
+Warning: v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+Error from server (NotFound): endpoints "external-legacy-db" not found
+No Endpoints object exists before the manual mapping is applied.
+Warning: v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+endpoints/external-legacy-db created
+Warning: v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+NAME                 ENDPOINTS            AGE
+external-legacy-db   192.168.1.150:3306   0s
+
+===== COREDNS RESOLUTION =====
+NAME                       READY   STATUS    RESTARTS      AGE     IP           NODE       NOMINATED NODE   READINESS GATES
+coredns-559f6c778d-cpbxc   1/1     Running   2 (11m ago)   5h32m   10.244.0.3   minikube   <none>           <none>
+search session11-evidence.svc.cluster.local svc.cluster.local cluster.local
+nameserver 10.96.0.10
+options ndots:5
+;; Got recursion not available from 10.96.0.10
+Server:		10.96.0.10
+Address:	10.96.0.10#53
+
+Name:	web-service-clusterip.session11-evidence.svc.cluster.local
+Address: 10.101.191.58
+;; Got recursion not available from 10.96.0.10
+
+;; Got recursion not available from 10.96.0.10
+;; Got recursion not available from 10.96.0.10
+;; Got recursion not available from 10.96.0.10
+;; Got recursion not available from 10.96.0.10
+Server:		10.96.0.10
+Address:	10.96.0.10#53
+
+Name:	web-service-clusterip.session11-evidence.svc.cluster.local
+Address: 10.101.191.58
+;; Got recursion not available from 10.96.0.10
+
+;; Got recursion not available from 10.96.0.10
+;; Got recursion not available from 10.96.0.10
+;; Got recursion not available from 10.96.0.10
+Server:		10.96.0.10
+Address:	10.96.0.10#53
+
+Name:	api.github.com
+Address: 20.207.73.85
+
+
+===== WORKLOAD IDENTITY BEFORE AND AFTER =====
+daemonset.apps/identity-daemonset created
+deployment.apps/identity-deployment created
+service/identity-stateful created
+statefulset.apps/identity-stateful created
+Waiting for deployment "identity-deployment" rollout to finish: 0 of 2 updated replicas are available...
+Waiting for deployment "identity-deployment" rollout to finish: 1 of 2 updated replicas are available...
+deployment "identity-deployment" successfully rolled out
+Waiting for 1 pods to be ready...
+partitioned roll out complete: 2 new pods have been updated...
+daemon set "identity-daemonset" successfully rolled out
+NAME                                   READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/identity-deployment    2/2     2            2           1s
+deployment.apps/web-app-clusterip      3/3     3            3           15s
+deployment.apps/web-app-loadbalancer   3/3     3            3           10s
+deployment.apps/web-app-nodeport       2/2     2            2           12s
+
+NAME                                 READY   AGE
+statefulset.apps/identity-stateful   2/2     1s
+statefulset.apps/web-stateful        3/3     5s
+
+NAME                                DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+daemonset.apps/identity-daemonset   1         1         1       1            1           <none>          1s
+NAME                                   READY   STATUS    RESTARTS   AGE
+identity-deployment-56d66c549c-klgsm   1/1     Running   0          1s
+identity-deployment-56d66c549c-v4cq5   1/1     Running   0          1s
+NAME                  READY   STATUS    RESTARTS   AGE
+identity-stateful-0   1/1     Running   0          1s
+identity-stateful-1   1/1     Running   0          1s
+Deleting generated Deployment pod: identity-deployment-56d66c549c-klgsm
+pod "identity-deployment-56d66c549c-klgsm" deleted from session11-evidence namespace
+pod "identity-stateful-0" deleted from session11-evidence namespace
+NAME                                   READY   STATUS    RESTARTS   AGE
+identity-deployment-56d66c549c-v4cq5   1/1     Running   0          7s
+identity-deployment-56d66c549c-xt6fb   1/1     Running   0          6s
+NAME                  READY   STATUS    RESTARTS   AGE
+identity-stateful-0   1/1     Running   0          4s
+identity-stateful-1   1/1     Running   0          7s
+StatefulSet restored ordinal identity-stateful-0; Deployment created a new generated name.
+
+===== SERVICE SELECTION AND DRIVER RESULT =====
+NAME                        TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)        AGE   SELECTOR
+external-database-service   ExternalName   <none>           api.github.com   <none>         14s   <none>
+external-legacy-db          ClusterIP      10.98.247.150    <none>           3306/TCP       8s    <none>
+identity-stateful           ClusterIP      None             <none>           80/TCP         7s    app=identity-stateful
+web-service-clusterip       ClusterIP      10.101.191.58    <none>           8080/TCP       21s   app=web-clusterip
+web-service-headless        ClusterIP      None             <none>           80/TCP         11s   app=web-headless
+web-service-loadbalancer    LoadBalancer   10.102.195.179   <pending>        80:32063/TCP   16s   app=web-loadbalancer
+web-service-nodeport        NodePort       10.108.161.37    <none>           80:30080/TCP   18s   app=web-nodeport
+NAME                             ADDRESSTYPE   PORTS   ENDPOINTS                                AGE
+external-legacy-db-kp58h         IPv4          3306    192.168.1.150                            8s
+identity-stateful-6t7gv          IPv4          80      10.244.0.127,10.244.0.129                7s
+web-service-clusterip-4q5rk      IPv4          80      10.244.0.111,10.244.0.110,10.244.0.112   21s
+web-service-headless-2wbvn       IPv4          80      10.244.0.120,10.244.0.121,10.244.0.122   11s
+web-service-loadbalancer-n7mv8   IPv4          80      10.244.0.117,10.244.0.116,10.244.0.115   16s
+web-service-nodeport-md6vh       IPv4          80      10.244.0.114,10.244.0.113                18s
+ClusterIP, NodePort, LoadBalancer, ExternalName and Headless service patterns all verified.
+PASS: CoreDNS resolved short names, namespace FQDNs, pod FQDNs and an external CNAME.

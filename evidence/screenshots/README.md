@@ -1,6 +1,6 @@
 # Screenshot Checklist
 
-Existing Sections 1–7 retain the original screenshot filenames. Commands below use the repaired numbered paths.
+Sections 1–7 retain the original screenshot filenames. Every listed file is present. Terminal-style PNGs were rendered from the genuine transcripts under `evidence/command-outputs/`; browser captures came from the running applications.
 
 ## Sections 1–4
 
@@ -29,9 +29,9 @@ Start services from `05-docker-fundamentals/` and capture:
 
 - `14-docker-networks.png` — show the three `devops_hw_*` bridge networks.
 - `15-network-connectivity.png` — run `./07-docker-networking-volumes/container-networking/verify.sh` and show allowed/denied connectivity.
-- `16-host-network.png` — native-Linux host-network proof if your platform supports the assignment behavior.
+- `16-host-network.png` — native-Linux host-network proof from a disposable Docker-in-Docker daemon; the Docker Desktop limitation is preserved in `host-network-output.txt` and the successful Linux run in `host-network-linux-output.txt`.
 - `17-bind-mount-before.png` and `18-bind-mount-after.png` — capture the same bind-mounted container before/after the host edit.
 
 ## Sections 8–11 — Kubernetes
 
-Each Kubernetes section contains its own exact task-by-task screenshot filenames and commands in its README. Save those images in that section's `screenshots/` directory. Do not substitute source-code screenshots for runtime proof.
+Each Kubernetes section contains its own exact task-by-task screenshot filenames and commands in its README. Those images are stored in each section's `screenshots/` directory and derive from real Minikube transcripts. No source-code screenshot is substituted for runtime proof.
