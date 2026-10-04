@@ -1,97 +1,69 @@
-HOSTED WORKFLOW EVIDENCE — FINAL PROJECT
-Commit: f93b4a00b624dee1ee96b9016a019a5f7fbf4695
-Run: https://github.com/not-so-shubh/devops-homework/actions/runs/37197332795
-
-
-✓ main Final DevOps Project · 37197332795
-Triggered via push about 3 minutes ago
-
-JOBS
-✓ source-security in 19s (ID 111421795772)
-✓ test in 6s (ID 111421795875)
-✓ configuration in 20s (ID 111421795906)
-✓ container-security in 34s (ID 111421822193)
-✓ security-gate in 5s (ID 111421923449)
-✓ kubernetes-smoke-deploy in 1m8s (ID 111421949417)
-✓ publish in 44s (ID 111422145945)
-- external-deploy in 0s (ID 111422279062)
-
-ANNOTATIONS
-- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
-source-security: .github#1
-
-- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
-test: .github#1
-
-- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
-configuration: .github#1
-
-- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
-container-security: .github#1
-
-- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
-security-gate: .github#1
-
-- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
-kubernetes-smoke-deploy: .github#1
-
-- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
-publish: .github#1
-
-
-ARTIFACTS
-gitleaks-results.sarif
-not-so-shubh~devops-homework~1B24VE.dockerbuild
-not-so-shubh~devops-homework~2H57GC.dockerbuild
-final-trivy-report
-
-For more information about a job, try: gh run view --job=<job-id>
-View this run on GitHub: https://github.com/not-so-shubh/devops-homework/actions/runs/37197332795
+HOSTED WORKFLOW EVIDENCE - FINAL PROJECT
+Commit: bd2c71e919862dc392f63710745e9d66f8dc3973
+Run: https://github.com/not-so-shubh/devops-homework/actions/runs/37212766713
 
 Job conclusions:
 source-security	completed	success
-test	completed	success
 configuration	completed	success
+test	completed	success
 container-security	completed	success
 security-gate	completed	success
-kubernetes-smoke-deploy	completed	success
 publish	completed	success
+kubernetes-smoke-deploy	completed	success
 external-deploy	completed	skipped
 
-Kubernetes smoke-deploy steps:
+Publish-before-deploy timing:
+publish	2026-10-04T15:23:40Z	2026-10-04T15:24:09Z	success
+kubernetes-smoke-deploy	2026-10-04T15:24:12Z	2026-10-04T15:25:24Z	success
+
+Kubernetes deployment steps:
 Set up job	completed	success
 Run actions/checkout@v7	completed	success
 Run azure/setup-helm@v5	completed	success
-Build the scanned source revision	completed	success
+Build source revision for non-publishing events	completed	skipped
+Run docker/login-action@v4	completed	success
+Pull published immutable image	completed	success
 Create ephemeral Kubernetes cluster	completed	success
 Helm deployment and verification	completed	success
+Post Run docker/login-action@v4	completed	success
 Post Run actions/checkout@v7	completed	success
 Complete job	completed	success
 
+Registry pull and deployment proof:
+Run docker/login-action@v4	2026-10-04T15:24:15.9515348Z Login Succeeded!
+Pull published immutable image	2026-10-04T15:24:16.2895374Z bd2c71e919862dc392f63710745e9d66f8dc3973: Pulling from not-so-shubh/final-devops-project
+Pull published immutable image	2026-10-04T15:24:23.9836454Z Digest: sha256:4689bf3088ee974b2c40f016ac3853c69f7f23c3a3bfaf4b85a08e4a305653ac
+Pull published immutable image	2026-10-04T15:24:23.9852580Z Status: Downloaded newer image for ghcr.io/not-so-shubh/final-devops-project:bd2c71e919862dc392f63710745e9d66f8dc3973
+Create ephemeral Kubernetes cluster	2026-10-04T15:24:23.9923144Z kind load docker-image "$DEPLOY_IMAGE"
+Helm deployment and verification	2026-10-04T15:25:18.3868578Z deployment "final-app" successfully rolled out
+Helm deployment and verification	2026-10-04T15:25:18.4372428Z deployment.apps/final-app   2/2     2            2           6s    app          ghcr.io/not-so-shubh/final-devops-project:bd2c71e919862dc392f63710745e9d66f8dc3973   app.kubernetes.io/instance=final-app,app.kubernetes.io/name=final-app
+Helm deployment and verification	2026-10-04T15:25:22.6879664Z Phase:          Succeeded
+Helm deployment and verification	2026-10-04T15:25:22.6963879Z {"status":"healthy"}
+
 Published image manifest:
-Name:      ghcr.io/not-so-shubh/final-devops-project:f93b4a00b624dee1ee96b9016a019a5f7fbf4695
+Name:      ghcr.io/not-so-shubh/final-devops-project:bd2c71e919862dc392f63710745e9d66f8dc3973
 MediaType: application/vnd.oci.image.index.v1+json
-Digest:    sha256:23d2c5fbc15127835d67b3a4de6fbf78d57f5f01e03ee71b51bedd1ef977c462
+Digest:    sha256:4689bf3088ee974b2c40f016ac3853c69f7f23c3a3bfaf4b85a08e4a305653ac
            
 Manifests: 
-  Name:        ghcr.io/not-so-shubh/final-devops-project:f93b4a00b624dee1ee96b9016a019a5f7fbf4695@sha256:c41e5d3d6262624cc097138a489c605ca4eeae2e576210e3f5f86b2f228be214
+  Name:        ghcr.io/not-so-shubh/final-devops-project:bd2c71e919862dc392f63710745e9d66f8dc3973@sha256:8fa417766b6b715171c68d67ee236ef009e50c9b162c6ee0426a69427acc7f91
   MediaType:   application/vnd.oci.image.manifest.v1+json
   Platform:    linux/amd64
                
-  Name:        ghcr.io/not-so-shubh/final-devops-project:f93b4a00b624dee1ee96b9016a019a5f7fbf4695@sha256:a0e008c9533b13b4a2ce04a52808cd662365e33496257f15934eebd605ff1d2f
+  Name:        ghcr.io/not-so-shubh/final-devops-project:bd2c71e919862dc392f63710745e9d66f8dc3973@sha256:8a6584ec08f5d4f28dfd1f3e0114cf9905098cee3789dea6643027381c5db662
   MediaType:   application/vnd.oci.image.manifest.v1+json
   Platform:    linux/arm64
                
-  Name:        ghcr.io/not-so-shubh/final-devops-project:f93b4a00b624dee1ee96b9016a019a5f7fbf4695@sha256:4f7b7be5cd62ea2137f9e638006f413441bbc576fac48921f7c1d1ed915e4dab
+  Name:        ghcr.io/not-so-shubh/final-devops-project:bd2c71e919862dc392f63710745e9d66f8dc3973@sha256:38b366e6b5dec931e81cfdbd3455f4564b64f4f31aaa1045f0071d04431f80a4
   MediaType:   application/vnd.oci.image.manifest.v1+json
   Platform:    unknown/unknown
   Annotations: 
-    vnd.docker.reference.digest: sha256:c41e5d3d6262624cc097138a489c605ca4eeae2e576210e3f5f86b2f228be214
+    vnd.docker.reference.digest: sha256:8fa417766b6b715171c68d67ee236ef009e50c9b162c6ee0426a69427acc7f91
     vnd.docker.reference.type:   attestation-manifest
                
-  Name:        ghcr.io/not-so-shubh/final-devops-project:f93b4a00b624dee1ee96b9016a019a5f7fbf4695@sha256:55ecaf917a8219cded1e856422dc0bc1f30530aaf3e6c271a4ba66f8766bec8b
+  Name:        ghcr.io/not-so-shubh/final-devops-project:bd2c71e919862dc392f63710745e9d66f8dc3973@sha256:abfa8699927c29fe71ee2152e58419cd3b5340fd5d56a115b4104f8f726deb30
   MediaType:   application/vnd.oci.image.manifest.v1+json
   Platform:    unknown/unknown
   Annotations: 
-    vnd.docker.reference.digest: sha256:a0e008c9533b13b4a2ce04a52808cd662365e33496257f15934eebd605ff1d2f
+    vnd.docker.reference.digest: sha256:8a6584ec08f5d4f28dfd1f3e0114cf9905098cee3789dea6643027381c5db662
     vnd.docker.reference.type:   attestation-manifest

@@ -1,82 +1,65 @@
-HOSTED WORKFLOW EVIDENCE — CI/CD
-Commit: c92b9965f9e7eece0fe1f0dcf0ff1b37b7c33352
-Run: https://github.com/not-so-shubh/devops-homework/actions/runs/37197231672
-
-
-✓ main CI-CD Demo · 37197231672
-Triggered via push about 3 minutes ago
-
-JOBS
-✓ test in 7s (ID 111421508754)
-✓ build in 18s (ID 111421541685)
-✓ kubernetes-smoke-deploy in 1m6s (ID 111421605258)
-✓ publish in 26s (ID 111421809089)
-- external-deploy in 0s (ID 111421991652)
-
-ANNOTATIONS
-- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
-test: .github#1
-
-- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
-build: .github#1
-
-- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
-kubernetes-smoke-deploy: .github#1
-
-- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
-publish: .github#1
-
-
-ARTIFACTS
-test-results-c92b9965f9e7eece0fe1f0dcf0ff1b37b7c33352
-not-so-shubh~devops-homework~PBOAHH.dockerbuild
-container-image-c92b9965f9e7eece0fe1f0dcf0ff1b37b7c33352
-not-so-shubh~devops-homework~B3AES8.dockerbuild
-
-For more information about a job, try: gh run view --job=<job-id>
-View this run on GitHub: https://github.com/not-so-shubh/devops-homework/actions/runs/37197231672
+HOSTED WORKFLOW EVIDENCE - CI/CD
+Commit: bd2c71e919862dc392f63710745e9d66f8dc3973
+Run: https://github.com/not-so-shubh/devops-homework/actions/runs/37212766677
 
 Job conclusions:
 test	completed	success
 build	completed	success
-kubernetes-smoke-deploy	completed	success
 publish	completed	success
+kubernetes-smoke-deploy	completed	success
 external-deploy	completed	skipped
 
-Kubernetes smoke-deploy steps:
+Publish-before-deploy timing:
+publish	2026-10-04T15:23:18Z	2026-10-04T15:23:58Z	success
+kubernetes-smoke-deploy	2026-10-04T15:24:01Z	2026-10-04T15:25:04Z	success
+
+Kubernetes deployment steps:
 Set up job	completed	success
 Run actions/checkout@v7	completed	success
-Run actions/download-artifact@v8	completed	success
-Load verified image	completed	success
+Run actions/download-artifact@v8	completed	skipped
+Load verified image	completed	skipped
+Run docker/login-action@v4	completed	success
+Pull published immutable image	completed	success
 Create ephemeral Kubernetes cluster	completed	success
 Deploy and verify in Kubernetes	completed	success
+Post Run docker/login-action@v4	completed	success
 Post Run actions/checkout@v7	completed	success
 Complete job	completed	success
 
+Registry pull and deployment proof:
+Run docker/login-action@v4	2026-10-04T15:24:06.7356320Z Login Succeeded!
+Pull published immutable image	2026-10-04T15:24:07.6147893Z bd2c71e919862dc392f63710745e9d66f8dc3973: Pulling from not-so-shubh/devops-homework
+Pull published immutable image	2026-10-04T15:24:09.4263341Z Digest: sha256:be79f3cccfa8e7117243e039c658026552b440545369a801b229e2a782d6bb16
+Pull published immutable image	2026-10-04T15:24:09.4274728Z Status: Downloaded newer image for ghcr.io/not-so-shubh/devops-homework:bd2c71e919862dc392f63710745e9d66f8dc3973
+Create ephemeral Kubernetes cluster	2026-10-04T15:24:09.4321931Z kind load docker-image "${IMAGE_NAME}:${GITHUB_SHA}"
+Deploy and verify in Kubernetes	2026-10-04T15:24:57.6567721Z deployment "cicd-demo" successfully rolled out
+Deploy and verify in Kubernetes	2026-10-04T15:24:57.6937008Z deployment.apps/cicd-demo   2/2     2            2           2s    app          ghcr.io/not-so-shubh/devops-homework:bd2c71e919862dc392f63710745e9d66f8dc3973   app=cicd-demo
+Deploy and verify in Kubernetes	2026-10-04T15:25:01.6857134Z {"status": "healthy"}pod "smoke-test" deleted from devops-demo namespace
+
 Published image manifest:
-Name:      ghcr.io/not-so-shubh/devops-homework:c92b9965f9e7eece0fe1f0dcf0ff1b37b7c33352
+Name:      ghcr.io/not-so-shubh/devops-homework:bd2c71e919862dc392f63710745e9d66f8dc3973
 MediaType: application/vnd.oci.image.index.v1+json
-Digest:    sha256:a0a95afef0d4fa6b870dfad1eb3edecf138a04c56b98cb4b4aea4a1e54b9f9cd
+Digest:    sha256:be79f3cccfa8e7117243e039c658026552b440545369a801b229e2a782d6bb16
            
 Manifests: 
-  Name:        ghcr.io/not-so-shubh/devops-homework:c92b9965f9e7eece0fe1f0dcf0ff1b37b7c33352@sha256:4d41f905015d0824407dd6d57fd596388b181c234958b6aa412635aa89a47c87
+  Name:        ghcr.io/not-so-shubh/devops-homework:bd2c71e919862dc392f63710745e9d66f8dc3973@sha256:a65dc3e63989dd0db4a14942a10afcca78d7f62a71f8afe3cb2828ddec6674d4
   MediaType:   application/vnd.oci.image.manifest.v1+json
   Platform:    linux/amd64
                
-  Name:        ghcr.io/not-so-shubh/devops-homework:c92b9965f9e7eece0fe1f0dcf0ff1b37b7c33352@sha256:3ad91d19892f73a49eaf46a7124b2db581fe2b0b079080ae88965fac10252312
+  Name:        ghcr.io/not-so-shubh/devops-homework:bd2c71e919862dc392f63710745e9d66f8dc3973@sha256:ce193dbfa6702e94400017dd81dbe992f94233d31eb41d3864d64d7710faecf9
   MediaType:   application/vnd.oci.image.manifest.v1+json
   Platform:    linux/arm64
                
-  Name:        ghcr.io/not-so-shubh/devops-homework:c92b9965f9e7eece0fe1f0dcf0ff1b37b7c33352@sha256:59241b5170219dba51b982503f6015070af1d65d35b77db71ba1af50194d9294
+  Name:        ghcr.io/not-so-shubh/devops-homework:bd2c71e919862dc392f63710745e9d66f8dc3973@sha256:341e6b7d6d95912080b9a918dd79d1890738a42d64618be6ca5a5d3711a755d3
   MediaType:   application/vnd.oci.image.manifest.v1+json
   Platform:    unknown/unknown
   Annotations: 
-    vnd.docker.reference.digest: sha256:4d41f905015d0824407dd6d57fd596388b181c234958b6aa412635aa89a47c87
+    vnd.docker.reference.digest: sha256:a65dc3e63989dd0db4a14942a10afcca78d7f62a71f8afe3cb2828ddec6674d4
     vnd.docker.reference.type:   attestation-manifest
                
-  Name:        ghcr.io/not-so-shubh/devops-homework:c92b9965f9e7eece0fe1f0dcf0ff1b37b7c33352@sha256:46ca240b8f82929ffaf4ddc2538167d2369e1b8ebf9f9640ba6772208c5c03e9
+  Name:        ghcr.io/not-so-shubh/devops-homework:bd2c71e919862dc392f63710745e9d66f8dc3973@sha256:c60fa2039321088b3a9b567451eaf869bab363f53c4863d43ee809c159d1dc81
   MediaType:   application/vnd.oci.image.manifest.v1+json
   Platform:    unknown/unknown
   Annotations: 
-    vnd.docker.reference.digest: sha256:3ad91d19892f73a49eaf46a7124b2db581fe2b0b079080ae88965fac10252312
+    vnd.docker.reference.digest: sha256:ce193dbfa6702e94400017dd81dbe992f94233d31eb41d3864d64d7710faecf9
     vnd.docker.reference.type:   attestation-manifest
