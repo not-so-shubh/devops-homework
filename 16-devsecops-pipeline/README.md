@@ -42,3 +42,9 @@ kubectl apply --dry-run=client -f kubernetes/
 The workflow uses only the short-lived built-in `GITHUB_TOKEN` to publish a multi-architecture image to GHCR. It always proves deployment in an ephemeral Kind cluster. A second deployment to an external cluster is gated by repository variable `ENABLE_DEVSECOPS_DEPLOY=true` and secret `KUBE_CONFIG`. The kubeconfig should grant only namespace-scoped deployment permissions. No cloud or registry password is committed.
 
 SARIF and plain-text reports are uploaded as workflow artifacts even when a security job fails, making findings auditable. Production should also protect the environment with required reviewers and branch protection.
+
+After all security gates pass, the hosted pipeline publishes immutable SHA and `latest` tags to GHCR. The Kubernetes verification job then pulls the SHA tag from GHCR and deploys that exact registry artifact to a disposable Kind cluster. This preserves the required push-before-deploy ordering while keeping permanent-cluster credentials optional and protected.
+
+## Successful pipeline screenshot
+
+![Successful DevSecOps pipeline](../evidence/hosted-workflows/02-devsecops-success.png)

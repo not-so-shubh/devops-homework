@@ -1,0 +1,25 @@
+$ docker run ... Ubuntu 24.04 systemd lab
+15d5c1b736333329d6444a9e56f382bcde62c5774cbae39085d90752f1567426
+$ systemctl is-system-running --wait
+running
+$ systemd-run --unit=devops-practice.service --property=Type=oneshot --remain-after-exit ...
+Running as unit: devops-practice.service; invocation ID: 27f512d6fd1549c3874fe563d45b018c
+$ systemctl status devops-practice.service --no-pager
+● devops-practice.service - /bin/sh -c "echo SERVICE_LOG_ENTRY; echo SERVICE_WARNING_ENTRY >&2"
+     Loaded: loaded (/run/systemd/transient/devops-practice.service; transient)
+  Transient: yes
+     Active: active (exited) since Sun 2026-10-04 15:15:31 UTC; 51ms ago
+    Process: 116 ExecStart=/bin/sh -c echo SERVICE_LOG_ENTRY; echo SERVICE_WARNING_ENTRY >&2 (code=exited, status=0/SUCCESS)
+   Main PID: 116 (code=exited, status=0/SUCCESS)
+        CPU: 2ms
+
+Oct 04 15:15:31 15d5c1b73633 systemd[1]: Starting devops-practice.service - /bin/sh -c "echo SERVICE_LOG_ENTRY; echo SERVICE_WARNING_ENTRY >&2"...
+Oct 04 15:15:31 15d5c1b73633 sh[116]: SERVICE_LOG_ENTRY
+Oct 04 15:15:31 15d5c1b73633 sh[116]: SERVICE_WARNING_ENTRY
+Oct 04 15:15:31 15d5c1b73633 systemd[1]: Finished devops-practice.service - /bin/sh -c "echo SERVICE_LOG_ENTRY; echo SERVICE_WARNING_ENTRY >&2".
+$ journalctl -u devops-practice.service --no-pager -n 20
+Oct 04 15:15:31 15d5c1b73633 systemd[1]: Starting devops-practice.service - /bin/sh -c "echo SERVICE_LOG_ENTRY; echo SERVICE_WARNING_ENTRY >&2"...
+Oct 04 15:15:31 15d5c1b73633 sh[116]: SERVICE_LOG_ENTRY
+Oct 04 15:15:31 15d5c1b73633 sh[116]: SERVICE_WARNING_ENTRY
+Oct 04 15:15:31 15d5c1b73633 systemd[1]: Finished devops-practice.service - /bin/sh -c "echo SERVICE_LOG_ENTRY; echo SERVICE_WARNING_ENTRY >&2".
+PASS: journalctl returned the logs for the requested systemd service.

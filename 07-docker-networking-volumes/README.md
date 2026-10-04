@@ -72,3 +72,13 @@ The after capture was taken against the same container ID with restart count zer
 - [`overlay-network.md`](overlay-network.md) — Swarm, VXLAN, ingress, encryption, and teardown
 
 The main lesson is least-privilege network attachment: a service can resolve and reach only the peers on its shared networks. Host mode removes that isolation on native Linux, while an overlay extends service networking across Docker daemons.
+
+## Submission evidence gallery
+
+![Three Docker networks](../evidence/screenshots/14-docker-networks.png)
+
+![Allowed and denied container connectivity](../evidence/screenshots/15-network-connectivity.png)
+
+![Native Linux host-network verification](../evidence/screenshots/16-host-network.png)
+
+The bind-mount before/after screenshots are embedded in the bind-mount section above.

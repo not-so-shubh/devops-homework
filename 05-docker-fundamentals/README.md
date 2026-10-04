@@ -47,3 +47,17 @@ The root `scripts/verify-all.sh` now performs repository structure, shell-syntax
 Previously captured genuine Docker build/curl evidence is retained under [`../evidence/command-outputs/`](../evidence/command-outputs/). Browser screenshots are retained under [`../evidence/screenshots/`](../evidence/screenshots/).
 
 To re-verify the runtime behavior, use the commands above and confirm each service returns its expected response before submission.
+
+## Application screenshots
+
+![Node.js application](../evidence/screenshots/06-nodejs-browser.png)
+
+![Python application](../evidence/screenshots/07-python-browser.png)
+
+![Java application](../evidence/screenshots/08-java-browser.png)
+
+![Apache application](../evidence/screenshots/09-apache-browser.png)
+
+![React application](../evidence/screenshots/10-react-browser.png)
+
+![Nginx application](../evidence/screenshots/11-nginx-browser.png)

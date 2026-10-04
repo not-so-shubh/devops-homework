@@ -71,3 +71,11 @@ kubectl run curl-check --rm -it --restart=Never --image=curlimages/curl:8.12.1 -
 ```bash
 kubectl delete namespace session14
 ```
+
+## Submission screenshots
+
+![Broken Kubernetes states](evidence/01-broken-states.png)
+
+![Corrected Kubernetes states](evidence/02-fixed-states.png)
+
+![Troubleshooting mini-project](evidence/03-mini-project.png)

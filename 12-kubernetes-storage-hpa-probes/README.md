@@ -61,3 +61,9 @@ kubectl delete pv session13-manual-pv --ignore-not-found
 ## Evidence
 
 Genuine command transcripts belong in `evidence/`; the exact capture checklist is in [`evidence/README.md`](evidence/README.md).
+
+## Submission screenshots
+
+![Volume types, probes, and mini-project](evidence/01-volumes-and-project.png)
+
+![HPA load and scaling](evidence/02-hpa-scaling.png)

@@ -180,3 +180,7 @@ The complete tutorial command transcript is captured in `screenshots/05-basics-t
 - [x] Control-plane and worker-node architecture documented above.
 
 No terminal transcript or screenshot in this section should be copied from another student's repository.
+
+## Submission screenshot
+
+![Minikube lifecycle and Kubernetes Basics tutorial](screenshots/05-basics-tutorial.png)

@@ -45,4 +45,4 @@ deluser --remove-home devopstest
 exit
 ```
 
-The repository's automated verifier deliberately does not create or delete real host accounts.
+The repository's automated verifier deliberately does not create or delete real host accounts. The assignment exercise was instead completed inside a disposable Ubuntu 24.04 container; see the [genuine transcript](../evidence/command-outputs/linux-user-practice.txt) and [rendered evidence](../evidence/screenshots/01-linux-user-practice.png). The transcript verifies the account, group, home directory, login shell, and cleanup.

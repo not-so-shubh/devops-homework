@@ -62,3 +62,13 @@ helm template devops-web ./devops-web --namespace session15 | kubectl apply --dr
 ```
 
 Store genuine install/upgrade/rollback output under `evidence/`.
+
+## Submission screenshots
+
+![Helm create, repository, and search commands](evidence/01-create-repo-search.png)
+
+![Helm install and test](evidence/02-install-test.png)
+
+![Helm upgrade and rollback](evidence/03-upgrade-rollback.png)
+
+![Helm uninstall](evidence/04-uninstall.png)

@@ -63,16 +63,31 @@ jobs:
           retention-days: 1
 
   kubernetes-smoke-deploy:
+    if: >-
+      always() &&
+      needs.build.result == 'success' &&
+      (needs.publish.result == 'success' || needs.publish.result == 'skipped')
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build, publish]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
+        if: github.event_name != 'push' || github.ref != 'refs/heads/main'
         with:
           name: container-image-${{ github.sha }}
           path: /tmp
       - name: Load verified image
+        if: github.event_name != 'push' || github.ref != 'refs/heads/main'
         run: docker load --input /tmp/cicd-image.tar
+      - uses: docker/login-action@v4
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pull published immutable image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: docker pull "${IMAGE_NAME}:${GITHUB_SHA}"
       - name: Create ephemeral Kubernetes cluster
         run: |
           cd "$RUNNER_TEMP"
@@ -97,7 +112,7 @@ jobs:
   publish:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    needs: kubernetes-smoke-deploy
+    needs: build
     steps:
       - uses: actions/checkout@v7
       - uses: docker/login-action@v4
@@ -120,7 +135,7 @@ jobs:
   external-deploy:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.ENABLE_KUBERNETES_DEPLOY == 'true'
     runs-on: ubuntu-latest
-    needs: publish
+    needs: [publish, kubernetes-smoke-deploy]
     environment: production
     steps:
       - uses: actions/checkout@v7

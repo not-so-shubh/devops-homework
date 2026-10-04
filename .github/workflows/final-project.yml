@@ -107,15 +107,32 @@ jobs:
       - run: echo "Tests, SAST, SCA, secret scan, configuration validation and image scan passed."
 
   kubernetes-smoke-deploy:
+    if: >-
+      always() &&
+      needs.security-gate.result == 'success' &&
+      (needs.publish.result == 'success' || needs.publish.result == 'skipped')
     runs-on: ubuntu-latest
-    needs: security-gate
+    needs: [security-gate, publish]
     steps:
       - uses: actions/checkout@v7
       - uses: azure/setup-helm@v5
-      - name: Build the scanned source revision
+      - name: Build source revision for non-publishing events
+        if: github.event_name != 'push' || github.ref != 'refs/heads/main'
         run: |
           docker build -f "$PROJECT/docker/Dockerfile" \
             -t "final-devops-project:${GITHUB_SHA}" "$PROJECT"
+          echo "DEPLOY_IMAGE=final-devops-project:${GITHUB_SHA}" >> "$GITHUB_ENV"
+      - uses: docker/login-action@v4
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pull published immutable image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          docker pull "${IMAGE}:${GITHUB_SHA}"
+          echo "DEPLOY_IMAGE=${IMAGE}:${GITHUB_SHA}" >> "$GITHUB_ENV"
       - name: Create ephemeral Kubernetes cluster
         run: |
           cd "$RUNNER_TEMP"
@@ -124,13 +141,15 @@ jobs:
           sha256sum --check kind-linux-amd64.sha256sum
           sudo install -m 0755 kind-linux-amd64 /usr/local/bin/kind
           kind create cluster --wait 180s
-          kind load docker-image "final-devops-project:${GITHUB_SHA}"
+          kind load docker-image "$DEPLOY_IMAGE"
       - name: Helm deployment and verification
         run: |
+          DEPLOY_REPOSITORY="${DEPLOY_IMAGE%:*}"
+          DEPLOY_TAG="${DEPLOY_IMAGE##*:}"
           helm upgrade --install final-app "$PROJECT/helm/final-app" \
             --namespace final-devops --create-namespace --wait --timeout 5m \
-            --set image.repository=final-devops-project \
-            --set image.tag="${GITHUB_SHA}" \
+            --set image.repository="$DEPLOY_REPOSITORY" \
+            --set image.tag="$DEPLOY_TAG" \
             --set image.pullPolicy=IfNotPresent \
             --set ingress.enabled=false \
             --set autoscaling.enabled=false \
@@ -142,7 +161,7 @@ jobs:
   publish:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    needs: kubernetes-smoke-deploy
+    needs: security-gate
     steps:
       - uses: actions/checkout@v7
       - uses: docker/login-action@v4
@@ -165,7 +184,7 @@ jobs:
   external-deploy:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.ENABLE_FINAL_DEPLOY == 'true'
     runs-on: ubuntu-latest
-    needs: publish
+    needs: [publish, kubernetes-smoke-deploy]
     environment: production
     steps:
       - uses: actions/checkout@v7

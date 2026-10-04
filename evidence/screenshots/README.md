@@ -5,6 +5,8 @@ Sections 1–7 retain the original screenshot filenames. Every listed file is pr
 ## Sections 1–4
 
 - `01-linux-links.png` — run `./01-linux-fundamentals/link-practice.sh` and show inode/link behavior plus the final PASS.
+- `01-linux-user-practice.png` — genuine Ubuntu 24.04 `adduser`, account/home verification, and cleanup evidence.
+- `01-linux-journalctl.png` — genuine systemd service status and service-specific `journalctl -u` output from Ubuntu 24.04.
 - `02-shell-script.png` — run `printf 'screenshot-output\n' | ./02-shell-scripting/system-info.sh` and show the system-information output.
 - `03-networking.png` — run `./03-networking-fundamentals/collect-network-info.sh` and show interface/route/socket output.
 - `04-git-commit-a.png` and `05-git-cherry-pick.png` — run `./04-git-github/git-practice-demo.sh` and capture the two required Git states.

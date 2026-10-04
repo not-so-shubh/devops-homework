@@ -412,3 +412,36 @@ The v2 manifest deliberately waits before becoming Ready so the Recreate outage 
 ## Required evidence
 
 See [`screenshots/README.md`](screenshots/README.md) for the exact Lecture 10 screenshot checklist. All screenshots must come from this student's cluster and must show the commands/states described above.
+
+## Submission evidence gallery
+
+<details>
+<summary>Open all Pods, controllers, deployment-strategy, and troubleshooting screenshots</summary>
+
+![Cluster health](screenshots/01-cluster-health.png)
+
+![Nginx Pod operations](screenshots/02-nginx-pod-operations.png)
+
+![ImagePullBackOff error](screenshots/03-imagepullbackoff-error.png)
+
+![Pod lifecycle stages](screenshots/04-pod-lifecycle-stages.png)
+
+![Lifecycle probes and CrashLoopBackOff](screenshots/05-lifecycle-probes-crashloop.png)
+
+![Init and multi-container Pods](screenshots/05-lifecycle-init-multicontainer.png)
+
+![ReplicaSet and StatefulSet](screenshots/06-controllers-rs-statefulset.png)
+
+![DaemonSet verification](screenshots/07-daemonset-verification.png)
+
+![Rolling update and rollback](screenshots/08-rolling-update-and-rollback.png)
+
+![Troubleshooting drills](screenshots/09-troubleshooting-drills.png)
+
+![Blue-green cutover](screenshots/11-blue-green-cutover.png)
+
+![Canary traffic split](screenshots/12-canary-traffic-split.png)
+
+![Recreate downtime](screenshots/13-recreate-downtime-outage.png)
+
+</details>

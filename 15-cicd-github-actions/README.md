@@ -51,3 +51,9 @@ The workflow uses the built-in `GITHUB_TOKEN` with `packages: write` to publish 
 - `KUBE_CONFIG`: a base64-encoded, least-privilege kubeconfig for the target namespace.
 
 Environment protection rules should require approval before production deployment. Pipeline logs and the `test-results` artifact provide execution evidence.
+
+The hosted pipeline publishes the immutable SHA-tagged image first, then pulls that registry artifact into an ephemeral Kind cluster for deployment verification. This demonstrates the assignment's required build/test/push/deploy sequence without requiring a permanent external cluster. The optional production job remains protected by `ENABLE_KUBERNETES_DEPLOY` and `KUBE_CONFIG`.
+
+## Successful pipeline screenshot
+
+![Successful CI/CD pipeline](../evidence/hosted-workflows/01-ci-cd-success.png)

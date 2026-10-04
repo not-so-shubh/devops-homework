@@ -66,7 +66,7 @@ See also:
 
 ## Objective, requirements, and evidence
 
-This section covers the assignment's soft-link/hard-link interview question, Ubuntu `adduser` versus `useradd`, systemd `journalctl`, and a categorized Linux command cheat sheet. The link practice is the executable component; account and journal instructions are deliberately documentation-only unless run in an isolated Linux lab.
+This section covers the assignment's soft-link/hard-link interview question, Ubuntu `adduser` versus `useradd`, systemd `journalctl`, and a categorized Linux command cheat sheet. All three practical exercises were executed in disposable Linux environments so they do not modify the macOS host.
 
 ```bash
 chmod +x link-practice.sh
@@ -93,3 +93,16 @@ PASS: link behavior matched expectations; cleanup will remove the temporary dire
 - [`linux-command-cheatsheet.md`](linux-command-cheatsheet.md) — purpose, syntax, and explanation for required commands
 
 The key lesson is the inode distinction: a symbolic link stores a path and can dangle, whereas a hard link is another directory entry for the same inode and survives removal of another name.
+
+## Runtime evidence
+
+The account transcript records `adduser`, `id`, `getent`, home-directory verification, and cleanup on Ubuntu 24.04. The journal transcript records a running systemd instance, a transient `devops-practice.service`, `systemctl status`, and `journalctl -u` output.
+
+- [Account-management transcript](../evidence/command-outputs/linux-user-practice.txt)
+- [Service-journal transcript](../evidence/command-outputs/linux-journalctl-practice.txt)
+
+![Soft-link and hard-link practice](../evidence/screenshots/01-linux-links.png)
+
+![Ubuntu adduser practice](../evidence/screenshots/01-linux-user-practice.png)
+
+![journalctl service-log practice](../evidence/screenshots/01-linux-journalctl.png)

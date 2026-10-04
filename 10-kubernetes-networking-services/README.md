@@ -344,3 +344,52 @@ kubectl delete -f 06-no-selector-service/ --ignore-not-found
 ```
 
 See [`screenshots/README.md`](screenshots/README.md) for the evidence checklist. Runtime screenshots must come from this student's cluster.
+
+## Submission evidence gallery
+
+<details>
+<summary>Open all networking, Service, DNS, and comparison screenshots</summary>
+
+![Kubernetes port architecture](screenshots/01-port-architecture.png)
+
+![ClusterIP Service](screenshots/02-clusterip-service.png)
+
+![ClusterIP FQDN](screenshots/02-clusterip-fqdn.png)
+
+![NodePort Service](screenshots/03-nodeport-service.png)
+
+![NodePort access](screenshots/03-nodeport-access.png)
+
+![LoadBalancer Service](screenshots/04-loadbalancer-service.png)
+
+![LoadBalancer access](screenshots/04-loadbalancer-access.png)
+
+![ExternalName Service](screenshots/05-externalname-service.png)
+
+![ExternalName DNS](screenshots/05-externalname-dns.png)
+
+![Headless Service DNS](screenshots/06-headless-dns.png)
+
+![Headless Pod FQDN](screenshots/06-headless-pod-fqdn.png)
+
+![Selectorless Service before endpoint](screenshots/07-selectorless-empty.png)
+
+![Selectorless Service endpoint](screenshots/07-selectorless-endpoint.png)
+
+![CoreDNS resolv.conf](screenshots/08-coredns-resolv-conf.png)
+
+![CoreDNS resolution](screenshots/08-coredns-resolution.png)
+
+![Workload identity before change](screenshots/09-identity-before.png)
+
+![Workload identity after change](screenshots/09-identity-after.png)
+
+![Controller comparison matrix](screenshots/10-controller-matrix.png)
+
+![Service decision tree](screenshots/11-service-decision-tree.png)
+
+![Docker-driver direct access](screenshots/12-docker-driver-direct.png)
+
+![Minikube Service URL](screenshots/12-minikube-service-url.png)
+
+</details>

@@ -80,3 +80,7 @@ PASS: system information collected successfully.
 - [`../evidence/command-outputs/shell-script-output.txt`](../evidence/command-outputs/shell-script-output.txt) — genuine captured output
 
 The main lesson is to separate data collection from presentation, quote every path-bearing variable, and use redirection deliberately so a full process snapshot is retained while a safer summary is printed.
+
+## Submission screenshot
+
+![System information script output](../evidence/screenshots/02-shell-script.png)

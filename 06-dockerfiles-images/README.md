@@ -33,3 +33,9 @@ The related container examples remain in Section 05:
 All six Section 05 applications can be started from [its Compose file](../05-docker-fundamentals/docker-compose.yml).
 
 Existing genuine build/runtime evidence is retained under `../evidence/command-outputs/`, and the screenshot checklist is under `../evidence/screenshots/`.
+
+## Submission screenshots
+
+![Multi-stage application response](../evidence/screenshots/12-multistage-browser.png)
+
+![Multi-stage container and port mapping](../evidence/screenshots/13-multistage-docker-ps.png)

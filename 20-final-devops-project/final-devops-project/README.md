@@ -115,3 +115,19 @@ The application emits `/metrics` and structured logs. [`monitoring/`](monitoring
 ## Evidence
 
 Follow [`evidence/README.md`](evidence/README.md). Never fabricate a successful cloud apply, pipeline run or screenshot; every submitted output must originate from the student's account and environment.
+
+The hosted pipeline publishes its immutable SHA tag to GHCR before the Kubernetes verification job pulls and deploys that exact tag to a disposable Kind cluster. The permanent production deployment remains an optional protected environment.
+
+### Submission evidence gallery
+
+![Successful final-project pipeline](../../evidence/hosted-workflows/03-final-project-success.png)
+
+![Kubernetes and Helm deployment](evidence/01-kubernetes-helm.png)
+
+![Broken troubleshooting state](evidence/02-troubleshooting-broken.png)
+
+![Corrected troubleshooting state](evidence/03-troubleshooting-fixed.png)
+
+![Argo CD Synced and Healthy](evidence/04-argocd-sync.png)
+
+![Argo CD self-healing](evidence/05-argocd-self-heal.png)

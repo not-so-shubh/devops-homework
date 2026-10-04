@@ -31,4 +31,4 @@ sudo systemctl status docker
 
 Persistent previous-boot logs require persistent journal storage (commonly `/var/log/journal`) and a recorded previous boot. Minimal containers often do not run systemd even when their filesystem is Ubuntu.
 
-macOS does not use systemd or `journalctl`; it uses Apple's unified logging system. Run this exercise on an Ubuntu host/VM with systemd. This repository does not fabricate journal output when systemd is unavailable.
+macOS does not use systemd or `journalctl`; it uses Apple's unified logging system. The exercise was therefore completed with a real systemd instance inside a disposable privileged Ubuntu 24.04 container. The [genuine transcript](../evidence/command-outputs/linux-journalctl-practice.txt) shows a transient service running successfully and `journalctl -u devops-practice.service` returning that service's logs; [rendered evidence](../evidence/screenshots/01-linux-journalctl.png) is included for submission review.

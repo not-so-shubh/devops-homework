@@ -334,3 +334,38 @@ kubectl get deployment yatri-backend yatri-frontend || echo 'Deployments deleted
 The lab cleanup script deletes only the `yatri-*` resources created by the full demo; it does not delete all resources from the cluster and does not disable Minikube globally. Remove temporary `/etc/hosts` entries and the local `campus-tls-cert` Secret when the corresponding lab is finished if they are no longer needed.
 
 See [`screenshots/README.md`](screenshots/README.md) for the exact evidence checklist. No example output from the assignment document or another student's repository counts as runtime evidence.
+
+## Submission evidence gallery
+
+<details>
+<summary>Open all ConfigMap, Secret, Ingress, TLS, and troubleshooting screenshots</summary>
+
+![ConfigMap creation](screenshots/01-configmap.png)
+
+![ConfigMap update](screenshots/02-configmap-update.png)
+
+![Secret creation and injection](screenshots/03-secret.png)
+
+![Secret newline troubleshooting](screenshots/04-newline-gotcha.png)
+
+![Secret architecture](screenshots/05-secret-architecture.png)
+
+![Configuration and Secret injection](screenshots/06-config-secret-injection.png)
+
+![Ingress versus Ingress Controller](screenshots/07-ingress-vs-controller.png)
+
+![Ingress Controller](screenshots/08-ingress-controller.png)
+
+![Hosts mapping](screenshots/09-hosts-mapping.png)
+
+![Path routing](screenshots/10-path-routing.png)
+
+![Host routing](screenshots/11-host-routing.png)
+
+![Hybrid routing](screenshots/12-hybrid-routing.png)
+
+![TLS Ingress](screenshots/13-tls-ingress.png)
+
+![Full Ingress demo](screenshots/14-full-demo.png)
+
+</details>

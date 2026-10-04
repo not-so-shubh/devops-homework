@@ -68,3 +68,17 @@ kubectl get all -n gitops-demo
 ```
 
 Automated sync, pruning and self-healing make Git the source of truth. Production repositories should require reviews, signed changes, policy checks and environment promotion rather than allowing direct image-tag edits.
+
+## Submission evidence gallery
+
+![Healthy observability stack and Prometheus targets](evidence/01-stack-health.png)
+
+![Prometheus firing alert and Alertmanager receipt](evidence/02-prometheus-alert.png)
+
+![Loki log query](evidence/03-loki-logs.png)
+
+![Tempo trace and Grafana datasources](evidence/04-tempo-grafana.png)
+
+![Argo CD Synced and Healthy](evidence/05-argocd-sync.png)
+
+![Argo CD self-healing](evidence/06-argocd-self-heal.png)

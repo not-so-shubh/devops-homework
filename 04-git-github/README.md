@@ -48,3 +48,9 @@ PASS: commit -a and cherry-pick behaved as expected.
 - [`../evidence/command-outputs/git-practice-output.txt`](../evidence/command-outputs/git-practice-output.txt) — real generated output
 
 The lesson is that the index is explicit state: `-a` is convenient for tracked edits but cannot discover new files, and cherry-pick transfers one change as a new commit rather than merging an entire branch.
+
+## Submission screenshots
+
+![git commit -a behavior](../evidence/screenshots/04-git-commit-a.png)
+
+![Cherry-pick verification](../evidence/screenshots/05-git-cherry-pick.png)

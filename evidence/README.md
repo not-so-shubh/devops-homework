@@ -7,6 +7,8 @@ This directory preserves genuine runtime evidence from the earlier DevOps sectio
 | Evidence file | Producing check |
 |---|---|
 | `linux-link-demo.txt` | `01-linux-fundamentals/link-practice.sh` |
+| `linux-user-practice.txt` | Ubuntu 24.04 `adduser` account creation and cleanup |
+| `linux-journalctl-practice.txt` | Ubuntu 24.04 systemd service and `journalctl -u` practice |
 | `shell-script-output.txt` | `02-shell-scripting/system-info.sh` |
 | `network-info.txt` | `03-networking-fundamentals/collect-network-info.sh` |
 | `git-practice-output.txt` | `04-git-github/git-practice-demo.sh` |
