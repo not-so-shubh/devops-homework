@@ -13,3 +13,8 @@ Additional final checks:
 - Gitleaks history scan: 0 leaks
 - Gitleaks working-directory scan: 0 leaks
 - git diff --check: passed
+- GitHub CI/CD Demo: success (run 37164772641)
+- GitHub DevSecOps Pipeline: success (run 37164772697)
+- GitHub Final DevOps Project: success (run 37164772654)
+- GHCR publish jobs: passed in all three hosted workflows
+- External Kubernetes deploy jobs: intentionally skipped (no credentials/opt-in)

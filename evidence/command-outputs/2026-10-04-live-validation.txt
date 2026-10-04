@@ -112,3 +112,26 @@ Cloud boundary
 Terraform apply was not run because it requires the student's AWS credentials,
 a globally unique S3 bucket name, and creates billable resources. The modules
 were initialized and validated locally without changing any AWS account.
+
+GitHub-hosted workflow verification
+-----------------------------------
+Commit: 128ab19cf86db9f80bc88b04e0e4ef9e2fbe95dc
+
+CI/CD Demo — success
+  https://github.com/not-so-shubh/devops-homework/actions/runs/37164772641
+  Passed: unit tests, image build, artifact upload, GHCR publish
+
+DevSecOps Pipeline — success
+  https://github.com/not-so-shubh/devops-homework/actions/runs/37164772697
+  Passed: unit tests, Bandit, pip-audit, Gitleaks, Trivy, security gate,
+  GHCR publish
+
+Final DevOps Project — success
+  https://github.com/not-so-shubh/devops-homework/actions/runs/37164772654
+  Passed: tests, source security, Kubernetes schema validation, Helm checks,
+  Terraform validation, container security, security gate, GHCR publish
+
+The deployment jobs were intentionally skipped: no external kubeconfig or
+explicit ENABLE_*_DEPLOY repository variable was configured. Package-list API
+visibility was not asserted because the current verification token does not
+have read:packages scope; the publish jobs themselves completed successfully.
