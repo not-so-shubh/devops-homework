@@ -56,13 +56,17 @@ jobs:
       - uses: azure/setup-kubectl@v4
       - uses: azure/setup-helm@v4
       - uses: hashicorp/setup-terraform@v3
-      - name: Kubernetes schema/client validation
-        run: kubectl apply --dry-run=client -k "$PROJECT/kubernetes"
+      - name: Kubernetes schema validation
+        run: |
+          kubectl kustomize "$PROJECT/kubernetes" > /tmp/final-kubernetes.yaml
+          docker run --rm -i ghcr.io/yannh/kubeconform:v0.8.0 \
+            -strict -summary -ignore-missing-schemas < /tmp/final-kubernetes.yaml
       - name: Helm lint and render
         run: |
           helm lint "$PROJECT/helm/final-app"
           helm template final-app "$PROJECT/helm/final-app" --namespace final-devops > /tmp/final-app.yaml
-          kubectl apply --dry-run=client -f /tmp/final-app.yaml
+          docker run --rm -i ghcr.io/yannh/kubeconform:v0.8.0 \
+            -strict -summary -ignore-missing-schemas < /tmp/final-app.yaml
       - name: Terraform formatting and validation
         working-directory: 20-final-devops-project/final-devops-project/terraform
         run: |
@@ -84,7 +88,7 @@ jobs:
           push: false
           tags: final-devops-project:${{ github.sha }}
       - name: Container image security gate
-        uses: aquasecurity/trivy-action@0.33.1
+        uses: aquasecurity/trivy-action@0.36.0
         with:
           image-ref: final-devops-project:${{ github.sha }}
           format: sarif
