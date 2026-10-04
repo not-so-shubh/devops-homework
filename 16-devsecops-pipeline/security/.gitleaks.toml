@@ -7,5 +7,7 @@ useDefault = true
 description = "Documented lab-only Kubernetes values"
 paths = [
   '''11-kubernetes-ingress-configmaps-secrets/.*\.ya?ml''',
-  '''12-kubernetes-storage-hpa-probes/03-mini-project/.*\.ya?ml'''
+  '''12-kubernetes-storage-hpa-probes/03-mini-project/.*\.ya?ml''',
+  '''11-kubernetes-ingress-configmaps-secrets/evidence-runtime\.txt''',
+  '''scripts/run-observability-evidence\.sh'''
 ]

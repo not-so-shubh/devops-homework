@@ -8,4 +8,8 @@ regexes = ['''lab-only-placeholder''']
 
 [[allowlists]]
 description = "Historical Session 12 training Secret contains documented non-production values"
-paths = ['''11-kubernetes-ingress-configmaps-secrets/02-secret/db-secret\.yaml''']
+paths = [
+  '''11-kubernetes-ingress-configmaps-secrets/02-secret/db-secret\.yaml''',
+  '''11-kubernetes-ingress-configmaps-secrets/evidence-runtime\.txt''',
+  '''scripts/run-observability-evidence\.sh'''
+]
