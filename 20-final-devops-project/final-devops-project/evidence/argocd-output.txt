@@ -1,0 +1,59 @@
+===== FINAL PROJECT ARGO CD — SYNCED/HEALTHY =====
+NAME                   SYNC     HEALTH    REVISION
+final-devops-project   Synced   Healthy   f93b4a00b624dee1ee96b9016a019a5f7fbf4695
+NAME                                   READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                                             SELECTOR
+deployment.apps/final-devops-project   4/4     4            4           9h    app          ghcr.io/not-so-shubh/final-devops-project:latest   app.kubernetes.io/instance=final-devops-project,app.kubernetes.io/name=final-app
+
+NAME                                       READY   STATUS        RESTARTS   AGE     IP             NODE       NOMINATED NODE   READINESS GATES
+pod/final-devops-project-6f6c495bc-46kkt   1/1     Running       0          12s     10.244.0.216   minikube   <none>           <none>
+pod/final-devops-project-6f6c495bc-4qgqw   1/1     Terminating   0          99s     10.244.0.214   minikube   <none>           <none>
+pod/final-devops-project-6f6c495bc-8mx6m   1/1     Terminating   0          99s     10.244.0.215   minikube   <none>           <none>
+pod/final-devops-project-6f6c495bc-8zjml   1/1     Running       0          3m14s   10.244.0.212   minikube   <none>           <none>
+pod/final-devops-project-6f6c495bc-jfcfj   1/1     Running       0          12s     10.244.0.217   minikube   <none>           <none>
+pod/final-devops-project-6f6c495bc-vg77p   1/1     Running       0          3m14s   10.244.0.211   minikube   <none>           <none>
+
+NAME                           TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE   SELECTOR
+service/final-devops-project   ClusterIP   10.107.255.231   <none>        80/TCP    9h    app.kubernetes.io/instance=final-devops-project,app.kubernetes.io/name=final-app
+
+NAME                                                       REFERENCE                         TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/final-devops-project   Deployment/final-devops-project   cpu: 4%/60%   2         8         2          9h
+$ published multi-architecture image digest running on the observed pods
+final-devops-project-6f6c495bc-46kkt	ghcr.io/not-so-shubh/final-devops-project@sha256:23d2c5fbc15127835d67b3a4de6fbf78d57f5f01e03ee71b51bedd1ef977c462
+final-devops-project-6f6c495bc-4qgqw	ghcr.io/not-so-shubh/final-devops-project@sha256:23d2c5fbc15127835d67b3a4de6fbf78d57f5f01e03ee71b51bedd1ef977c462
+final-devops-project-6f6c495bc-8mx6m	ghcr.io/not-so-shubh/final-devops-project@sha256:23d2c5fbc15127835d67b3a4de6fbf78d57f5f01e03ee71b51bedd1ef977c462
+final-devops-project-6f6c495bc-8zjml	ghcr.io/not-so-shubh/final-devops-project@sha256:23d2c5fbc15127835d67b3a4de6fbf78d57f5f01e03ee71b51bedd1ef977c462
+final-devops-project-6f6c495bc-jfcfj	ghcr.io/not-so-shubh/final-devops-project@sha256:23d2c5fbc15127835d67b3a4de6fbf78d57f5f01e03ee71b51bedd1ef977c462
+final-devops-project-6f6c495bc-vg77p	ghcr.io/not-so-shubh/final-devops-project@sha256:23d2c5fbc15127835d67b3a4de6fbf78d57f5f01e03ee71b51bedd1ef977c462
+$ in-cluster health request
+warning: couldn't attach to pod/final-health-probe, falling back to streaming logs: unable to upgrade connection: container final-health-probe not found in pod final-health-probe_final-devops
+{"status":"healthy"}
+===== DELIBERATE CONFIGURATION DRIFT AND SELF-HEAL =====
+$ kubectl patch configmap APP_MESSAGE=DRIFTED-BY-EVIDENCE
+configmap/final-devops-project-config patched
+value immediately after drift: DRIFTED-BY-EVIDENCE
+attempt=1 value=DRIFTED-BY-EVIDENCE sync=OutOfSync
+attempt=2 value=Final DevOps Project deployed with Helm sync=Synced
+
+===== DELETED SERVICE SELF-HEAL =====
+service "final-devops-project" deleted from final-devops namespace
+attempt=1 service=missing
+attempt=2 service=recreated sync=Synced
+
+===== FINAL VERIFIED STATE =====
+NAME                   SYNC     HEALTH    REVISION
+final-devops-project   Synced   Healthy   f93b4a00b624dee1ee96b9016a019a5f7fbf4695
+NAME                                   READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                                             SELECTOR
+deployment.apps/final-devops-project   4/4     4            4           9h    app          ghcr.io/not-so-shubh/final-devops-project:latest   app.kubernetes.io/instance=final-devops-project,app.kubernetes.io/name=final-app
+
+NAME                                       READY   STATUS    RESTARTS   AGE     IP             NODE       NOMINATED NODE   READINESS GATES
+pod/final-devops-project-6f6c495bc-46kkt   1/1     Running   0          25s     10.244.0.216   minikube   <none>           <none>
+pod/final-devops-project-6f6c495bc-8zjml   1/1     Running   0          3m27s   10.244.0.212   minikube   <none>           <none>
+pod/final-devops-project-6f6c495bc-jfcfj   1/1     Running   0          25s     10.244.0.217   minikube   <none>           <none>
+pod/final-devops-project-6f6c495bc-vg77p   1/1     Running   0          3m27s   10.244.0.211   minikube   <none>           <none>
+
+NAME                           TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE   SELECTOR
+service/final-devops-project   ClusterIP   10.102.136.19   <none>        80/TCP    5s    app.kubernetes.io/instance=final-devops-project,app.kubernetes.io/name=final-app
+
+NAME                                                       REFERENCE                         TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/final-devops-project   Deployment/final-devops-project   cpu: 4%/60%   2         8         4          9h
+PASS: final project is Synced/Healthy and Argo CD healed configuration drift and a deleted Service.

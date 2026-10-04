@@ -1,0 +1,82 @@
+HOSTED WORKFLOW EVIDENCE — CI/CD
+Commit: c92b9965f9e7eece0fe1f0dcf0ff1b37b7c33352
+Run: https://github.com/not-so-shubh/devops-homework/actions/runs/37197231672
+
+
+✓ main CI-CD Demo · 37197231672
+Triggered via push about 3 minutes ago
+
+JOBS
+✓ test in 7s (ID 111421508754)
+✓ build in 18s (ID 111421541685)
+✓ kubernetes-smoke-deploy in 1m6s (ID 111421605258)
+✓ publish in 26s (ID 111421809089)
+- external-deploy in 0s (ID 111421991652)
+
+ANNOTATIONS
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+test: .github#1
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+build: .github#1
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+kubernetes-smoke-deploy: .github#1
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+publish: .github#1
+
+
+ARTIFACTS
+test-results-c92b9965f9e7eece0fe1f0dcf0ff1b37b7c33352
+not-so-shubh~devops-homework~PBOAHH.dockerbuild
+container-image-c92b9965f9e7eece0fe1f0dcf0ff1b37b7c33352
+not-so-shubh~devops-homework~B3AES8.dockerbuild
+
+For more information about a job, try: gh run view --job=<job-id>
+View this run on GitHub: https://github.com/not-so-shubh/devops-homework/actions/runs/37197231672
+
+Job conclusions:
+test	completed	success
+build	completed	success
+kubernetes-smoke-deploy	completed	success
+publish	completed	success
+external-deploy	completed	skipped
+
+Kubernetes smoke-deploy steps:
+Set up job	completed	success
+Run actions/checkout@v7	completed	success
+Run actions/download-artifact@v8	completed	success
+Load verified image	completed	success
+Create ephemeral Kubernetes cluster	completed	success
+Deploy and verify in Kubernetes	completed	success
+Post Run actions/checkout@v7	completed	success
+Complete job	completed	success
+
+Published image manifest:
+Name:      ghcr.io/not-so-shubh/devops-homework:c92b9965f9e7eece0fe1f0dcf0ff1b37b7c33352
+MediaType: application/vnd.oci.image.index.v1+json
+Digest:    sha256:a0a95afef0d4fa6b870dfad1eb3edecf138a04c56b98cb4b4aea4a1e54b9f9cd
+           
+Manifests: 
+  Name:        ghcr.io/not-so-shubh/devops-homework:c92b9965f9e7eece0fe1f0dcf0ff1b37b7c33352@sha256:4d41f905015d0824407dd6d57fd596388b181c234958b6aa412635aa89a47c87
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    linux/amd64
+               
+  Name:        ghcr.io/not-so-shubh/devops-homework:c92b9965f9e7eece0fe1f0dcf0ff1b37b7c33352@sha256:3ad91d19892f73a49eaf46a7124b2db581fe2b0b079080ae88965fac10252312
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    linux/arm64
+               
+  Name:        ghcr.io/not-so-shubh/devops-homework:c92b9965f9e7eece0fe1f0dcf0ff1b37b7c33352@sha256:59241b5170219dba51b982503f6015070af1d65d35b77db71ba1af50194d9294
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    unknown/unknown
+  Annotations: 
+    vnd.docker.reference.digest: sha256:4d41f905015d0824407dd6d57fd596388b181c234958b6aa412635aa89a47c87
+    vnd.docker.reference.type:   attestation-manifest
+               
+  Name:        ghcr.io/not-so-shubh/devops-homework:c92b9965f9e7eece0fe1f0dcf0ff1b37b7c33352@sha256:46ca240b8f82929ffaf4ddc2538167d2369e1b8ebf9f9640ba6772208c5c03e9
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    unknown/unknown
+  Annotations: 
+    vnd.docker.reference.digest: sha256:3ad91d19892f73a49eaf46a7124b2db581fe2b0b079080ae88965fac10252312
+    vnd.docker.reference.type:   attestation-manifest

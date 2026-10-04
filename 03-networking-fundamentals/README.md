@@ -63,4 +63,4 @@ PASS: available local networking information was collected.
 - [`networking-commands.md`](networking-commands.md) — command-by-command reference
 - [`../evidence/command-outputs/network-info.txt`](../evidence/command-outputs/network-info.txt) — genuine local output
 
-The key lesson is that an interface owns addresses, the route table chooses a next hop, DNS resolves names, and a listening socket is the process-facing endpoint that accepts TCP/UDP traffic. The same concepts explain service-name DNS and isolation in [Docker Networking](../docker-network/README.md).
+The key lesson is that an interface owns addresses, the route table chooses a next hop, DNS resolves names, and a listening socket is the process-facing endpoint that accepts TCP/UDP traffic. The same concepts explain service-name DNS and isolation in [Docker Networking](../07-docker-networking-volumes/README.md).

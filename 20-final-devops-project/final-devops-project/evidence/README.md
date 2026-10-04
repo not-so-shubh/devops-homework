@@ -8,5 +8,9 @@ Completed local evidence:
 - [Broken troubleshooting state](02-troubleshooting-broken.png)
 - [Fixed troubleshooting state and HTTP 200](03-troubleshooting-fixed.png)
 - [Full troubleshooting transcript](troubleshooting-output.txt)
+- [Argo CD Synced/Healthy proof](04-argocd-sync.png)
+- [Argo CD configuration and deleted-Service self-healing](05-argocd-self-heal.png)
+- [Full Argo CD transcript](argocd-output.txt)
+- [Successful hosted final-project pipeline and multi-architecture image](../../../evidence/hosted-workflows/final-project-success.txt)
 
-The hosted pipeline/GHCR evidence and final Argo CD proof are generated only from successful hosted runs. AWS apply/output/destroy evidence must come from an authorized AWS account and is intentionally never fabricated.
+AWS apply/output/destroy evidence must come from an authorized AWS account and is intentionally never fabricated. Use `scripts/run-aws-evidence.sh final` only after reviewing the cost and credential safeguards.

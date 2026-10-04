@@ -19,7 +19,11 @@ This directory preserves genuine runtime evidence from the earlier DevOps sectio
 | `bind-mount-output.txt` | Section 07 bind-mount before/after lab |
 | `host-network-output.txt` | Section 07 guarded host-network attempt |
 | `host-network-linux-output.txt` | Section 07 successful native-Linux host-network verification in a disposable daemon |
-| `verification-summary.txt` | Historical pre-refactor verifier summary; rerun the repaired verifier before relying on its totals |
+| `verification-summary.txt` | Current full verifier run: 12 passed, 0 failed, 0 skipped |
+
+## Hosted pipeline evidence
+
+[`hosted-workflows/`](hosted-workflows/) contains genuine successful GitHub Actions transcripts and captures for the CI/CD, DevSecOps and final-project pipelines. The records include the real Kind/Helm deployment jobs and multi-architecture GHCR manifests.
 
 ## Kubernetes evidence
 

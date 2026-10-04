@@ -89,7 +89,7 @@ The `terraform/` project provisions a VPC, two subnets, routing, ECR and a priva
 
 ## CI/CD and DevSecOps
 
-The executable workflow is [`.github/workflows/final-project.yml`](../../../.github/workflows/final-project.yml). It runs tests, Bandit SAST, pip-audit SCA, Gitleaks, Kubernetes/Helm/Terraform validation, a Docker build and Trivy image gate. The gated revision is deployed with Helm to an ephemeral Kind cluster and must pass the chart test before the workflow publishes multi-architecture immutable SHA and `latest` tags. External production deployment is protected by `ENABLE_FINAL_DEPLOY=true`, a least-privilege `KUBE_CONFIG` secret and GitHub environment approval.
+The executable workflow is [`.github/workflows/final-project.yml`](../../.github/workflows/final-project.yml). It runs tests, Bandit SAST, pip-audit SCA, Gitleaks, Kubernetes/Helm/Terraform validation, a Docker build and Trivy image gate. The gated revision is deployed with Helm to an ephemeral Kind cluster and must pass the chart test before the workflow publishes multi-architecture immutable SHA and `latest` tags. External production deployment is protected by `ENABLE_FINAL_DEPLOY=true`, a least-privilege `KUBE_CONFIG` secret and GitHub environment approval.
 
 ## Monitoring
 

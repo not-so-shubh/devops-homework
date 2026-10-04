@@ -1,0 +1,102 @@
+HOSTED WORKFLOW EVIDENCE — DEVSECOPS
+Commit: f93b4a00b624dee1ee96b9016a019a5f7fbf4695
+Run: https://github.com/not-so-shubh/devops-homework/actions/runs/37197332796
+
+
+✓ main DevSecOps Pipeline · 37197332796
+Triggered via push about 3 minutes ago
+
+JOBS
+✓ unit-test in 7s (ID 111421795924)
+✓ sast in 9s (ID 111421796036)
+✓ sca in 15s (ID 111421796050)
+✓ secret-scan in 5s (ID 111421796052)
+✓ container-scan in 26s (ID 111421825340)
+✓ security-gate in 3s (ID 111421904800)
+✓ kubernetes-smoke-deploy in 54s (ID 111421921206)
+✓ publish in 31s (ID 111422093562)
+- external-deploy in 0s (ID 111422196233)
+
+ANNOTATIONS
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+unit-test: .github#1
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+sast: .github#1
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+sca: .github#1
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+secret-scan: .github#1
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+container-scan: .github#1
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+security-gate: .github#1
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+kubernetes-smoke-deploy: .github#1
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+publish: .github#1
+
+
+ARTIFACTS
+not-so-shubh~devops-homework~A90656.dockerbuild
+bandit-report
+not-so-shubh~devops-homework~HB2Q82.dockerbuild
+trivy-report
+gitleaks-results.sarif
+
+For more information about a job, try: gh run view --job=<job-id>
+View this run on GitHub: https://github.com/not-so-shubh/devops-homework/actions/runs/37197332796
+
+Job conclusions:
+unit-test	completed	success
+sast	completed	success
+sca	completed	success
+secret-scan	completed	success
+container-scan	completed	success
+security-gate	completed	success
+kubernetes-smoke-deploy	completed	success
+publish	completed	success
+external-deploy	completed	skipped
+
+Kubernetes smoke-deploy steps:
+Set up job	completed	success
+Run actions/checkout@v7	completed	success
+Build the scanned source revision	completed	success
+Create ephemeral Kubernetes cluster	completed	success
+Deploy and verify in Kubernetes	completed	success
+Post Run actions/checkout@v7	completed	success
+Complete job	completed	success
+
+Published image manifest:
+Name:      ghcr.io/not-so-shubh/devsecops-demo:f93b4a00b624dee1ee96b9016a019a5f7fbf4695
+MediaType: application/vnd.oci.image.index.v1+json
+Digest:    sha256:6832f663c58f822e1b919f482291e8900a2213d4eaa4f489e24b569832c1007a
+           
+Manifests: 
+  Name:        ghcr.io/not-so-shubh/devsecops-demo:f93b4a00b624dee1ee96b9016a019a5f7fbf4695@sha256:379cf0fb40d6b86fcae2844c6fb9493a36de697b743a93a7be347fcc6282fdcf
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    linux/amd64
+               
+  Name:        ghcr.io/not-so-shubh/devsecops-demo:f93b4a00b624dee1ee96b9016a019a5f7fbf4695@sha256:e0bf2dba3418564b3f668845259ed33616999f72f93ceb9488f1b10f9be14b6c
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    linux/arm64
+               
+  Name:        ghcr.io/not-so-shubh/devsecops-demo:f93b4a00b624dee1ee96b9016a019a5f7fbf4695@sha256:43b3b12ef0201a8b88ba45baa013349a62bfd3886da474d9c1c00b20f5ae330f
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    unknown/unknown
+  Annotations: 
+    vnd.docker.reference.digest: sha256:379cf0fb40d6b86fcae2844c6fb9493a36de697b743a93a7be347fcc6282fdcf
+    vnd.docker.reference.type:   attestation-manifest
+               
+  Name:        ghcr.io/not-so-shubh/devsecops-demo:f93b4a00b624dee1ee96b9016a019a5f7fbf4695@sha256:e5817073946a2dd740bbc5470acb24ad046978737304480fea2db4e3c896a61b
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    unknown/unknown
+  Annotations: 
+    vnd.docker.reference.digest: sha256:e0bf2dba3418564b3f668845259ed33616999f72f93ceb9488f1b10f9be14b6c
+    vnd.docker.reference.type:   attestation-manifest
