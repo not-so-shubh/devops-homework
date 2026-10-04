@@ -75,7 +75,7 @@ jobs:
           load: true
           tags: devsecops-demo:${{ github.sha }}
       - name: Trivy image gate
-        uses: aquasecurity/trivy-action@0.36.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: devsecops-demo:${{ github.sha }}
           format: sarif
