@@ -27,3 +27,23 @@ terraform apply destroy.tfplan
 - `force_destroy=false` protects objects from accidental deletion. Empty the lab bucket before destroying, or deliberately override only after review.
 
 Capture successful command output and the AWS console bucket properties after running with an authorized lab account.
+
+## Live AWS evidence
+
+The configuration was applied in `ap-southeast-2` on 7 October 2026. Terraform created all seven planned objects, the AWS Console confirmed the security controls below, and Terraform then destroyed all seven objects successfully. The sanitized [plan, apply, state, output and destroy transcript](../../evidence/command-outputs/aws-session18-live.txt) records the complete lifecycle.
+
+### Bucket inventory and region
+
+![Live S3 bucket in Asia Pacific Sydney](evidence/01-s3-bucket.png)
+
+### Versioning
+
+![S3 bucket versioning enabled](evidence/02-s3-versioning.png)
+
+### Default encryption
+
+![SSE-S3 default encryption enabled](evidence/03-s3-encryption.png)
+
+### Public-access protection
+
+![Block all public access enabled](evidence/04-s3-public-access-block.png)

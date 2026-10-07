@@ -1,7 +1,7 @@
 variable "aws_region" {
   description = "AWS region for the S3 API and supporting resources."
   type        = string
-  default     = "ap-south-1"
+  default     = "ap-southeast-2"
 }
 
 variable "bucket_prefix" {

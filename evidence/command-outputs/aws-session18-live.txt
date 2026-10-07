@@ -1,0 +1,714 @@
+AWS identity verified for an authorized 12-digit account (identifier withheld).
+Project: 17-terraform-aws/terraform-s3-demo
+Transcript: evidence/command-outputs/aws-session18-live.txt
+Initializing the backend...
+
+Initializing provider plugins...
+- Reusing previous version of hashicorp/aws from the dependency lock file
+- Reusing previous version of hashicorp/random from the dependency lock file
+- Using previously-installed hashicorp/aws v6.67.0
+- Using previously-installed hashicorp/random v3.9.1
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+Success! The configuration is valid.
+
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_s3_bucket.homework will be created
+  + resource "aws_s3_bucket" "homework" {
+      + acceleration_status         = (known after apply)
+      + acl                         = (known after apply)
+      + arn                         = (known after apply)
+      + bucket                      = (known after apply)
+      + bucket_domain_name          = (known after apply)
+      + bucket_namespace            = (known after apply)
+      + bucket_prefix               = (known after apply)
+      + bucket_region               = (known after apply)
+      + bucket_regional_domain_name = (known after apply)
+      + force_destroy               = false
+      + hosted_zone_id              = (known after apply)
+      + id                          = (known after apply)
+      + object_lock_enabled         = (known after apply)
+      + policy                      = (known after apply)
+      + region                      = "ap-southeast-2"
+      + request_payer               = (known after apply)
+      + tags_all                    = {
+          + "Environment" = "lab"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "devops-homework-s3"
+          + "Student"     = "24BCS10601"
+        }
+      + website_domain              = (known after apply)
+      + website_endpoint            = (known after apply)
+
+      + cors_rule (known after apply)
+
+      + grant (known after apply)
+
+      + lifecycle_rule (known after apply)
+
+      + logging (known after apply)
+
+      + object_lock_configuration (known after apply)
+
+      + replication_configuration (known after apply)
+
+      + server_side_encryption_configuration (known after apply)
+
+      + versioning (known after apply)
+
+      + website (known after apply)
+    }
+
+  # aws_s3_bucket_lifecycle_configuration.homework will be created
+  + resource "aws_s3_bucket_lifecycle_configuration" "homework" {
+      + bucket                                 = (known after apply)
+      + expected_bucket_owner                  = (known after apply)
+      + id                                     = (known after apply)
+      + region                                 = "ap-southeast-2"
+      + transition_default_minimum_object_size = "all_storage_classes_128K"
+
+      + rule {
+          + id     = "expire-noncurrent-lab-versions"
+          + status = "Enabled"
+            # (1 unchanged attribute hidden)
+
+          + filter {
+                # (1 unchanged attribute hidden)
+            }
+
+          + noncurrent_version_expiration {
+              + noncurrent_days = 30
+            }
+        }
+    }
+
+  # aws_s3_bucket_ownership_controls.homework will be created
+  + resource "aws_s3_bucket_ownership_controls" "homework" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+      + region = "ap-southeast-2"
+
+      + rule {
+          + object_ownership = "BucketOwnerEnforced"
+        }
+    }
+
+  # aws_s3_bucket_public_access_block.homework will be created
+  + resource "aws_s3_bucket_public_access_block" "homework" {
+      + block_public_acls       = true
+      + block_public_policy     = true
+      + bucket                  = (known after apply)
+      + id                      = (known after apply)
+      + ignore_public_acls      = true
+      + region                  = "ap-southeast-2"
+      + restrict_public_buckets = true
+    }
+
+  # aws_s3_bucket_server_side_encryption_configuration.homework will be created
+  + resource "aws_s3_bucket_server_side_encryption_configuration" "homework" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+      + region = "ap-southeast-2"
+
+      + rule {
+          + blocked_encryption_types = (known after apply)
+          + bucket_key_enabled       = true
+
+          + apply_server_side_encryption_by_default {
+              + kms_master_key_id = (known after apply)
+              + sse_algorithm     = "AES256"
+            }
+        }
+    }
+
+  # aws_s3_bucket_versioning.homework will be created
+  + resource "aws_s3_bucket_versioning" "homework" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+      + region = "ap-southeast-2"
+
+      + versioning_configuration {
+          + mfa_delete = (known after apply)
+          + status     = "Enabled"
+        }
+    }
+
+  # random_id.bucket will be created
+  + resource "random_id" "bucket" {
+      + b64_std     = (known after apply)
+      + b64_url     = (known after apply)
+      + byte_length = 4
+      + dec         = (known after apply)
+      + hex         = (known after apply)
+      + id          = (known after apply)
+    }
+
+Plan: 7 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + bucket_arn           = (known after apply)
+  + bucket_name          = (known after apply)
+  + regional_domain_name = (known after apply)
+
+─────────────────────────────────────────────────────────────────────────────
+
+Saved the plan to:
+/var/folders/nc/cb1dsz612ms5y410zv_f423c0000gn/T/devops-session18-plan.XXXXXX.8YVv9VgXWt
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "/var/folders/nc/cb1dsz612ms5y410zv_f423c0000gn/T/devops-session18-plan.XXXXXX.8YVv9VgXWt"
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_s3_bucket.homework will be created
+  + resource "aws_s3_bucket" "homework" {
+      + acceleration_status         = (known after apply)
+      + acl                         = (known after apply)
+      + arn                         = (known after apply)
+      + bucket                      = (known after apply)
+      + bucket_domain_name          = (known after apply)
+      + bucket_namespace            = (known after apply)
+      + bucket_prefix               = (known after apply)
+      + bucket_region               = (known after apply)
+      + bucket_regional_domain_name = (known after apply)
+      + force_destroy               = false
+      + hosted_zone_id              = (known after apply)
+      + id                          = (known after apply)
+      + object_lock_enabled         = (known after apply)
+      + policy                      = (known after apply)
+      + region                      = "ap-southeast-2"
+      + request_payer               = (known after apply)
+      + tags_all                    = {
+          + "Environment" = "lab"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "devops-homework-s3"
+          + "Student"     = "24BCS10601"
+        }
+      + website_domain              = (known after apply)
+      + website_endpoint            = (known after apply)
+
+      + cors_rule (known after apply)
+
+      + grant (known after apply)
+
+      + lifecycle_rule (known after apply)
+
+      + logging (known after apply)
+
+      + object_lock_configuration (known after apply)
+
+      + replication_configuration (known after apply)
+
+      + server_side_encryption_configuration (known after apply)
+
+      + versioning (known after apply)
+
+      + website (known after apply)
+    }
+
+  # aws_s3_bucket_lifecycle_configuration.homework will be created
+  + resource "aws_s3_bucket_lifecycle_configuration" "homework" {
+      + bucket                                 = (known after apply)
+      + expected_bucket_owner                  = (known after apply)
+      + id                                     = (known after apply)
+      + region                                 = "ap-southeast-2"
+      + transition_default_minimum_object_size = "all_storage_classes_128K"
+
+      + rule {
+          + id     = "expire-noncurrent-lab-versions"
+          + status = "Enabled"
+            # (1 unchanged attribute hidden)
+
+          + filter {
+                # (1 unchanged attribute hidden)
+            }
+
+          + noncurrent_version_expiration {
+              + noncurrent_days = 30
+            }
+        }
+    }
+
+  # aws_s3_bucket_ownership_controls.homework will be created
+  + resource "aws_s3_bucket_ownership_controls" "homework" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+      + region = "ap-southeast-2"
+
+      + rule {
+          + object_ownership = "BucketOwnerEnforced"
+        }
+    }
+
+  # aws_s3_bucket_public_access_block.homework will be created
+  + resource "aws_s3_bucket_public_access_block" "homework" {
+      + block_public_acls       = true
+      + block_public_policy     = true
+      + bucket                  = (known after apply)
+      + id                      = (known after apply)
+      + ignore_public_acls      = true
+      + region                  = "ap-southeast-2"
+      + restrict_public_buckets = true
+    }
+
+  # aws_s3_bucket_server_side_encryption_configuration.homework will be created
+  + resource "aws_s3_bucket_server_side_encryption_configuration" "homework" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+      + region = "ap-southeast-2"
+
+      + rule {
+          + blocked_encryption_types = (known after apply)
+          + bucket_key_enabled       = true
+
+          + apply_server_side_encryption_by_default {
+              + kms_master_key_id = (known after apply)
+              + sse_algorithm     = "AES256"
+            }
+        }
+    }
+
+  # aws_s3_bucket_versioning.homework will be created
+  + resource "aws_s3_bucket_versioning" "homework" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+      + region = "ap-southeast-2"
+
+      + versioning_configuration {
+          + mfa_delete = (known after apply)
+          + status     = "Enabled"
+        }
+    }
+
+  # random_id.bucket will be created
+  + resource "random_id" "bucket" {
+      + b64_std     = (known after apply)
+      + b64_url     = (known after apply)
+      + byte_length = 4
+      + dec         = (known after apply)
+      + hex         = (known after apply)
+      + id          = (known after apply)
+    }
+
+Plan: 7 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + bucket_arn           = (known after apply)
+  + bucket_name          = (known after apply)
+  + regional_domain_name = (known after apply)
+random_id.bucket: Creating...
+random_id.bucket: Creation complete after 0s [id=745bKw]
+aws_s3_bucket.homework: Creating...
+aws_s3_bucket.homework: Still creating... [00m10s elapsed]
+aws_s3_bucket.homework: Creation complete after 11s [id=shubh-devops-homework-ef8e5b2b]
+aws_s3_bucket_server_side_encryption_configuration.homework: Creating...
+aws_s3_bucket_versioning.homework: Creating...
+aws_s3_bucket_ownership_controls.homework: Creating...
+aws_s3_bucket_public_access_block.homework: Creating...
+aws_s3_bucket_server_side_encryption_configuration.homework: Creation complete after 2s [id=shubh-devops-homework-ef8e5b2b]
+aws_s3_bucket_public_access_block.homework: Creation complete after 2s [id=shubh-devops-homework-ef8e5b2b]
+aws_s3_bucket_ownership_controls.homework: Creation complete after 3s [id=shubh-devops-homework-ef8e5b2b]
+aws_s3_bucket_versioning.homework: Creation complete after 4s [id=shubh-devops-homework-ef8e5b2b]
+aws_s3_bucket_lifecycle_configuration.homework: Creating...
+aws_s3_bucket_lifecycle_configuration.homework: Still creating... [00m10s elapsed]
+aws_s3_bucket_lifecycle_configuration.homework: Still creating... [00m20s elapsed]
+aws_s3_bucket_lifecycle_configuration.homework: Still creating... [00m30s elapsed]
+aws_s3_bucket_lifecycle_configuration.homework: Still creating... [00m40s elapsed]
+aws_s3_bucket_lifecycle_configuration.homework: Still creating... [00m50s elapsed]
+aws_s3_bucket_lifecycle_configuration.homework: Still creating... [01m00s elapsed]
+aws_s3_bucket_lifecycle_configuration.homework: Creation complete after 1m1s [id=shubh-devops-homework-ef8e5b2b]
+
+Apply complete! Resources: 7 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+bucket_arn = "arn:aws:s3:::shubh-devops-homework-ef8e5b2b"
+bucket_name = "shubh-devops-homework-ef8e5b2b"
+regional_domain_name = "shubh-devops-homework-ef8e5b2b.s3.ap-southeast-2.amazonaws.com"
+aws_s3_bucket.homework
+aws_s3_bucket_lifecycle_configuration.homework
+aws_s3_bucket_ownership_controls.homework
+aws_s3_bucket_public_access_block.homework
+aws_s3_bucket_server_side_encryption_configuration.homework
+aws_s3_bucket_versioning.homework
+random_id.bucket
+bucket_arn = "arn:aws:s3:::shubh-devops-homework-ef8e5b2b"
+bucket_name = "shubh-devops-homework-ef8e5b2b"
+regional_domain_name = "shubh-devops-homework-ef8e5b2b.s3.ap-southeast-2.amazonaws.com"
+
+Resources are live. Capture the required AWS console screenshots now.
+Do not close this terminal; cleanup will continue after Enter is pressed.
+Screenshot capture completed; guarded destroy started.
+random_id.bucket: Refreshing state... [id=745bKw]
+aws_s3_bucket.homework: Refreshing state... [id=shubh-devops-homework-ef8e5b2b]
+aws_s3_bucket_versioning.homework: Refreshing state... [id=shubh-devops-homework-ef8e5b2b]
+aws_s3_bucket_ownership_controls.homework: Refreshing state... [id=shubh-devops-homework-ef8e5b2b]
+aws_s3_bucket_public_access_block.homework: Refreshing state... [id=shubh-devops-homework-ef8e5b2b]
+aws_s3_bucket_server_side_encryption_configuration.homework: Refreshing state... [id=shubh-devops-homework-ef8e5b2b]
+aws_s3_bucket_lifecycle_configuration.homework: Refreshing state... [id=shubh-devops-homework-ef8e5b2b]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_s3_bucket.homework will be destroyed
+  - resource "aws_s3_bucket" "homework" {
+      - arn                         = "arn:aws:s3:::shubh-devops-homework-ef8e5b2b" -> null
+      - bucket                      = "shubh-devops-homework-ef8e5b2b" -> null
+      - bucket_domain_name          = "shubh-devops-homework-ef8e5b2b.s3.amazonaws.com" -> null
+      - bucket_namespace            = "global" -> null
+      - bucket_region               = "ap-southeast-2" -> null
+      - bucket_regional_domain_name = "shubh-devops-homework-ef8e5b2b.s3.ap-southeast-2.amazonaws.com" -> null
+      - force_destroy               = false -> null
+      - hosted_zone_id              = "Z1WCIGYICN2BYD" -> null
+      - id                          = "shubh-devops-homework-ef8e5b2b" -> null
+      - object_lock_enabled         = false -> null
+      - region                      = "ap-southeast-2" -> null
+      - request_payer               = "BucketOwner" -> null
+      - tags                        = {} -> null
+      - tags_all                    = {
+          - "Environment" = "lab"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "devops-homework-s3"
+          - "Student"     = "24BCS10601"
+        } -> null
+        # (3 unchanged attributes hidden)
+
+      - grant {
+          - id          = "[REDACTED_CANONICAL_USER_ID]" -> null
+          - permissions = [
+              - "FULL_CONTROL",
+            ] -> null
+          - type        = "CanonicalUser" -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - lifecycle_rule {
+          - abort_incomplete_multipart_upload_days = 0 -> null
+          - enabled                                = true -> null
+          - id                                     = "expire-noncurrent-lab-versions" -> null
+          - tags                                   = {} -> null
+            # (1 unchanged attribute hidden)
+
+          - noncurrent_version_expiration {
+              - days = 30 -> null
+            }
+        }
+
+      - server_side_encryption_configuration {
+          - rule {
+              - bucket_key_enabled = true -> null
+
+              - apply_server_side_encryption_by_default {
+                  - sse_algorithm     = "AES256" -> null
+                    # (1 unchanged attribute hidden)
+                }
+            }
+        }
+
+      - versioning {
+          - enabled    = true -> null
+          - mfa_delete = false -> null
+        }
+    }
+
+  # aws_s3_bucket_lifecycle_configuration.homework will be destroyed
+  - resource "aws_s3_bucket_lifecycle_configuration" "homework" {
+      - bucket                                 = "shubh-devops-homework-ef8e5b2b" -> null
+      - id                                     = "shubh-devops-homework-ef8e5b2b" -> null
+      - region                                 = "ap-southeast-2" -> null
+      - transition_default_minimum_object_size = "all_storage_classes_128K" -> null
+        # (1 unchanged attribute hidden)
+
+      - rule {
+          - id     = "expire-noncurrent-lab-versions" -> null
+          - status = "Enabled" -> null
+            # (1 unchanged attribute hidden)
+
+          - filter {
+                # (1 unchanged attribute hidden)
+            }
+
+          - noncurrent_version_expiration {
+              - noncurrent_days = 30 -> null
+            }
+        }
+    }
+
+  # aws_s3_bucket_ownership_controls.homework will be destroyed
+  - resource "aws_s3_bucket_ownership_controls" "homework" {
+      - bucket = "shubh-devops-homework-ef8e5b2b" -> null
+      - id     = "shubh-devops-homework-ef8e5b2b" -> null
+      - region = "ap-southeast-2" -> null
+
+      - rule {
+          - object_ownership = "BucketOwnerEnforced" -> null
+        }
+    }
+
+  # aws_s3_bucket_public_access_block.homework will be destroyed
+  - resource "aws_s3_bucket_public_access_block" "homework" {
+      - block_public_acls       = true -> null
+      - block_public_policy     = true -> null
+      - bucket                  = "shubh-devops-homework-ef8e5b2b" -> null
+      - id                      = "shubh-devops-homework-ef8e5b2b" -> null
+      - ignore_public_acls      = true -> null
+      - region                  = "ap-southeast-2" -> null
+      - restrict_public_buckets = true -> null
+    }
+
+  # aws_s3_bucket_server_side_encryption_configuration.homework will be destroyed
+  - resource "aws_s3_bucket_server_side_encryption_configuration" "homework" {
+      - bucket                = "shubh-devops-homework-ef8e5b2b" -> null
+      - id                    = "shubh-devops-homework-ef8e5b2b" -> null
+      - region                = "ap-southeast-2" -> null
+        # (1 unchanged attribute hidden)
+
+      - rule {
+          - blocked_encryption_types = [
+              - "SSE-C",
+            ] -> null
+          - bucket_key_enabled       = true -> null
+
+          - apply_server_side_encryption_by_default {
+              - sse_algorithm     = "AES256" -> null
+                # (1 unchanged attribute hidden)
+            }
+        }
+    }
+
+  # aws_s3_bucket_versioning.homework will be destroyed
+  - resource "aws_s3_bucket_versioning" "homework" {
+      - bucket                = "shubh-devops-homework-ef8e5b2b" -> null
+      - id                    = "shubh-devops-homework-ef8e5b2b" -> null
+      - region                = "ap-southeast-2" -> null
+        # (1 unchanged attribute hidden)
+
+      - versioning_configuration {
+          - mfa_delete = "Disabled" -> null
+          - status     = "Enabled" -> null
+        }
+    }
+
+  # random_id.bucket will be destroyed
+  - resource "random_id" "bucket" {
+      - b64_std     = "745bKw==" -> null
+      - b64_url     = "745bKw" -> null
+      - byte_length = 4 -> null
+      - dec         = "4019084075" -> null
+      - hex         = "ef8e5b2b" -> null
+      - id          = "745bKw" -> null
+    }
+
+Plan: 0 to add, 0 to change, 7 to destroy.
+
+Changes to Outputs:
+  - bucket_arn           = "arn:aws:s3:::shubh-devops-homework-ef8e5b2b" -> null
+  - bucket_name          = "shubh-devops-homework-ef8e5b2b" -> null
+  - regional_domain_name = "shubh-devops-homework-ef8e5b2b.s3.ap-southeast-2.amazonaws.com" -> null
+
+─────────────────────────────────────────────────────────────────────────────
+
+Saved the plan to: /tmp/devops-session18-destroy.tfplan
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "/tmp/devops-session18-destroy.tfplan"
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_s3_bucket.homework will be destroyed
+  - resource "aws_s3_bucket" "homework" {
+      - arn                         = "arn:aws:s3:::shubh-devops-homework-ef8e5b2b" -> null
+      - bucket                      = "shubh-devops-homework-ef8e5b2b" -> null
+      - bucket_domain_name          = "shubh-devops-homework-ef8e5b2b.s3.amazonaws.com" -> null
+      - bucket_namespace            = "global" -> null
+      - bucket_region               = "ap-southeast-2" -> null
+      - bucket_regional_domain_name = "shubh-devops-homework-ef8e5b2b.s3.ap-southeast-2.amazonaws.com" -> null
+      - force_destroy               = false -> null
+      - hosted_zone_id              = "Z1WCIGYICN2BYD" -> null
+      - id                          = "shubh-devops-homework-ef8e5b2b" -> null
+      - object_lock_enabled         = false -> null
+      - region                      = "ap-southeast-2" -> null
+      - request_payer               = "BucketOwner" -> null
+      - tags                        = {} -> null
+      - tags_all                    = {
+          - "Environment" = "lab"
+          - "ManagedBy"   = "Terraform"
+          - "Project"     = "devops-homework-s3"
+          - "Student"     = "24BCS10601"
+        } -> null
+        # (3 unchanged attributes hidden)
+
+      - grant {
+          - id          = "[REDACTED_CANONICAL_USER_ID]" -> null
+          - permissions = [
+              - "FULL_CONTROL",
+            ] -> null
+          - type        = "CanonicalUser" -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - lifecycle_rule {
+          - abort_incomplete_multipart_upload_days = 0 -> null
+          - enabled                                = true -> null
+          - id                                     = "expire-noncurrent-lab-versions" -> null
+          - tags                                   = {} -> null
+            # (1 unchanged attribute hidden)
+
+          - noncurrent_version_expiration {
+              - days = 30 -> null
+            }
+        }
+
+      - server_side_encryption_configuration {
+          - rule {
+              - bucket_key_enabled = true -> null
+
+              - apply_server_side_encryption_by_default {
+                  - sse_algorithm     = "AES256" -> null
+                    # (1 unchanged attribute hidden)
+                }
+            }
+        }
+
+      - versioning {
+          - enabled    = true -> null
+          - mfa_delete = false -> null
+        }
+    }
+
+  # aws_s3_bucket_lifecycle_configuration.homework will be destroyed
+  - resource "aws_s3_bucket_lifecycle_configuration" "homework" {
+      - bucket                                 = "shubh-devops-homework-ef8e5b2b" -> null
+      - id                                     = "shubh-devops-homework-ef8e5b2b" -> null
+      - region                                 = "ap-southeast-2" -> null
+      - transition_default_minimum_object_size = "all_storage_classes_128K" -> null
+        # (1 unchanged attribute hidden)
+
+      - rule {
+          - id     = "expire-noncurrent-lab-versions" -> null
+          - status = "Enabled" -> null
+            # (1 unchanged attribute hidden)
+
+          - filter {
+                # (1 unchanged attribute hidden)
+            }
+
+          - noncurrent_version_expiration {
+              - noncurrent_days = 30 -> null
+            }
+        }
+    }
+
+  # aws_s3_bucket_ownership_controls.homework will be destroyed
+  - resource "aws_s3_bucket_ownership_controls" "homework" {
+      - bucket = "shubh-devops-homework-ef8e5b2b" -> null
+      - id     = "shubh-devops-homework-ef8e5b2b" -> null
+      - region = "ap-southeast-2" -> null
+
+      - rule {
+          - object_ownership = "BucketOwnerEnforced" -> null
+        }
+    }
+
+  # aws_s3_bucket_public_access_block.homework will be destroyed
+  - resource "aws_s3_bucket_public_access_block" "homework" {
+      - block_public_acls       = true -> null
+      - block_public_policy     = true -> null
+      - bucket                  = "shubh-devops-homework-ef8e5b2b" -> null
+      - id                      = "shubh-devops-homework-ef8e5b2b" -> null
+      - ignore_public_acls      = true -> null
+      - region                  = "ap-southeast-2" -> null
+      - restrict_public_buckets = true -> null
+    }
+
+  # aws_s3_bucket_server_side_encryption_configuration.homework will be destroyed
+  - resource "aws_s3_bucket_server_side_encryption_configuration" "homework" {
+      - bucket                = "shubh-devops-homework-ef8e5b2b" -> null
+      - id                    = "shubh-devops-homework-ef8e5b2b" -> null
+      - region                = "ap-southeast-2" -> null
+        # (1 unchanged attribute hidden)
+
+      - rule {
+          - blocked_encryption_types = [
+              - "SSE-C",
+            ] -> null
+          - bucket_key_enabled       = true -> null
+
+          - apply_server_side_encryption_by_default {
+              - sse_algorithm     = "AES256" -> null
+                # (1 unchanged attribute hidden)
+            }
+        }
+    }
+
+  # aws_s3_bucket_versioning.homework will be destroyed
+  - resource "aws_s3_bucket_versioning" "homework" {
+      - bucket                = "shubh-devops-homework-ef8e5b2b" -> null
+      - id                    = "shubh-devops-homework-ef8e5b2b" -> null
+      - region                = "ap-southeast-2" -> null
+        # (1 unchanged attribute hidden)
+
+      - versioning_configuration {
+          - mfa_delete = "Disabled" -> null
+          - status     = "Enabled" -> null
+        }
+    }
+
+  # random_id.bucket will be destroyed
+  - resource "random_id" "bucket" {
+      - b64_std     = "745bKw==" -> null
+      - b64_url     = "745bKw" -> null
+      - byte_length = 4 -> null
+      - dec         = "4019084075" -> null
+      - hex         = "ef8e5b2b" -> null
+      - id          = "745bKw" -> null
+    }
+
+Plan: 0 to add, 0 to change, 7 to destroy.
+
+Changes to Outputs:
+  - bucket_arn           = "arn:aws:s3:::shubh-devops-homework-ef8e5b2b" -> null
+  - bucket_name          = "shubh-devops-homework-ef8e5b2b" -> null
+  - regional_domain_name = "shubh-devops-homework-ef8e5b2b.s3.ap-southeast-2.amazonaws.com" -> null
+aws_s3_bucket_ownership_controls.homework: Destroying... [id=shubh-devops-homework-ef8e5b2b]
+aws_s3_bucket_public_access_block.homework: Destroying... [id=shubh-devops-homework-ef8e5b2b]
+aws_s3_bucket_server_side_encryption_configuration.homework: Destroying... [id=shubh-devops-homework-ef8e5b2b]
+aws_s3_bucket_lifecycle_configuration.homework: Destroying... [id=shubh-devops-homework-ef8e5b2b]
+aws_s3_bucket_public_access_block.homework: Destruction complete after 3s
+aws_s3_bucket_server_side_encryption_configuration.homework: Destruction complete after 4s
+aws_s3_bucket_ownership_controls.homework: Destruction complete after 4s
+aws_s3_bucket_lifecycle_configuration.homework: Destruction complete after 4s
+aws_s3_bucket_versioning.homework: Destroying... [id=shubh-devops-homework-ef8e5b2b]
+aws_s3_bucket_versioning.homework: Destruction complete after 1s
+aws_s3_bucket.homework: Destroying... [id=shubh-devops-homework-ef8e5b2b]
+aws_s3_bucket.homework: Destruction complete after 1s
+random_id.bucket: Destroying... [id=745bKw]
+random_id.bucket: Destruction complete after 0s
+
+Apply complete! Resources: 0 added, 0 changed, 7 destroyed.
+PASS: Terraform apply, output and destroy completed for session18.

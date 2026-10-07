@@ -1,0 +1,1647 @@
+AWS identity verified for an authorized 12-digit account (identifier withheld).
+Project: 18-cloud-terraform-project
+Transcript: 18-cloud-terraform-project/evidence/aws-session19-live.txt
+Initializing the backend...
+
+Initializing provider plugins...
+- Reusing previous version of hashicorp/random from the dependency lock file
+- Reusing previous version of hashicorp/aws from the dependency lock file
+- Using previously-installed hashicorp/random v3.9.1
+- Using previously-installed hashicorp/aws v6.67.0
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+Success! The configuration is valid.
+
+data.aws_availability_zones.available: Reading...
+data.aws_ssm_parameter.amazon_linux: Reading...
+data.aws_availability_zones.available: Read complete after 2s [id=ap-southeast-2]
+data.aws_ssm_parameter.amazon_linux: Read complete after 2s [id=/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_instance.web will be created
+  + resource "aws_instance" "web" {
+      + ami                                  = (sensitive value)
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = true
+      + availability_zone                    = (known after apply)
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = (known after apply)
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "ap-southeast-2"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "devops-cloud-project-web"
+        }
+      + tags_all                             = {
+          + "ManagedBy" = "Terraform"
+          + "Name"      = "devops-cloud-project-web"
+          + "Project"   = "devops-cloud-project"
+          + "Student"   = "24BCS10601"
+        }
+      + tenancy                              = (known after apply)
+      + user_data                            = <<-EOT
+            #!/bin/bash
+            dnf install -y nginx
+            echo '<h1>Terraform Cloud Project</h1><p>Provisioned by Session 19.</p>' > /usr/share/nginx/html/index.html
+            systemctl enable --now nginx
+        EOT
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options {
+          + http_endpoint               = "enabled"
+          + http_protocol_ipv6          = "disabled"
+          + http_put_response_hop_limit = (known after apply)
+          + http_tokens                 = "required"
+          + instance_metadata_tags      = (known after apply)
+        }
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = true
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 8
+          + volume_type           = "gp3"
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+  # aws_internet_gateway.main will be created
+  + resource "aws_internet_gateway" "main" {
+      + arn      = (known after apply)
+      + id       = (known after apply)
+      + owner_id = (known after apply)
+      + region   = "ap-southeast-2"
+      + tags     = {
+          + "Name" = "devops-cloud-project-igw"
+        }
+      + tags_all = {
+          + "ManagedBy" = "Terraform"
+          + "Name"      = "devops-cloud-project-igw"
+          + "Project"   = "devops-cloud-project"
+          + "Student"   = "24BCS10601"
+        }
+      + vpc_id   = (known after apply)
+    }
+
+  # aws_route_table.public will be created
+  + resource "aws_route_table" "public" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + region           = "ap-southeast-2"
+      + route            = [
+          + {
+              + cidr_block                 = "0.0.0.0/0"
+              + gateway_id                 = (known after apply)
+                # (12 unchanged attributes hidden)
+            },
+        ]
+      + tags             = {
+          + "Name" = "devops-cloud-project-public"
+        }
+      + tags_all         = {
+          + "ManagedBy" = "Terraform"
+          + "Name"      = "devops-cloud-project-public"
+          + "Project"   = "devops-cloud-project"
+          + "Student"   = "24BCS10601"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # aws_route_table_association.public will be created
+  + resource "aws_route_table_association" "public" {
+      + id             = (known after apply)
+      + region         = "ap-southeast-2"
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # aws_s3_bucket.artifacts will be created
+  + resource "aws_s3_bucket" "artifacts" {
+      + acceleration_status         = (known after apply)
+      + acl                         = (known after apply)
+      + arn                         = (known after apply)
+      + bucket                      = (known after apply)
+      + bucket_domain_name          = (known after apply)
+      + bucket_namespace            = (known after apply)
+      + bucket_prefix               = (known after apply)
+      + bucket_region               = (known after apply)
+      + bucket_regional_domain_name = (known after apply)
+      + force_destroy               = false
+      + hosted_zone_id              = (known after apply)
+      + id                          = (known after apply)
+      + object_lock_enabled         = (known after apply)
+      + policy                      = (known after apply)
+      + region                      = "ap-southeast-2"
+      + request_payer               = (known after apply)
+      + tags_all                    = {
+          + "ManagedBy" = "Terraform"
+          + "Project"   = "devops-cloud-project"
+          + "Student"   = "24BCS10601"
+        }
+      + website_domain              = (known after apply)
+      + website_endpoint            = (known after apply)
+
+      + cors_rule (known after apply)
+
+      + grant (known after apply)
+
+      + lifecycle_rule (known after apply)
+
+      + logging (known after apply)
+
+      + object_lock_configuration (known after apply)
+
+      + replication_configuration (known after apply)
+
+      + server_side_encryption_configuration (known after apply)
+
+      + versioning (known after apply)
+
+      + website (known after apply)
+    }
+
+  # aws_s3_bucket_public_access_block.artifacts will be created
+  + resource "aws_s3_bucket_public_access_block" "artifacts" {
+      + block_public_acls       = true
+      + block_public_policy     = true
+      + bucket                  = (known after apply)
+      + id                      = (known after apply)
+      + ignore_public_acls      = true
+      + region                  = "ap-southeast-2"
+      + restrict_public_buckets = true
+    }
+
+  # aws_s3_bucket_server_side_encryption_configuration.artifacts will be created
+  + resource "aws_s3_bucket_server_side_encryption_configuration" "artifacts" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+      + region = "ap-southeast-2"
+
+      + rule {
+          + blocked_encryption_types = (known after apply)
+          + bucket_key_enabled       = (known after apply)
+
+          + apply_server_side_encryption_by_default {
+              + kms_master_key_id = (known after apply)
+              + sse_algorithm     = "AES256"
+            }
+        }
+    }
+
+  # aws_security_group.web will be created
+  + resource "aws_security_group" "web" {
+      + arn                    = (known after apply)
+      + description            = "Permit public HTTP for the homework web server"
+      + egress                 = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + from_port        = 0
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "-1"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ]
+      + id                     = (known after apply)
+      + ingress                = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + description      = "HTTP"
+              + from_port        = 80
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 80
+            },
+        ]
+      + name                   = "devops-cloud-project-web"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + region                 = "ap-southeast-2"
+      + revoke_rules_on_delete = false
+      + tags_all               = {
+          + "ManagedBy" = "Terraform"
+          + "Project"   = "devops-cloud-project"
+          + "Student"   = "24BCS10601"
+        }
+      + vpc_id                 = (known after apply)
+    }
+
+  # aws_subnet.public will be created
+  + resource "aws_subnet" "public" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "ap-southeast-2a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.20.10.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block                                = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = true
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + region                                         = "ap-southeast-2"
+      + tags                                           = {
+          + "Name" = "devops-cloud-project-public"
+        }
+      + tags_all                                       = {
+          + "ManagedBy" = "Terraform"
+          + "Name"      = "devops-cloud-project-public"
+          + "Project"   = "devops-cloud-project"
+          + "Student"   = "24BCS10601"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # aws_vpc.main will be created
+  + resource "aws_vpc" "main" {
+      + arn                                  = (known after apply)
+      + cidr_block                           = "10.20.0.0/16"
+      + default_network_acl_id               = (known after apply)
+      + default_route_table_id               = (known after apply)
+      + default_security_group_id            = (known after apply)
+      + dhcp_options_id                      = (known after apply)
+      + enable_dns_hostnames                 = true
+      + enable_dns_support                   = true
+      + enable_network_address_usage_metrics = (known after apply)
+      + id                                   = (known after apply)
+      + instance_tenancy                     = "default"
+      + ipv6_association_id                  = (known after apply)
+      + ipv6_cidr_block                      = (known after apply)
+      + ipv6_cidr_block_network_border_group = (known after apply)
+      + main_route_table_id                  = (known after apply)
+      + owner_id                             = (known after apply)
+      + region                               = "ap-southeast-2"
+      + tags                                 = {
+          + "Name" = "devops-cloud-project-vpc"
+        }
+      + tags_all                             = {
+          + "ManagedBy" = "Terraform"
+          + "Name"      = "devops-cloud-project-vpc"
+          + "Project"   = "devops-cloud-project"
+          + "Student"   = "24BCS10601"
+        }
+    }
+
+  # random_id.suffix will be created
+  + resource "random_id" "suffix" {
+      + b64_std     = (known after apply)
+      + b64_url     = (known after apply)
+      + byte_length = 4
+      + dec         = (known after apply)
+      + hex         = (known after apply)
+      + id          = (known after apply)
+    }
+
+Plan: 11 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + application_url  = (known after apply)
+  + artifact_bucket  = (known after apply)
+  + instance_id      = (known after apply)
+  + public_subnet_id = (known after apply)
+  + vpc_id           = (known after apply)
+
+─────────────────────────────────────────────────────────────────────────────
+
+Saved the plan to:
+/var/folders/nc/cb1dsz612ms5y410zv_f423c0000gn/T/devops-session19-plan.XXXXXX.uoymsSGFh5
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "/var/folders/nc/cb1dsz612ms5y410zv_f423c0000gn/T/devops-session19-plan.XXXXXX.uoymsSGFh5"
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_instance.web will be created
+  + resource "aws_instance" "web" {
+      + ami                                  = (sensitive value)
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = true
+      + availability_zone                    = (known after apply)
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = (known after apply)
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "ap-southeast-2"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "devops-cloud-project-web"
+        }
+      + tags_all                             = {
+          + "ManagedBy" = "Terraform"
+          + "Name"      = "devops-cloud-project-web"
+          + "Project"   = "devops-cloud-project"
+          + "Student"   = "24BCS10601"
+        }
+      + tenancy                              = (known after apply)
+      + user_data                            = <<-EOT
+            #!/bin/bash
+            dnf install -y nginx
+            echo '<h1>Terraform Cloud Project</h1><p>Provisioned by Session 19.</p>' > /usr/share/nginx/html/index.html
+            systemctl enable --now nginx
+        EOT
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options {
+          + http_endpoint               = "enabled"
+          + http_protocol_ipv6          = "disabled"
+          + http_put_response_hop_limit = (known after apply)
+          + http_tokens                 = "required"
+          + instance_metadata_tags      = (known after apply)
+        }
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = true
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 8
+          + volume_type           = "gp3"
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+  # aws_internet_gateway.main will be created
+  + resource "aws_internet_gateway" "main" {
+      + arn      = (known after apply)
+      + id       = (known after apply)
+      + owner_id = (known after apply)
+      + region   = "ap-southeast-2"
+      + tags     = {
+          + "Name" = "devops-cloud-project-igw"
+        }
+      + tags_all = {
+          + "ManagedBy" = "Terraform"
+          + "Name"      = "devops-cloud-project-igw"
+          + "Project"   = "devops-cloud-project"
+          + "Student"   = "24BCS10601"
+        }
+      + vpc_id   = (known after apply)
+    }
+
+  # aws_route_table.public will be created
+  + resource "aws_route_table" "public" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + region           = "ap-southeast-2"
+      + route            = [
+          + {
+              + cidr_block                 = "0.0.0.0/0"
+              + gateway_id                 = (known after apply)
+                # (12 unchanged attributes hidden)
+            },
+        ]
+      + tags             = {
+          + "Name" = "devops-cloud-project-public"
+        }
+      + tags_all         = {
+          + "ManagedBy" = "Terraform"
+          + "Name"      = "devops-cloud-project-public"
+          + "Project"   = "devops-cloud-project"
+          + "Student"   = "24BCS10601"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # aws_route_table_association.public will be created
+  + resource "aws_route_table_association" "public" {
+      + id             = (known after apply)
+      + region         = "ap-southeast-2"
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # aws_s3_bucket.artifacts will be created
+  + resource "aws_s3_bucket" "artifacts" {
+      + acceleration_status         = (known after apply)
+      + acl                         = (known after apply)
+      + arn                         = (known after apply)
+      + bucket                      = (known after apply)
+      + bucket_domain_name          = (known after apply)
+      + bucket_namespace            = (known after apply)
+      + bucket_prefix               = (known after apply)
+      + bucket_region               = (known after apply)
+      + bucket_regional_domain_name = (known after apply)
+      + force_destroy               = false
+      + hosted_zone_id              = (known after apply)
+      + id                          = (known after apply)
+      + object_lock_enabled         = (known after apply)
+      + policy                      = (known after apply)
+      + region                      = "ap-southeast-2"
+      + request_payer               = (known after apply)
+      + tags_all                    = {
+          + "ManagedBy" = "Terraform"
+          + "Project"   = "devops-cloud-project"
+          + "Student"   = "24BCS10601"
+        }
+      + website_domain              = (known after apply)
+      + website_endpoint            = (known after apply)
+
+      + cors_rule (known after apply)
+
+      + grant (known after apply)
+
+      + lifecycle_rule (known after apply)
+
+      + logging (known after apply)
+
+      + object_lock_configuration (known after apply)
+
+      + replication_configuration (known after apply)
+
+      + server_side_encryption_configuration (known after apply)
+
+      + versioning (known after apply)
+
+      + website (known after apply)
+    }
+
+  # aws_s3_bucket_public_access_block.artifacts will be created
+  + resource "aws_s3_bucket_public_access_block" "artifacts" {
+      + block_public_acls       = true
+      + block_public_policy     = true
+      + bucket                  = (known after apply)
+      + id                      = (known after apply)
+      + ignore_public_acls      = true
+      + region                  = "ap-southeast-2"
+      + restrict_public_buckets = true
+    }
+
+  # aws_s3_bucket_server_side_encryption_configuration.artifacts will be created
+  + resource "aws_s3_bucket_server_side_encryption_configuration" "artifacts" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+      + region = "ap-southeast-2"
+
+      + rule {
+          + blocked_encryption_types = (known after apply)
+          + bucket_key_enabled       = (known after apply)
+
+          + apply_server_side_encryption_by_default {
+              + kms_master_key_id = (known after apply)
+              + sse_algorithm     = "AES256"
+            }
+        }
+    }
+
+  # aws_security_group.web will be created
+  + resource "aws_security_group" "web" {
+      + arn                    = (known after apply)
+      + description            = "Permit public HTTP for the homework web server"
+      + egress                 = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + from_port        = 0
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "-1"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ]
+      + id                     = (known after apply)
+      + ingress                = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + description      = "HTTP"
+              + from_port        = 80
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 80
+            },
+        ]
+      + name                   = "devops-cloud-project-web"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + region                 = "ap-southeast-2"
+      + revoke_rules_on_delete = false
+      + tags_all               = {
+          + "ManagedBy" = "Terraform"
+          + "Project"   = "devops-cloud-project"
+          + "Student"   = "24BCS10601"
+        }
+      + vpc_id                 = (known after apply)
+    }
+
+  # aws_subnet.public will be created
+  + resource "aws_subnet" "public" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "ap-southeast-2a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.20.10.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block                                = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = true
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + region                                         = "ap-southeast-2"
+      + tags                                           = {
+          + "Name" = "devops-cloud-project-public"
+        }
+      + tags_all                                       = {
+          + "ManagedBy" = "Terraform"
+          + "Name"      = "devops-cloud-project-public"
+          + "Project"   = "devops-cloud-project"
+          + "Student"   = "24BCS10601"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # aws_vpc.main will be created
+  + resource "aws_vpc" "main" {
+      + arn                                  = (known after apply)
+      + cidr_block                           = "10.20.0.0/16"
+      + default_network_acl_id               = (known after apply)
+      + default_route_table_id               = (known after apply)
+      + default_security_group_id            = (known after apply)
+      + dhcp_options_id                      = (known after apply)
+      + enable_dns_hostnames                 = true
+      + enable_dns_support                   = true
+      + enable_network_address_usage_metrics = (known after apply)
+      + id                                   = (known after apply)
+      + instance_tenancy                     = "default"
+      + ipv6_association_id                  = (known after apply)
+      + ipv6_cidr_block                      = (known after apply)
+      + ipv6_cidr_block_network_border_group = (known after apply)
+      + main_route_table_id                  = (known after apply)
+      + owner_id                             = (known after apply)
+      + region                               = "ap-southeast-2"
+      + tags                                 = {
+          + "Name" = "devops-cloud-project-vpc"
+        }
+      + tags_all                             = {
+          + "ManagedBy" = "Terraform"
+          + "Name"      = "devops-cloud-project-vpc"
+          + "Project"   = "devops-cloud-project"
+          + "Student"   = "24BCS10601"
+        }
+    }
+
+  # random_id.suffix will be created
+  + resource "random_id" "suffix" {
+      + b64_std     = (known after apply)
+      + b64_url     = (known after apply)
+      + byte_length = 4
+      + dec         = (known after apply)
+      + hex         = (known after apply)
+      + id          = (known after apply)
+    }
+
+Plan: 11 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + application_url  = (known after apply)
+  + artifact_bucket  = (known after apply)
+  + instance_id      = (known after apply)
+  + public_subnet_id = (known after apply)
+  + vpc_id           = (known after apply)
+random_id.suffix: Creating...
+random_id.suffix: Creation complete after 0s [id=fxhg2g]
+aws_vpc.main: Creating...
+aws_s3_bucket.artifacts: Creating...
+aws_vpc.main: Still creating... [00m10s elapsed]
+aws_s3_bucket.artifacts: Still creating... [00m10s elapsed]
+aws_vpc.main: Creation complete after 13s [id=vpc-0768a9a59d46d67e0]
+aws_internet_gateway.main: Creating...
+aws_subnet.public: Creating...
+aws_security_group.web: Creating...
+aws_internet_gateway.main: Creation complete after 3s [id=igw-0bb5faed86029a57b]
+aws_route_table.public: Creating...
+aws_s3_bucket.artifacts: Creation complete after 16s [id=devops-cloud-project-7f1860da]
+aws_s3_bucket_public_access_block.artifacts: Creating...
+aws_s3_bucket_server_side_encryption_configuration.artifacts: Creating...
+aws_s3_bucket_public_access_block.artifacts: Creation complete after 2s [id=devops-cloud-project-7f1860da]
+aws_s3_bucket_server_side_encryption_configuration.artifacts: Creation complete after 2s [id=devops-cloud-project-7f1860da]
+aws_route_table.public: Creation complete after 3s [id=rtb-087a14d087a8986a7]
+aws_security_group.web: Creation complete after 7s [id=sg-08f4567abbe090ba4]
+aws_subnet.public: Still creating... [00m10s elapsed]
+aws_subnet.public: Creation complete after 14s [id=subnet-031b4a7a57f4df3b1]
+aws_route_table_association.public: Creating...
+aws_route_table_association.public: Creation complete after 1s [id=rtbassoc-02c741889a2200b75]
+aws_instance.web: Creating...
+aws_instance.web: Still creating... [00m10s elapsed]
+aws_instance.web: Creation complete after 18s [id=i-0ffe2b5d0f90f0322]
+
+Apply complete! Resources: 11 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+application_url = "http://13.236.136.228/"
+artifact_bucket = "devops-cloud-project-7f1860da"
+instance_id = "i-0ffe2b5d0f90f0322"
+public_subnet_id = "subnet-031b4a7a57f4df3b1"
+vpc_id = "vpc-0768a9a59d46d67e0"
+data.aws_availability_zones.available
+data.aws_ssm_parameter.amazon_linux
+aws_instance.web
+aws_internet_gateway.main
+aws_route_table.public
+aws_route_table_association.public
+aws_s3_bucket.artifacts
+aws_s3_bucket_public_access_block.artifacts
+aws_s3_bucket_server_side_encryption_configuration.artifacts
+aws_security_group.web
+aws_subnet.public
+aws_vpc.main
+random_id.suffix
+application_url = "http://13.236.136.228/"
+artifact_bucket = "devops-cloud-project-7f1860da"
+instance_id = "i-0ffe2b5d0f90f0322"
+public_subnet_id = "subnet-031b4a7a57f4df3b1"
+vpc_id = "vpc-0768a9a59d46d67e0"
+
+Checking the live Session 19 web server...
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+curl: (7) Failed to connect to 13.236.136.228 port 80 after 447 ms: Couldn't connect to server
+Warning: Problem : connection refused. Will retry in 5 seconds. 30 retries
+Warning: left.
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+curl: (7) Failed to connect to 13.236.136.228 port 80 after 709 ms: Couldn't connect to server
+Warning: Problem : connection refused. Will retry in 5 seconds. 29 retries
+Warning: left.
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+curl: (7) Failed to connect to 13.236.136.228 port 80 after 412 ms: Couldn't connect to server
+Warning: Problem : connection refused. Will retry in 5 seconds. 28 retries
+Warning: left.
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+curl: (7) Failed to connect to 13.236.136.228 port 80 after 536 ms: Couldn't connect to server
+Warning: Problem : connection refused. Will retry in 5 seconds. 27 retries
+Warning: left.
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    66  100    66    0     0     77      0 --:--:-- --:--:-- --:--:--    77100    66  100    66    0     0     77      0 --:--:-- --:--:-- --:--:--    77
+<h1>Terraform Cloud Project</h1><p>Provisioned by Session 19.</p>
+
+
+Resources are live. Capture the required AWS console screenshots now.
+Do not close this terminal; cleanup will continue after Enter is pressed.
+Screenshot capture completed; guarded destroy started.
+random_id.suffix: Refreshing state... [id=fxhg2g]
+data.aws_ssm_parameter.amazon_linux: Reading...
+data.aws_availability_zones.available: Reading...
+aws_vpc.main: Refreshing state... [id=vpc-0768a9a59d46d67e0]
+aws_s3_bucket.artifacts: Refreshing state... [id=devops-cloud-project-7f1860da]
+data.aws_ssm_parameter.amazon_linux: Read complete after 2s [id=/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64]
+data.aws_availability_zones.available: Read complete after 2s [id=ap-southeast-2]
+aws_internet_gateway.main: Refreshing state... [id=igw-0bb5faed86029a57b]
+aws_subnet.public: Refreshing state... [id=subnet-031b4a7a57f4df3b1]
+aws_security_group.web: Refreshing state... [id=sg-08f4567abbe090ba4]
+aws_route_table.public: Refreshing state... [id=rtb-087a14d087a8986a7]
+aws_route_table_association.public: Refreshing state... [id=rtbassoc-02c741889a2200b75]
+aws_instance.web: Refreshing state... [id=i-0ffe2b5d0f90f0322]
+aws_s3_bucket_public_access_block.artifacts: Refreshing state... [id=devops-cloud-project-7f1860da]
+aws_s3_bucket_server_side_encryption_configuration.artifacts: Refreshing state... [id=devops-cloud-project-7f1860da]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_instance.web will be destroyed
+  - resource "aws_instance" "web" {
+      - ami                                  = (sensitive value) -> null
+      - arn                                  = "arn:aws:ec2:ap-southeast-2:[REDACTED_ACCOUNT_ID]:instance/i-0ffe2b5d0f90f0322" -> null
+      - associate_public_ip_address          = true -> null
+      - availability_zone                    = "ap-southeast-2a" -> null
+      - disable_api_stop                     = false -> null
+      - disable_api_termination              = false -> null
+      - ebs_optimized                        = false -> null
+      - force_destroy                        = false -> null
+      - get_password_data                    = false -> null
+      - hibernation                          = false -> null
+      - id                                   = "i-0ffe2b5d0f90f0322" -> null
+      - instance_initiated_shutdown_behavior = "stop" -> null
+      - instance_state                       = "running" -> null
+      - instance_type                        = "t3.micro" -> null
+      - ipv6_address_count                   = 0 -> null
+      - ipv6_addresses                       = [] -> null
+      - monitoring                           = false -> null
+      - placement_partition_number           = 0 -> null
+      - primary_network_interface_id         = "eni-0823230de88da1340" -> null
+      - private_dns                          = "ip-10-20-10-38.ap-southeast-2.compute.internal" -> null
+      - private_ip                           = "10.20.10.38" -> null
+      - public_dns                           = "ec2-13-236-136-228.ap-southeast-2.compute.amazonaws.com" -> null
+      - public_ip                            = "13.236.136.228" -> null
+      - region                               = "ap-southeast-2" -> null
+      - secondary_private_ips                = [] -> null
+      - security_groups                      = [] -> null
+      - source_dest_check                    = true -> null
+      - subnet_id                            = "subnet-031b4a7a57f4df3b1" -> null
+      - tags                                 = {
+          - "Name" = "devops-cloud-project-web"
+        } -> null
+      - tags_all                             = {
+          - "ManagedBy" = "Terraform"
+          - "Name"      = "devops-cloud-project-web"
+          - "Project"   = "devops-cloud-project"
+          - "Student"   = "24BCS10601"
+        } -> null
+      - tenancy                              = "default" -> null
+      - user_data                            = <<-EOT
+            #!/bin/bash
+            dnf install -y nginx
+            echo '<h1>Terraform Cloud Project</h1><p>Provisioned by Session 19.</p>' > /usr/share/nginx/html/index.html
+            systemctl enable --now nginx
+        EOT -> null
+      - user_data_replace_on_change          = false -> null
+      - vpc_security_group_ids               = [
+          - "sg-08f4567abbe090ba4",
+        ] -> null
+        # (9 unchanged attributes hidden)
+
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "open" -> null
+        }
+
+      - cpu_options {
+          - core_count            = 1 -> null
+          - threads_per_core      = 2 -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - credit_specification {
+          - cpu_credits = "unlimited" -> null
+        }
+
+      - enclave_options {
+          - enabled = false -> null
+        }
+
+      - maintenance_options {
+          - auto_recovery = "default" -> null
+        }
+
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_protocol_ipv6          = "disabled" -> null
+          - http_put_response_hop_limit = 2 -> null
+          - http_tokens                 = "required" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      - primary_network_interface {
+          - delete_on_termination = true -> null
+          - network_interface_id  = "eni-0823230de88da1340" -> null
+        }
+
+      - private_dns_name_options {
+          - enable_resource_name_dns_a_record    = false -> null
+          - enable_resource_name_dns_aaaa_record = false -> null
+          - hostname_type                        = "ip-name" -> null
+        }
+
+      - root_block_device {
+          - delete_on_termination = true -> null
+          - device_name           = "/dev/xvda" -> null
+          - encrypted             = true -> null
+          - iops                  = 3000 -> null
+          - kms_key_id            = "arn:aws:kms:ap-southeast-2:[REDACTED_ACCOUNT_ID]:key/6e074fb8-b688-4db8-8048-131b76cd26f4" -> null
+          - tags                  = {} -> null
+          - tags_all              = {
+              - "ManagedBy" = "Terraform"
+              - "Project"   = "devops-cloud-project"
+              - "Student"   = "24BCS10601"
+            } -> null
+          - throughput            = 125 -> null
+          - volume_id             = "vol-08aae531df77f0348" -> null
+          - volume_size           = 8 -> null
+          - volume_type           = "gp3" -> null
+        }
+    }
+
+  # aws_internet_gateway.main will be destroyed
+  - resource "aws_internet_gateway" "main" {
+      - arn      = "arn:aws:ec2:ap-southeast-2:[REDACTED_ACCOUNT_ID]:internet-gateway/igw-0bb5faed86029a57b" -> null
+      - id       = "igw-0bb5faed86029a57b" -> null
+      - owner_id = "[REDACTED_ACCOUNT_ID]" -> null
+      - region   = "ap-southeast-2" -> null
+      - tags     = {
+          - "Name" = "devops-cloud-project-igw"
+        } -> null
+      - tags_all = {
+          - "ManagedBy" = "Terraform"
+          - "Name"      = "devops-cloud-project-igw"
+          - "Project"   = "devops-cloud-project"
+          - "Student"   = "24BCS10601"
+        } -> null
+      - vpc_id   = "vpc-0768a9a59d46d67e0" -> null
+    }
+
+  # aws_route_table.public will be destroyed
+  - resource "aws_route_table" "public" {
+      - arn              = "arn:aws:ec2:ap-southeast-2:[REDACTED_ACCOUNT_ID]:route-table/rtb-087a14d087a8986a7" -> null
+      - id               = "rtb-087a14d087a8986a7" -> null
+      - owner_id         = "[REDACTED_ACCOUNT_ID]" -> null
+      - propagating_vgws = [] -> null
+      - region           = "ap-southeast-2" -> null
+      - route            = [
+          - {
+              - cidr_block                 = "0.0.0.0/0"
+              - gateway_id                 = "igw-0bb5faed86029a57b"
+                # (12 unchanged attributes hidden)
+            },
+        ] -> null
+      - tags             = {
+          - "Name" = "devops-cloud-project-public"
+        } -> null
+      - tags_all         = {
+          - "ManagedBy" = "Terraform"
+          - "Name"      = "devops-cloud-project-public"
+          - "Project"   = "devops-cloud-project"
+          - "Student"   = "24BCS10601"
+        } -> null
+      - vpc_id           = "vpc-0768a9a59d46d67e0" -> null
+    }
+
+  # aws_route_table_association.public will be destroyed
+  - resource "aws_route_table_association" "public" {
+      - id             = "rtbassoc-02c741889a2200b75" -> null
+      - region         = "ap-southeast-2" -> null
+      - route_table_id = "rtb-087a14d087a8986a7" -> null
+      - subnet_id      = "subnet-031b4a7a57f4df3b1" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # aws_s3_bucket.artifacts will be destroyed
+  - resource "aws_s3_bucket" "artifacts" {
+      - arn                         = "arn:aws:s3:::devops-cloud-project-7f1860da" -> null
+      - bucket                      = "devops-cloud-project-7f1860da" -> null
+      - bucket_domain_name          = "devops-cloud-project-7f1860da.s3.amazonaws.com" -> null
+      - bucket_namespace            = "global" -> null
+      - bucket_region               = "ap-southeast-2" -> null
+      - bucket_regional_domain_name = "devops-cloud-project-7f1860da.s3.ap-southeast-2.amazonaws.com" -> null
+      - force_destroy               = false -> null
+      - hosted_zone_id              = "Z1WCIGYICN2BYD" -> null
+      - id                          = "devops-cloud-project-7f1860da" -> null
+      - object_lock_enabled         = false -> null
+      - region                      = "ap-southeast-2" -> null
+      - request_payer               = "BucketOwner" -> null
+      - tags                        = {} -> null
+      - tags_all                    = {
+          - "ManagedBy" = "Terraform"
+          - "Project"   = "devops-cloud-project"
+          - "Student"   = "24BCS10601"
+        } -> null
+        # (3 unchanged attributes hidden)
+
+      - grant {
+          - id          = "[REDACTED_CANONICAL_USER_ID]" -> null
+          - permissions = [
+              - "FULL_CONTROL",
+            ] -> null
+          - type        = "CanonicalUser" -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - server_side_encryption_configuration {
+          - rule {
+              - bucket_key_enabled = false -> null
+
+              - apply_server_side_encryption_by_default {
+                  - sse_algorithm     = "AES256" -> null
+                    # (1 unchanged attribute hidden)
+                }
+            }
+        }
+
+      - versioning {
+          - enabled    = false -> null
+          - mfa_delete = false -> null
+        }
+    }
+
+  # aws_s3_bucket_public_access_block.artifacts will be destroyed
+  - resource "aws_s3_bucket_public_access_block" "artifacts" {
+      - block_public_acls       = true -> null
+      - block_public_policy     = true -> null
+      - bucket                  = "devops-cloud-project-7f1860da" -> null
+      - id                      = "devops-cloud-project-7f1860da" -> null
+      - ignore_public_acls      = true -> null
+      - region                  = "ap-southeast-2" -> null
+      - restrict_public_buckets = true -> null
+    }
+
+  # aws_s3_bucket_server_side_encryption_configuration.artifacts will be destroyed
+  - resource "aws_s3_bucket_server_side_encryption_configuration" "artifacts" {
+      - bucket                = "devops-cloud-project-7f1860da" -> null
+      - id                    = "devops-cloud-project-7f1860da" -> null
+      - region                = "ap-southeast-2" -> null
+        # (1 unchanged attribute hidden)
+
+      - rule {
+          - blocked_encryption_types = [
+              - "SSE-C",
+            ] -> null
+          - bucket_key_enabled       = false -> null
+
+          - apply_server_side_encryption_by_default {
+              - sse_algorithm     = "AES256" -> null
+                # (1 unchanged attribute hidden)
+            }
+        }
+    }
+
+  # aws_security_group.web will be destroyed
+  - resource "aws_security_group" "web" {
+      - arn                    = "arn:aws:ec2:ap-southeast-2:[REDACTED_ACCOUNT_ID]:security-group/sg-08f4567abbe090ba4" -> null
+      - description            = "Permit public HTTP for the homework web server" -> null
+      - egress                 = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - from_port        = 0
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "-1"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - id                     = "sg-08f4567abbe090ba4" -> null
+      - ingress                = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - description      = "HTTP"
+              - from_port        = 80
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 80
+            },
+        ] -> null
+      - name                   = "devops-cloud-project-web" -> null
+      - owner_id               = "[REDACTED_ACCOUNT_ID]" -> null
+      - region                 = "ap-southeast-2" -> null
+      - revoke_rules_on_delete = false -> null
+      - tags                   = {} -> null
+      - tags_all               = {
+          - "ManagedBy" = "Terraform"
+          - "Project"   = "devops-cloud-project"
+          - "Student"   = "24BCS10601"
+        } -> null
+      - vpc_id                 = "vpc-0768a9a59d46d67e0" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # aws_subnet.public will be destroyed
+  - resource "aws_subnet" "public" {
+      - arn                                            = "arn:aws:ec2:ap-southeast-2:[REDACTED_ACCOUNT_ID]:subnet/subnet-031b4a7a57f4df3b1" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "ap-southeast-2a" -> null
+      - availability_zone_id                           = "apse2-az1" -> null
+      - cidr_block                                     = "10.20.10.0/24" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-031b4a7a57f4df3b1" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = true -> null
+      - owner_id                                       = "[REDACTED_ACCOUNT_ID]" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - region                                         = "ap-southeast-2" -> null
+      - tags                                           = {
+          - "Name" = "devops-cloud-project-public"
+        } -> null
+      - tags_all                                       = {
+          - "ManagedBy" = "Terraform"
+          - "Name"      = "devops-cloud-project-public"
+          - "Project"   = "devops-cloud-project"
+          - "Student"   = "24BCS10601"
+        } -> null
+      - vpc_id                                         = "vpc-0768a9a59d46d67e0" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # aws_vpc.main will be destroyed
+  - resource "aws_vpc" "main" {
+      - arn                                  = "arn:aws:ec2:ap-southeast-2:[REDACTED_ACCOUNT_ID]:vpc/vpc-0768a9a59d46d67e0" -> null
+      - assign_generated_ipv6_cidr_block     = false -> null
+      - cidr_block                           = "10.20.0.0/16" -> null
+      - default_network_acl_id               = "acl-011d21d5de086ad74" -> null
+      - default_route_table_id               = "rtb-0de6e319f844ef005" -> null
+      - default_security_group_id            = "sg-05c0892f21808072d" -> null
+      - dhcp_options_id                      = "dopt-0d1f7a3d7634365b0" -> null
+      - enable_dns_hostnames                 = true -> null
+      - enable_dns_support                   = true -> null
+      - enable_network_address_usage_metrics = false -> null
+      - id                                   = "vpc-0768a9a59d46d67e0" -> null
+      - instance_tenancy                     = "default" -> null
+      - ipv6_netmask_length                  = 0 -> null
+      - main_route_table_id                  = "rtb-0de6e319f844ef005" -> null
+      - owner_id                             = "[REDACTED_ACCOUNT_ID]" -> null
+      - region                               = "ap-southeast-2" -> null
+      - tags                                 = {
+          - "Name" = "devops-cloud-project-vpc"
+        } -> null
+      - tags_all                             = {
+          - "ManagedBy" = "Terraform"
+          - "Name"      = "devops-cloud-project-vpc"
+          - "Project"   = "devops-cloud-project"
+          - "Student"   = "24BCS10601"
+        } -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # random_id.suffix will be destroyed
+  - resource "random_id" "suffix" {
+      - b64_std     = "fxhg2g==" -> null
+      - b64_url     = "fxhg2g" -> null
+      - byte_length = 4 -> null
+      - dec         = "2132304090" -> null
+      - hex         = "7f1860da" -> null
+      - id          = "fxhg2g" -> null
+    }
+
+Plan: 0 to add, 0 to change, 11 to destroy.
+
+Changes to Outputs:
+  - application_url  = "http://13.236.136.228/" -> null
+  - artifact_bucket  = "devops-cloud-project-7f1860da" -> null
+  - instance_id      = "i-0ffe2b5d0f90f0322" -> null
+  - public_subnet_id = "subnet-031b4a7a57f4df3b1" -> null
+  - vpc_id           = "vpc-0768a9a59d46d67e0" -> null
+
+─────────────────────────────────────────────────────────────────────────────
+
+Saved the plan to: /tmp/devops-session19-destroy.tfplan
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "/tmp/devops-session19-destroy.tfplan"
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_instance.web will be destroyed
+  - resource "aws_instance" "web" {
+      - ami                                  = (sensitive value) -> null
+      - arn                                  = "arn:aws:ec2:ap-southeast-2:[REDACTED_ACCOUNT_ID]:instance/i-0ffe2b5d0f90f0322" -> null
+      - associate_public_ip_address          = true -> null
+      - availability_zone                    = "ap-southeast-2a" -> null
+      - disable_api_stop                     = false -> null
+      - disable_api_termination              = false -> null
+      - ebs_optimized                        = false -> null
+      - force_destroy                        = false -> null
+      - get_password_data                    = false -> null
+      - hibernation                          = false -> null
+      - id                                   = "i-0ffe2b5d0f90f0322" -> null
+      - instance_initiated_shutdown_behavior = "stop" -> null
+      - instance_state                       = "running" -> null
+      - instance_type                        = "t3.micro" -> null
+      - ipv6_address_count                   = 0 -> null
+      - ipv6_addresses                       = [] -> null
+      - monitoring                           = false -> null
+      - placement_partition_number           = 0 -> null
+      - primary_network_interface_id         = "eni-0823230de88da1340" -> null
+      - private_dns                          = "ip-10-20-10-38.ap-southeast-2.compute.internal" -> null
+      - private_ip                           = "10.20.10.38" -> null
+      - public_dns                           = "ec2-13-236-136-228.ap-southeast-2.compute.amazonaws.com" -> null
+      - public_ip                            = "13.236.136.228" -> null
+      - region                               = "ap-southeast-2" -> null
+      - secondary_private_ips                = [] -> null
+      - security_groups                      = [] -> null
+      - source_dest_check                    = true -> null
+      - subnet_id                            = "subnet-031b4a7a57f4df3b1" -> null
+      - tags                                 = {
+          - "Name" = "devops-cloud-project-web"
+        } -> null
+      - tags_all                             = {
+          - "ManagedBy" = "Terraform"
+          - "Name"      = "devops-cloud-project-web"
+          - "Project"   = "devops-cloud-project"
+          - "Student"   = "24BCS10601"
+        } -> null
+      - tenancy                              = "default" -> null
+      - user_data                            = <<-EOT
+            #!/bin/bash
+            dnf install -y nginx
+            echo '<h1>Terraform Cloud Project</h1><p>Provisioned by Session 19.</p>' > /usr/share/nginx/html/index.html
+            systemctl enable --now nginx
+        EOT -> null
+      - user_data_replace_on_change          = false -> null
+      - vpc_security_group_ids               = [
+          - "sg-08f4567abbe090ba4",
+        ] -> null
+        # (9 unchanged attributes hidden)
+
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "open" -> null
+        }
+
+      - cpu_options {
+          - core_count            = 1 -> null
+          - threads_per_core      = 2 -> null
+            # (2 unchanged attributes hidden)
+        }
+
+      - credit_specification {
+          - cpu_credits = "unlimited" -> null
+        }
+
+      - enclave_options {
+          - enabled = false -> null
+        }
+
+      - maintenance_options {
+          - auto_recovery = "default" -> null
+        }
+
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_protocol_ipv6          = "disabled" -> null
+          - http_put_response_hop_limit = 2 -> null
+          - http_tokens                 = "required" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      - primary_network_interface {
+          - delete_on_termination = true -> null
+          - network_interface_id  = "eni-0823230de88da1340" -> null
+        }
+
+      - private_dns_name_options {
+          - enable_resource_name_dns_a_record    = false -> null
+          - enable_resource_name_dns_aaaa_record = false -> null
+          - hostname_type                        = "ip-name" -> null
+        }
+
+      - root_block_device {
+          - delete_on_termination = true -> null
+          - device_name           = "/dev/xvda" -> null
+          - encrypted             = true -> null
+          - iops                  = 3000 -> null
+          - kms_key_id            = "arn:aws:kms:ap-southeast-2:[REDACTED_ACCOUNT_ID]:key/6e074fb8-b688-4db8-8048-131b76cd26f4" -> null
+          - tags                  = {} -> null
+          - tags_all              = {
+              - "ManagedBy" = "Terraform"
+              - "Project"   = "devops-cloud-project"
+              - "Student"   = "24BCS10601"
+            } -> null
+          - throughput            = 125 -> null
+          - volume_id             = "vol-08aae531df77f0348" -> null
+          - volume_size           = 8 -> null
+          - volume_type           = "gp3" -> null
+        }
+    }
+
+  # aws_internet_gateway.main will be destroyed
+  - resource "aws_internet_gateway" "main" {
+      - arn      = "arn:aws:ec2:ap-southeast-2:[REDACTED_ACCOUNT_ID]:internet-gateway/igw-0bb5faed86029a57b" -> null
+      - id       = "igw-0bb5faed86029a57b" -> null
+      - owner_id = "[REDACTED_ACCOUNT_ID]" -> null
+      - region   = "ap-southeast-2" -> null
+      - tags     = {
+          - "Name" = "devops-cloud-project-igw"
+        } -> null
+      - tags_all = {
+          - "ManagedBy" = "Terraform"
+          - "Name"      = "devops-cloud-project-igw"
+          - "Project"   = "devops-cloud-project"
+          - "Student"   = "24BCS10601"
+        } -> null
+      - vpc_id   = "vpc-0768a9a59d46d67e0" -> null
+    }
+
+  # aws_route_table.public will be destroyed
+  - resource "aws_route_table" "public" {
+      - arn              = "arn:aws:ec2:ap-southeast-2:[REDACTED_ACCOUNT_ID]:route-table/rtb-087a14d087a8986a7" -> null
+      - id               = "rtb-087a14d087a8986a7" -> null
+      - owner_id         = "[REDACTED_ACCOUNT_ID]" -> null
+      - propagating_vgws = [] -> null
+      - region           = "ap-southeast-2" -> null
+      - route            = [
+          - {
+              - cidr_block                 = "0.0.0.0/0"
+              - gateway_id                 = "igw-0bb5faed86029a57b"
+                # (12 unchanged attributes hidden)
+            },
+        ] -> null
+      - tags             = {
+          - "Name" = "devops-cloud-project-public"
+        } -> null
+      - tags_all         = {
+          - "ManagedBy" = "Terraform"
+          - "Name"      = "devops-cloud-project-public"
+          - "Project"   = "devops-cloud-project"
+          - "Student"   = "24BCS10601"
+        } -> null
+      - vpc_id           = "vpc-0768a9a59d46d67e0" -> null
+    }
+
+  # aws_route_table_association.public will be destroyed
+  - resource "aws_route_table_association" "public" {
+      - id             = "rtbassoc-02c741889a2200b75" -> null
+      - region         = "ap-southeast-2" -> null
+      - route_table_id = "rtb-087a14d087a8986a7" -> null
+      - subnet_id      = "subnet-031b4a7a57f4df3b1" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # aws_s3_bucket.artifacts will be destroyed
+  - resource "aws_s3_bucket" "artifacts" {
+      - arn                         = "arn:aws:s3:::devops-cloud-project-7f1860da" -> null
+      - bucket                      = "devops-cloud-project-7f1860da" -> null
+      - bucket_domain_name          = "devops-cloud-project-7f1860da.s3.amazonaws.com" -> null
+      - bucket_namespace            = "global" -> null
+      - bucket_region               = "ap-southeast-2" -> null
+      - bucket_regional_domain_name = "devops-cloud-project-7f1860da.s3.ap-southeast-2.amazonaws.com" -> null
+      - force_destroy               = false -> null
+      - hosted_zone_id              = "Z1WCIGYICN2BYD" -> null
+      - id                          = "devops-cloud-project-7f1860da" -> null
+      - object_lock_enabled         = false -> null
+      - region                      = "ap-southeast-2" -> null
+      - request_payer               = "BucketOwner" -> null
+      - tags                        = {} -> null
+      - tags_all                    = {
+          - "ManagedBy" = "Terraform"
+          - "Project"   = "devops-cloud-project"
+          - "Student"   = "24BCS10601"
+        } -> null
+        # (3 unchanged attributes hidden)
+
+      - grant {
+          - id          = "[REDACTED_CANONICAL_USER_ID]" -> null
+          - permissions = [
+              - "FULL_CONTROL",
+            ] -> null
+          - type        = "CanonicalUser" -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - server_side_encryption_configuration {
+          - rule {
+              - bucket_key_enabled = false -> null
+
+              - apply_server_side_encryption_by_default {
+                  - sse_algorithm     = "AES256" -> null
+                    # (1 unchanged attribute hidden)
+                }
+            }
+        }
+
+      - versioning {
+          - enabled    = false -> null
+          - mfa_delete = false -> null
+        }
+    }
+
+  # aws_s3_bucket_public_access_block.artifacts will be destroyed
+  - resource "aws_s3_bucket_public_access_block" "artifacts" {
+      - block_public_acls       = true -> null
+      - block_public_policy     = true -> null
+      - bucket                  = "devops-cloud-project-7f1860da" -> null
+      - id                      = "devops-cloud-project-7f1860da" -> null
+      - ignore_public_acls      = true -> null
+      - region                  = "ap-southeast-2" -> null
+      - restrict_public_buckets = true -> null
+    }
+
+  # aws_s3_bucket_server_side_encryption_configuration.artifacts will be destroyed
+  - resource "aws_s3_bucket_server_side_encryption_configuration" "artifacts" {
+      - bucket                = "devops-cloud-project-7f1860da" -> null
+      - id                    = "devops-cloud-project-7f1860da" -> null
+      - region                = "ap-southeast-2" -> null
+        # (1 unchanged attribute hidden)
+
+      - rule {
+          - blocked_encryption_types = [
+              - "SSE-C",
+            ] -> null
+          - bucket_key_enabled       = false -> null
+
+          - apply_server_side_encryption_by_default {
+              - sse_algorithm     = "AES256" -> null
+                # (1 unchanged attribute hidden)
+            }
+        }
+    }
+
+  # aws_security_group.web will be destroyed
+  - resource "aws_security_group" "web" {
+      - arn                    = "arn:aws:ec2:ap-southeast-2:[REDACTED_ACCOUNT_ID]:security-group/sg-08f4567abbe090ba4" -> null
+      - description            = "Permit public HTTP for the homework web server" -> null
+      - egress                 = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - from_port        = 0
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "-1"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - id                     = "sg-08f4567abbe090ba4" -> null
+      - ingress                = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - description      = "HTTP"
+              - from_port        = 80
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 80
+            },
+        ] -> null
+      - name                   = "devops-cloud-project-web" -> null
+      - owner_id               = "[REDACTED_ACCOUNT_ID]" -> null
+      - region                 = "ap-southeast-2" -> null
+      - revoke_rules_on_delete = false -> null
+      - tags                   = {} -> null
+      - tags_all               = {
+          - "ManagedBy" = "Terraform"
+          - "Project"   = "devops-cloud-project"
+          - "Student"   = "24BCS10601"
+        } -> null
+      - vpc_id                 = "vpc-0768a9a59d46d67e0" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # aws_subnet.public will be destroyed
+  - resource "aws_subnet" "public" {
+      - arn                                            = "arn:aws:ec2:ap-southeast-2:[REDACTED_ACCOUNT_ID]:subnet/subnet-031b4a7a57f4df3b1" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "ap-southeast-2a" -> null
+      - availability_zone_id                           = "apse2-az1" -> null
+      - cidr_block                                     = "10.20.10.0/24" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-031b4a7a57f4df3b1" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = true -> null
+      - owner_id                                       = "[REDACTED_ACCOUNT_ID]" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - region                                         = "ap-southeast-2" -> null
+      - tags                                           = {
+          - "Name" = "devops-cloud-project-public"
+        } -> null
+      - tags_all                                       = {
+          - "ManagedBy" = "Terraform"
+          - "Name"      = "devops-cloud-project-public"
+          - "Project"   = "devops-cloud-project"
+          - "Student"   = "24BCS10601"
+        } -> null
+      - vpc_id                                         = "vpc-0768a9a59d46d67e0" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # aws_vpc.main will be destroyed
+  - resource "aws_vpc" "main" {
+      - arn                                  = "arn:aws:ec2:ap-southeast-2:[REDACTED_ACCOUNT_ID]:vpc/vpc-0768a9a59d46d67e0" -> null
+      - assign_generated_ipv6_cidr_block     = false -> null
+      - cidr_block                           = "10.20.0.0/16" -> null
+      - default_network_acl_id               = "acl-011d21d5de086ad74" -> null
+      - default_route_table_id               = "rtb-0de6e319f844ef005" -> null
+      - default_security_group_id            = "sg-05c0892f21808072d" -> null
+      - dhcp_options_id                      = "dopt-0d1f7a3d7634365b0" -> null
+      - enable_dns_hostnames                 = true -> null
+      - enable_dns_support                   = true -> null
+      - enable_network_address_usage_metrics = false -> null
+      - id                                   = "vpc-0768a9a59d46d67e0" -> null
+      - instance_tenancy                     = "default" -> null
+      - ipv6_netmask_length                  = 0 -> null
+      - main_route_table_id                  = "rtb-0de6e319f844ef005" -> null
+      - owner_id                             = "[REDACTED_ACCOUNT_ID]" -> null
+      - region                               = "ap-southeast-2" -> null
+      - tags                                 = {
+          - "Name" = "devops-cloud-project-vpc"
+        } -> null
+      - tags_all                             = {
+          - "ManagedBy" = "Terraform"
+          - "Name"      = "devops-cloud-project-vpc"
+          - "Project"   = "devops-cloud-project"
+          - "Student"   = "24BCS10601"
+        } -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # random_id.suffix will be destroyed
+  - resource "random_id" "suffix" {
+      - b64_std     = "fxhg2g==" -> null
+      - b64_url     = "fxhg2g" -> null
+      - byte_length = 4 -> null
+      - dec         = "2132304090" -> null
+      - hex         = "7f1860da" -> null
+      - id          = "fxhg2g" -> null
+    }
+
+Plan: 0 to add, 0 to change, 11 to destroy.
+
+Changes to Outputs:
+  - application_url  = "http://13.236.136.228/" -> null
+  - artifact_bucket  = "devops-cloud-project-7f1860da" -> null
+  - instance_id      = "i-0ffe2b5d0f90f0322" -> null
+  - public_subnet_id = "subnet-031b4a7a57f4df3b1" -> null
+  - vpc_id           = "vpc-0768a9a59d46d67e0" -> null
+aws_s3_bucket_public_access_block.artifacts: Destroying... [id=devops-cloud-project-7f1860da]
+aws_s3_bucket_server_side_encryption_configuration.artifacts: Destroying... [id=devops-cloud-project-7f1860da]
+aws_instance.web: Destroying... [id=i-0ffe2b5d0f90f0322]
+aws_s3_bucket_server_side_encryption_configuration.artifacts: Destruction complete after 2s
+aws_s3_bucket_public_access_block.artifacts: Destruction complete after 3s
+aws_s3_bucket.artifacts: Destroying... [id=devops-cloud-project-7f1860da]
+aws_s3_bucket.artifacts: Destruction complete after 2s
+random_id.suffix: Destroying... [id=fxhg2g]
+random_id.suffix: Destruction complete after 0s
+aws_instance.web: Still destroying... [id=i-0ffe2b5d0f90f0322, 00m10s elapsed]
+aws_instance.web: Still destroying... [id=i-0ffe2b5d0f90f0322, 00m20s elapsed]
+aws_instance.web: Still destroying... [id=i-0ffe2b5d0f90f0322, 00m30s elapsed]
+aws_instance.web: Destruction complete after 34s
+aws_route_table_association.public: Destroying... [id=rtbassoc-02c741889a2200b75]
+aws_security_group.web: Destroying... [id=sg-08f4567abbe090ba4]
+aws_route_table_association.public: Destruction complete after 2s
+aws_subnet.public: Destroying... [id=subnet-031b4a7a57f4df3b1]
+aws_route_table.public: Destroying... [id=rtb-087a14d087a8986a7]
+aws_security_group.web: Destruction complete after 5s
+aws_subnet.public: Destruction complete after 3s
+aws_route_table.public: Destruction complete after 6s
+aws_internet_gateway.main: Destroying... [id=igw-0bb5faed86029a57b]
+aws_internet_gateway.main: Destruction complete after 2s
+aws_vpc.main: Destroying... [id=vpc-0768a9a59d46d67e0]
+aws_vpc.main: Destruction complete after 1s
+
+Apply complete! Resources: 0 added, 0 changed, 11 destroyed.
+PASS: Terraform apply, HTTP verification and destroy completed for session19.

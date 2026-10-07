@@ -13,6 +13,8 @@ disabled according to terraform.tfvars.
 
 Set OUTPUT_FILE to select the transcript path. The default is a temporary file.
 Review/redact account IDs and resource identifiers before publishing evidence.
+Set PAUSE_FOR_SCREENSHOTS=yes to pause after apply and outputs so AWS console
+screenshots can be captured before the guarded destroy.
 USAGE
 }
 
@@ -37,8 +39,11 @@ for command_name in aws terraform; do
 done
 
 if [[ -e "$PROJECT/terraform.tfstate" || -e "$PROJECT/terraform.tfstate.backup" ]]; then
-  echo "Refusing to use $PROJECT because existing local Terraform state was found." >&2
-  exit 1
+  if [[ -n "$(terraform -chdir="$PROJECT" state list 2>/dev/null)" ]]; then
+    echo "Refusing to use $PROJECT because existing managed resources were found in local state." >&2
+    exit 1
+  fi
+  echo "Existing local state is empty; continuing safely."
 fi
 
 AWS_ACCOUNT="$(aws sts get-caller-identity --query Account --output text)"
@@ -51,6 +56,7 @@ OUTPUT_FILE="${OUTPUT_FILE:-/tmp/devops-homework-${TARGET}-aws-evidence.txt}"
 PLAN_FILE="$(mktemp -t "devops-${TARGET}-plan.XXXXXX")"
 DESTROY_PLAN_FILE="$(mktemp -t "devops-${TARGET}-destroy.XXXXXX")"
 cleanup_needed=false
+LIVE_TAIL_PID=""
 
 cleanup() {
   status=$?
@@ -60,12 +66,20 @@ cleanup() {
     terraform -chdir="$PROJECT" destroy -auto-approve || true
   fi
   rm -f "$PLAN_FILE" "$DESTROY_PLAN_FILE"
+  if [[ -n "$LIVE_TAIL_PID" ]]; then
+    kill "$LIVE_TAIL_PID" 2>/dev/null || true
+    wait "$LIVE_TAIL_PID" 2>/dev/null || true
+  fi
   trap - EXIT
   exit "$status"
 }
 trap cleanup EXIT
 
-exec > >(tee "$OUTPUT_FILE") 2>&1
+: > "$OUTPUT_FILE"
+exec 3>&1
+tail -n 0 -f "$OUTPUT_FILE" >&3 &
+LIVE_TAIL_PID=$!
+exec > "$OUTPUT_FILE" 2>&1
 echo "AWS identity verified for an authorized 12-digit account (identifier withheld)."
 echo "Project: $PROJECT"
 echo "Transcript: $OUTPUT_FILE"
@@ -80,6 +94,22 @@ cleanup_needed=true
 terraform -chdir="$PROJECT" apply -input=false "$PLAN_FILE"
 terraform -chdir="$PROJECT" state list
 terraform -chdir="$PROJECT" output
+
+if [[ "$TARGET" == "session19" ]]; then
+  echo
+  echo "Checking the live Session 19 web server..."
+  curl --fail --retry 30 --retry-delay 5 --retry-connrefused \
+    --connect-timeout 5 --max-time 10 \
+    "$(terraform -chdir="$PROJECT" output -raw application_url)"
+  echo
+fi
+
+if [[ "${PAUSE_FOR_SCREENSHOTS:-}" == "yes" ]]; then
+  echo
+  echo "Resources are live. Capture the required AWS console screenshots now."
+  echo "Do not close this terminal; cleanup will continue after Enter is pressed."
+  read -r -p "Press Enter to create and apply the destroy plan... " _
+fi
 
 terraform -chdir="$PROJECT" plan -destroy -input=false -out="$DESTROY_PLAN_FILE"
 terraform -chdir="$PROJECT" show -no-color "$DESTROY_PLAN_FILE"

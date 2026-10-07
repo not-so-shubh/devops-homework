@@ -22,6 +22,9 @@ This directory preserves genuine runtime evidence from the earlier DevOps sectio
 | `host-network-output.txt` | Section 07 guarded host-network attempt |
 | `host-network-linux-output.txt` | Section 07 successful native-Linux host-network verification in a disposable daemon |
 | `verification-summary.txt` | Current full verifier run: 12 passed, 0 failed, 0 skipped |
+| `aws-session18-live.txt` | Authorized AWS Terraform plan, apply, state/output and successful seven-resource destroy |
+| `../18-cloud-terraform-project/evidence/aws-session19-live.txt` | Authorized AWS Terraform plan, 11-resource apply, live HTTP verification and successful 11-resource destroy |
+| `../20-final-devops-project/final-devops-project/evidence/aws-final-infrastructure-live.txt` | Authorized final AWS Terraform plan, 12-resource apply/output and successful destroy with EKS cost controls retained |
 
 ## Hosted pipeline evidence
 

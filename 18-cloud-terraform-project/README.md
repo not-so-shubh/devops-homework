@@ -41,3 +41,7 @@ terraform apply destroy.tfplan
 Terraform state maps configuration addresses to real AWS object IDs. Never edit it by hand or commit it. A team should migrate it to encrypted remote storage with locking and narrowly scoped IAM. The lab opens only TCP/80; it does not expose SSH. EC2 and public IPv4 can incur charges, so inspect the plan and destroy the lab when finished.
 
 Use short-lived AWS credentials or an SSO profile. Capture the plan summary, applied resource inventory, browser/curl response, AWS console resources and successful destroy output.
+
+## Live AWS run
+
+The complete authorized run is preserved in [`evidence/`](evidence/README.md): Terraform created 11 resources in Sydney, served the expected Nginx response, and destroyed all 11 resources after the screenshots were captured.

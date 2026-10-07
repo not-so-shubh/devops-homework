@@ -3,7 +3,7 @@ data "aws_availability_zones" "available" {
 }
 
 data "aws_ssm_parameter" "amazon_linux" {
-  name = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-arm64"
+  name = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
 }
 
 resource "random_id" "suffix" {

@@ -1,4 +1,4 @@
-aws_region         = "ap-south-1"
+aws_region         = "ap-southeast-2"
 project_name       = "devops-cloud-project"
 vpc_cidr           = "10.20.0.0/16"
 public_subnet_cidr = "10.20.10.0/24"

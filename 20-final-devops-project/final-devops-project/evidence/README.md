@@ -1,4 +1,4 @@
-# Final Project Evidence Checklist
+# Final Project Evidence
 
 Capture: local tests; container health; SAST/SCA/secret/image scan reports; successful GitHub pipeline; registry image and immutable SHA; Terraform plan/apply/outputs/destroy; Kubernetes resources; ConfigMap/Secret injection; TLS Ingress; HPA/probes/storage; Helm install/upgrade/rollback/test; Prometheus metrics and alerts; logs/traces; Argo CD Synced/Healthy and self-healing; and the complete broken/fixed troubleshooting challenge.
 
@@ -21,4 +21,22 @@ Completed local evidence:
 
 GitHub Actions run [37647537916](https://github.com/not-so-shubh/devops-homework/actions/runs/37647537916) created the two checked-in observability screenshots from the running Compose stack. The same run published both immutable images, deployed the three-tier Helm release into Kind, rolled out all five application/database pods and passed the Helm connectivity test.
 
-AWS apply/output/destroy evidence must come from an authorized AWS account and is intentionally never fabricated. Use `scripts/run-aws-evidence.sh final` only after reviewing the cost and credential safeguards.
+## Live AWS infrastructure
+
+An authorized cost-controlled AWS run was completed in `ap-southeast-2` on 7 October 2026. Terraform applied all 12 planned ECR, S3 and networking resources, the AWS Console confirmed the resources below, and Terraform then destroyed all 12 resources. EKS remained deliberately disabled because the assignment infrastructure can be evidenced without incurring its separate control-plane and node charges.
+
+The sanitized [complete Terraform transcript](aws-final-infrastructure-live.txt) records initialization, validation, saved plan, apply, state, outputs, destroy plan and successful cleanup.
+
+### ECR repository
+
+![Final project private ECR repository](08-aws-ecr-repository.png)
+
+![Immutable ECR tags and AES-256 encryption](09-aws-ecr-security.png)
+
+### S3 artifact bucket
+
+![Final project artifact bucket in Sydney](06-aws-s3-artifact-bucket.png)
+
+### Multi-AZ VPC
+
+![Final project VPC with two public subnets, routing and Internet Gateway](07-aws-vpc-resource-map.png)

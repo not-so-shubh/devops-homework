@@ -124,6 +124,8 @@ terraform destroy
 
 The default variable keeps billable EKS resources disabled; the example enables them for the supervised grading run. Genuine apply/destroy evidence must come from an authorized AWS account.
 
+The cost-controlled [live AWS evidence](evidence/README.md#live-aws-infrastructure) demonstrates a successful 12-resource apply/destroy lifecycle for ECR, S3 and the multi-AZ VPC in Sydney. EKS remained disabled; Kubernetes and Helm behavior is proved separately by the genuine local and hosted Kind evidence.
+
 ## Observability
 
 The backend exposes request totals and duration histograms at `/metrics`. The `monitoring/` directory includes a ServiceMonitor, Prometheus discovery, alerts, kube-prometheus-stack values and a provisioned Grafana dashboard with request-rate, p95-latency and status-code panels.
@@ -173,3 +175,7 @@ See [RUBRIC-CROSSWALK.md](RUBRIC-CROSSWALK.md) for a criterion-by-criterion map 
 ![Kubernetes and Helm deployment](evidence/01-kubernetes-helm.png)
 
 ![Argo CD Synced and Healthy](evidence/04-argocd-sync.png)
+
+![Live final-project AWS VPC](evidence/07-aws-vpc-resource-map.png)
+
+![Live final-project ECR controls](evidence/09-aws-ecr-security.png)
