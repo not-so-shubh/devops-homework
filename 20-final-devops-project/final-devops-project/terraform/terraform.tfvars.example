@@ -1,5 +1,5 @@
 aws_region          = "ap-south-1"
-project_name        = "final-devops-project"
+project_name        = "release-tracker"
 vpc_cidr            = "10.42.0.0/16"
-enable_eks          = false
+enable_eks          = true
 node_instance_types = ["t3.small"]

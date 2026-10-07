@@ -1,133 +1,173 @@
-# Final End-to-End DevOps Project
+# Release Tracker — Final End-to-End DevOps Project
 
 **Student:** Shubh Jaiswal
+
 **Enrollment:** 24BCS10601
 
-## Project overview
-
-This project takes a tested Python service from source control through security gates, container publishing, Kubernetes deployment, Helm lifecycle management, cloud provisioning, monitoring and GitOps reconciliation. Every deployable artifact is declarative and reviewable.
+Release Tracker is an original full-stack application for recording software releases across development, staging and production. It combines a responsive React interface, a FastAPI REST API and PostgreSQL with a complete secure-delivery platform: automated testing, two-image security gates, GHCR publishing, Kubernetes, Helm, Terraform/AWS, Prometheus/Grafana and Argo CD.
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-    Dev[Developer] --> Git[Git + GitHub]
-    Git --> CI[GitHub Actions CI]
-    CI --> Test[Tests]
-    CI --> Sec[SAST + SCA + Secrets]
-    Test --> Build[Docker Build]
-    Sec --> Build
-    Build --> Scan[Trivy Image Scan]
-    Scan --> Registry[GHCR / ECR]
-    Registry --> Helm[Helm Release]
-    Helm --> K8s[Kubernetes]
-    TF[Terraform] --> AWS[VPC + ECR + S3 + optional EKS]
-    AWS --> K8s
-    K8s --> Obs[Metrics + Logs + Alerts]
-    Git --> Argo[Argo CD]
-    Argo -->|continuous reconciliation| K8s
+    Browser[React UI] -->|/api| API[FastAPI backend]
+    API --> DB[(PostgreSQL)]
+    API --> Metrics[/Prometheus metrics/]
+    Git[GitHub] --> CI[GitHub Actions]
+    CI --> Tests[pytest + Vite build]
+    Tests --> Security[Bandit + pip-audit + Gitleaks + Trivy]
+    Security --> Registry[Two GHCR images]
+    Registry --> Helm[Helm release]
+    Helm --> K8s[Kubernetes / EKS]
+    K8s --> Metrics
+    Metrics --> Grafana[Grafana dashboard]
+    Git --> Argo[Argo CD self-heal]
+    Terraform --> AWS[VPC + 2 subnets + EKS + node group]
 ```
 
-## Technologies
+## Application features
 
-Python, unittest, Git/GitHub, GitHub Actions, Docker, GHCR/ECR, Kubernetes, Helm, Terraform, AWS, Bandit, pip-audit, Gitleaks, Trivy, Prometheus, Grafana/Loki/Tempo concepts and Argo CD.
+- Create, list, inspect, update and delete release records.
+- Validate environment and status values with Pydantic.
+- Store data in PostgreSQL using SQLAlchemy and an Alembic migration.
+- Report health at `/health`, database readiness at `/ready`, OpenAPI at `/docs` and Prometheus telemetry at `/metrics`.
+- Filter release cards and view live healthy/deploying/failed totals in a responsive React interface.
 
-## Application setup
+### REST API
+
+| Method | Route | Purpose |
+|---|---|---|
+| `GET` | `/api/releases` | List releases |
+| `GET` | `/api/releases/{id}` | Get one release |
+| `POST` | `/api/releases` | Create a release |
+| `PUT` | `/api/releases/{id}` | Replace a release |
+| `DELETE` | `/api/releases/{id}` | Delete a release |
+| `GET` | `/api/releases/stats` | Aggregate delivery state |
+
+## Run locally with Docker Compose
 
 ```bash
-python3 -m unittest discover -s application/tests -v
-PORT=8080 python3 application/app.py
-curl http://127.0.0.1:8080/
-curl http://127.0.0.1:8080/health
-curl http://127.0.0.1:8080/metrics
+cp .env.example .env
+# Set a local-only PostgreSQL password in .env.
+docker compose up --build -d
+docker compose ps
+open http://localhost:8088
+curl -fsS http://localhost:8088/health
+curl -fsS http://localhost:8088/api/releases
+docker compose down -v
 ```
 
-The service exposes health, readiness and Prometheus endpoints and writes structured JSON access logs.
+Compose starts all three required services: frontend, backend and PostgreSQL. The backend executes `alembic upgrade head` before serving traffic. Both application images use non-root users; the frontend uses a Node build stage and an unprivileged Nginx runtime.
 
-## Docker setup
-
-From this directory:
+## Test and build without Compose
 
 ```bash
-docker build -f docker/Dockerfile -t final-devops-project:local .
-docker run --rm -d --name final-app -p 8088:8080 final-devops-project:local
-curl -fsS http://127.0.0.1:8088/health
-docker inspect --format '{{json .State.Health}}' final-app
-docker rm -f final-app
+python3 -m venv backend/.venv
+backend/.venv/bin/pip install -r backend/requirements-dev.txt
+(cd backend && .venv/bin/pytest -v)
+
+(cd frontend && npm ci && npm run build && npm audit --audit-level=high)
 ```
 
-The image uses a pinned minimal Alpine base, installs only the Python runtime, runs with a non-root UID, defines an explicit healthcheck and embeds no credentials.
-
-## Kubernetes deployment
-
-```bash
-minikube addons enable ingress
-minikube addons enable metrics-server
-kubectl apply -k kubernetes/
-kubectl wait --for=condition=available deployment/final-app -n final-devops --timeout=180s
-kubectl get all,configmap,secret,pvc,ingress,hpa,pdb,networkpolicy -n final-devops
-kubectl port-forward -n final-devops service/final-app 8088:80
-curl http://127.0.0.1:8088/health
-```
-
-The deployment includes ConfigMap, lab-only Secret placeholder, Service, TLS-capable Ingress, HPA, startup/readiness/liveness probes, PVC, PodDisruptionBudget, resource controls and default-deny NetworkPolicy. Create the TLS Secret from a locally generated certificate before testing HTTPS; never commit a private key.
-
-## Helm deployment
-
-```bash
-helm lint helm/final-app
-helm upgrade --install final-app helm/final-app -n final-devops --create-namespace --wait
-helm test final-app -n final-devops
-helm upgrade final-app helm/final-app -n final-devops --set config.message='Release 2' --wait
-helm history final-app -n final-devops
-helm rollback final-app 1 -n final-devops --wait
-```
-
-## Terraform infrastructure
-
-The `terraform/` project provisions a VPC, two subnets, routing, ECR and a private versioned S3 bucket. EKS and its node group are present but protected by `enable_eks=false` because they incur charges. Follow [`terraform/README.md`](terraform/README.md), review the saved plan and destroy the cloud lab when evidence is captured.
+The test suite has eight test cases across health, readiness, metrics and every CRUD behavior. Tests override the application dependency with an isolated in-memory SQLite database; they never use production data.
 
 ## CI/CD and DevSecOps
 
-The executable workflow is [`.github/workflows/final-project.yml`](../../.github/workflows/final-project.yml). It runs tests, Bandit SAST, pip-audit SCA, Gitleaks, Kubernetes/Helm/Terraform validation, a Docker build and Trivy image gate. The gated revision is deployed with Helm to an ephemeral Kind cluster and must pass the chart test before the workflow publishes multi-architecture immutable SHA and `latest` tags. External production deployment is protected by `ENABLE_FINAL_DEPLOY=true`, a least-privilege `KUBE_CONFIG` secret and GitHub environment approval.
+The root [final-project workflow](../../.github/workflows/final-project.yml) runs on every relevant pull request and `main` push:
 
-## Monitoring
+1. Run eight pytest tests and a clean Vite production build.
+2. Run Bandit SAST, pip-audit SCA and Gitleaks history scanning.
+3. Validate Kustomize, Helm and Terraform configurations.
+4. Build backend and frontend images independently.
+5. Fail each image job on any `HIGH` or `CRITICAL` Trivy finding and upload both SARIF reports.
+6. After every gate passes, publish both images to GHCR using immutable commit-SHA and `latest` tags.
+7. Pull those exact SHA images into a disposable Kind cluster, deploy the three-tier chart and run Helm connectivity tests.
 
-The application emits `/metrics` and structured logs. [`monitoring/`](monitoring/) provides Prometheus discovery, alerts and a ServiceMonitor. Important signals include availability, request/error/latency rates, CPU, memory, restarts, probe failures, saturation and HPA state. Logs and traces should carry request/trace IDs so Grafana, Loki and Tempo views correlate.
+The optional permanent deployment runs only when the repository variable `ENABLE_FINAL_DEPLOY=true` and a protected environment provides `KUBE_CONFIG`.
 
-## GitOps
+## Kubernetes and Helm
 
-[`gitops/application.yaml`](gitops/application.yaml) defines an Argo CD application that renders the Helm chart from Git, automatically prunes obsolete resources and self-heals drift. Production promotion should update immutable image tags through reviewed pull requests.
+Raw manifests in `kubernetes/` and the production-style chart in `helm/final-app/` both provide:
 
-## Troubleshooting
+- dedicated `final-devops` namespace;
+- two backend and two frontend replicas;
+- internal ClusterIP services named `backend`, `frontend` and `database`;
+- PostgreSQL persistence and a lab-only placeholder Secret;
+- startup/readiness/liveness probes, resource requests/limits and restricted security contexts;
+- HPA for the backend, disruption budgets and ingress routing `/api` to the API and `/` to the UI.
 
-[`troubleshooting/`](troubleshooting/) contains an intentional multi-fault challenge and the documented identify-investigate-root-cause-fix-verify workflow. It covers image pull failure, missing configuration and Service selector mismatch without inventing output.
+```bash
+helm lint helm/final-app
+helm upgrade --install final-app helm/final-app \
+  --namespace final-devops --create-namespace --wait
+kubectl get deployment,pods,service,ingress,hpa -n final-devops
+helm test final-app -n final-devops --logs
+```
 
-## Lessons learned
+Do not use the committed lab password in a real environment. Supply `postgres.password` through a secret manager or encrypted values file.
 
-- A file passing syntax checks is not proof that the workload ran; runtime evidence and observable behavior matter.
-- Immutable artifacts plus declarative configuration make rollback and audit straightforward.
-- Security must gate delivery before publication, and runtime least privilege is distinct from build-time scanning.
-- Requests, probes, telemetry and runbooks are part of application correctness, not optional production polish.
-- GitOps reduces configuration drift, but protected review and safe secret delivery remain necessary.
-- Cloud resources require cost awareness, remote state protection and deliberate teardown.
+## Terraform and AWS
 
-## Evidence
+`terraform/` defines valid HCL for a VPC, Internet Gateway, two public subnets in separate availability zones, routes, a private versioned S3 artifact bucket, immutable ECR repository, EKS cluster and managed node group. Copy `terraform.tfvars.example` to the ignored `terraform.tfvars` and review costs before enabling EKS.
 
-Follow [`evidence/README.md`](evidence/README.md). Never fabricate a successful cloud apply, pipeline run or screenshot; every submitted output must originate from the student's account and environment.
+```bash
+cd terraform
+cp terraform.tfvars.example terraform.tfvars
+terraform init
+terraform fmt -check
+terraform validate
+terraform plan -out=tfplan
+terraform apply tfplan
+terraform output
+terraform destroy
+```
 
-The hosted pipeline publishes its immutable SHA tag to GHCR before the Kubernetes verification job pulls and deploys that exact tag to a disposable Kind cluster. The permanent production deployment remains an optional protected environment.
+The default variable keeps billable EKS resources disabled; the example enables them for the supervised grading run. Genuine apply/destroy evidence must come from an authorized AWS account.
 
-### Submission evidence gallery
+## Observability
+
+The backend exposes request totals and duration histograms at `/metrics`. The `monitoring/` directory includes a ServiceMonitor, Prometheus discovery, alerts, kube-prometheus-stack values and a provisioned Grafana dashboard with request-rate, p95-latency and status-code panels.
+
+The required hosted `observability-smoke` job also starts the application and monitoring Compose files together, generates requests, asserts that Prometheus is scraping non-zero application samples, verifies Grafana loaded the dashboard and uploads genuine UI/dashboard screenshots.
+
+```bash
+docker compose -f docker-compose.yml -f monitoring/docker-compose.yml up --build -d --wait
+open http://localhost:3001/d/release-tracker/release-tracker
+```
+
+```bash
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm upgrade --install monitoring prometheus-community/kube-prometheus-stack \
+  -n monitoring --create-namespace -f monitoring/kube-prometheus-stack-values.yaml
+kubectl apply -f monitoring/dashboard.yaml
+kubectl apply -f monitoring/servicemonitor.yaml
+```
+
+## GitOps and troubleshooting
+
+`gitops/application.yaml` makes Argo CD render this chart from `main`, prune removed objects and self-heal drift. `troubleshooting/` retains the deliberate multi-fault exercise and its evidence-backed diagnosis/fix workflow.
+
+## Project map
+
+```text
+backend/       FastAPI, SQLAlchemy, Alembic, pytest, backend Dockerfile
+frontend/      React/Vite UI, Nginx config, multi-stage frontend Dockerfile
+docker-compose.yml
+kubernetes/    Raw three-tier manifests
+helm/          Three-tier Helm chart and test hook
+terraform/     VPC, two subnets, EKS and managed node group
+monitoring/    Prometheus rules, ServiceMonitor and Grafana dashboard
+gitops/        Argo CD Application
+security/      Security policy and Gitleaks config
+evidence/      Genuine runtime/pipeline screenshots and transcripts
+```
+
+See [RUBRIC-CROSSWALK.md](RUBRIC-CROSSWALK.md) for a criterion-by-criterion map and [evidence/README.md](evidence/README.md) for evidence provenance.
+
+## Evidence gallery
 
 ![Successful final-project pipeline](../../evidence/hosted-workflows/03-final-project-success.png)
 
 ![Kubernetes and Helm deployment](evidence/01-kubernetes-helm.png)
 
-![Broken troubleshooting state](evidence/02-troubleshooting-broken.png)
-
-![Corrected troubleshooting state](evidence/03-troubleshooting-fixed.png)
-
 ![Argo CD Synced and Healthy](evidence/04-argocd-sync.png)
-
-![Argo CD self-healing](evidence/05-argocd-self-heal.png)

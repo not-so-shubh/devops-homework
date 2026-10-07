@@ -3,13 +3,9 @@ name: Final DevOps Project
 on:
   push:
     branches: [main]
-    paths:
-      - "20-final-devops-project/**"
-      - ".github/workflows/final-project.yml"
+    paths: ["20-final-devops-project/**", ".github/workflows/final-project.yml", "scripts/verify-all.sh"]
   pull_request:
-    paths:
-      - "20-final-devops-project/**"
-      - ".github/workflows/final-project.yml"
+    paths: ["20-final-devops-project/**", ".github/workflows/final-project.yml", "scripts/verify-all.sh"]
   workflow_dispatch:
 
 permissions:
@@ -19,7 +15,8 @@ permissions:
 
 env:
   PROJECT: 20-final-devops-project/final-devops-project
-  IMAGE: ghcr.io/${{ github.repository_owner }}/final-devops-project
+  BACKEND_IMAGE: ghcr.io/${{ github.repository_owner }}/release-tracker-backend
+  FRONTEND_IMAGE: ghcr.io/${{ github.repository_owner }}/release-tracker-frontend
 
 jobs:
   test:
@@ -27,9 +24,19 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
-        with: {python-version: "3.13"}
-      - run: python -m py_compile "$PROJECT/application/app.py"
-      - run: python -m unittest discover -s "$PROJECT/application/tests" -v
+        with: {python-version: "3.13", cache: pip, cache-dependency-path: "20-final-devops-project/final-devops-project/backend/requirements-dev.txt"}
+      - name: Backend tests
+        working-directory: 20-final-devops-project/final-devops-project/backend
+        run: |
+          python -m pip install -r requirements-dev.txt
+          pytest -v
+      - uses: actions/setup-node@v6
+        with: {node-version: 24, cache: npm, cache-dependency-path: "20-final-devops-project/final-devops-project/frontend/package-lock.json"}
+      - name: Frontend production build
+        working-directory: 20-final-devops-project/final-devops-project/frontend
+        run: |
+          npm ci
+          npm run build
 
   source-security:
     runs-on: ubuntu-latest
@@ -40,9 +47,9 @@ jobs:
         with: {python-version: "3.13"}
       - run: pip install bandit pip-audit
       - name: SAST
-        run: bandit -r "$PROJECT/application" -lll -iii
+        run: bandit -r "$PROJECT/backend/app" -lll -iii
       - name: SCA
-        run: pip-audit -r "$PROJECT/application/requirements.txt" --strict
+        run: pip-audit -r "$PROJECT/backend/requirements-dev.txt" --strict
       - name: Secret scan
         uses: gitleaks/gitleaks-action@v3
         env:
@@ -59,14 +66,12 @@ jobs:
       - name: Kubernetes schema validation
         run: |
           kubectl kustomize "$PROJECT/kubernetes" > /tmp/final-kubernetes.yaml
-          docker run --rm -i ghcr.io/yannh/kubeconform:v0.8.0 \
-            -strict -summary -ignore-missing-schemas < /tmp/final-kubernetes.yaml
+          docker run --rm -i ghcr.io/yannh/kubeconform:v0.8.0 -strict -summary -ignore-missing-schemas < /tmp/final-kubernetes.yaml
       - name: Helm lint and render
         run: |
           helm lint "$PROJECT/helm/final-app"
           helm template final-app "$PROJECT/helm/final-app" --namespace final-devops > /tmp/final-app.yaml
-          docker run --rm -i ghcr.io/yannh/kubeconform:v0.8.0 \
-            -strict -summary -ignore-missing-schemas < /tmp/final-app.yaml
+          docker run --rm -i ghcr.io/yannh/kubeconform:v0.8.0 -strict -summary -ignore-missing-schemas < /tmp/final-app.yaml
       - name: Terraform formatting and validation
         working-directory: 20-final-devops-project/final-devops-project/terraform
         run: |
@@ -74,7 +79,7 @@ jobs:
           terraform init -backend=false -input=false
           terraform validate
 
-  container-security:
+  backend-image:
     runs-on: ubuntu-latest
     needs: test
     steps:
@@ -82,34 +87,140 @@ jobs:
       - uses: docker/setup-buildx-action@v4
       - uses: docker/build-push-action@v7
         with:
-          context: 20-final-devops-project/final-devops-project
-          file: 20-final-devops-project/final-devops-project/docker/Dockerfile
+          context: 20-final-devops-project/final-devops-project/backend
           load: true
           push: false
-          tags: final-devops-project:${{ github.sha }}
-      - name: Container image security gate
+          tags: release-tracker-backend:${{ github.sha }}
+      - name: Trivy backend image gate
         uses: aquasecurity/trivy-action@v0.36.0
         with:
-          image-ref: final-devops-project:${{ github.sha }}
+          image-ref: release-tracker-backend:${{ github.sha }}
           format: sarif
-          output: final-trivy.sarif
+          output: backend-trivy.sarif
           severity: HIGH,CRITICAL
-          ignore-unfixed: true
           exit-code: "1"
       - if: always()
         uses: actions/upload-artifact@v7
-        with: {name: final-trivy-report, path: final-trivy.sarif}
+        with: {name: backend-trivy-report, path: backend-trivy.sarif}
+
+  frontend-image:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v7
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/build-push-action@v7
+        with:
+          context: 20-final-devops-project/final-devops-project/frontend
+          load: true
+          push: false
+          tags: release-tracker-frontend:${{ github.sha }}
+      - name: Trivy frontend image gate
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: release-tracker-frontend:${{ github.sha }}
+          format: sarif
+          output: frontend-trivy.sarif
+          severity: HIGH,CRITICAL
+          exit-code: "1"
+      - if: always()
+        uses: actions/upload-artifact@v7
+        with: {name: frontend-trivy-report, path: frontend-trivy.sarif}
+
+  observability-smoke:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v7
+      - name: Start application, Prometheus and Grafana
+        run: |
+          docker compose \
+            -f "$PROJECT/docker-compose.yml" \
+            -f "$PROJECT/monitoring/docker-compose.yml" \
+            up --build -d --wait --wait-timeout 240
+      - name: Generate real application metrics
+        run: |
+          curl -fsS -X POST http://127.0.0.1:8088/api/releases \
+            -H 'Content-Type: application/json' \
+            -d '{"service":"hosted-smoke","version":"1.0.0","environment":"staging","status":"healthy","owner":"GitHub Actions","notes":"Observability verification traffic"}'
+          for request in $(seq 1 60); do curl -fsS -o /dev/null http://127.0.0.1:8088/health; done
+      - name: Verify Prometheus target, samples and provisioned Grafana dashboard
+        run: |
+          for attempt in $(seq 1 24); do
+            TARGETS=$(curl -fsS http://127.0.0.1:9090/api/v1/targets || true)
+            if jq -e '.data.activeTargets | any(.health == "up")' <<<"$TARGETS" >/dev/null; then break; fi
+            sleep 5
+          done
+          jq -e '.data.activeTargets | any(.health == "up")' <<<"$TARGETS"
+          for request in $(seq 1 30); do curl -fsS -o /dev/null http://127.0.0.1:8088/health; done
+          sleep 6
+          for request in $(seq 1 30); do curl -fsS -o /dev/null http://127.0.0.1:8088/health; done
+          sleep 6
+          METRICS=$(curl -fsSG --data-urlencode 'query=sum(rate(release_tracker_http_requests_total[1m]))' http://127.0.0.1:9090/api/v1/query)
+          jq -e '.data.result | length > 0 and (.[0].value[1] | tonumber) > 0' <<<"$METRICS"
+          curl -fsS http://127.0.0.1:3001/api/health | jq -e '.database == "ok"'
+          curl -fsS 'http://127.0.0.1:3001/api/search?query=Release%20Tracker' | jq -e 'any(.uid == "release-tracker")'
+      - name: Capture genuine application and Grafana screenshots
+        run: |
+          google-chrome --headless --no-sandbox --disable-gpu --window-size=1440,1000 \
+            --screenshot="$RUNNER_TEMP/release-tracker-ui.png" http://127.0.0.1:8088
+          google-chrome --headless --no-sandbox --disable-gpu --window-size=1440,1000 \
+            --screenshot="$RUNNER_TEMP/release-tracker-grafana.png" \
+            'http://127.0.0.1:3001/d/release-tracker/release-tracker?orgId=1&from=now-15m&to=now&kiosk'
+      - if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-tracker-observability-evidence
+          path: |
+            ${{ runner.temp }}/release-tracker-ui.png
+            ${{ runner.temp }}/release-tracker-grafana.png
+      - if: always()
+        name: Compose status and logs
+        run: |
+          docker compose -f "$PROJECT/docker-compose.yml" -f "$PROJECT/monitoring/docker-compose.yml" ps
+          docker compose -f "$PROJECT/docker-compose.yml" -f "$PROJECT/monitoring/docker-compose.yml" logs --no-color --tail=80
+      - if: always()
+        name: Remove smoke stack
+        run: docker compose -f "$PROJECT/docker-compose.yml" -f "$PROJECT/monitoring/docker-compose.yml" down -v
 
   security-gate:
     runs-on: ubuntu-latest
-    needs: [test, source-security, configuration, container-security]
+    needs: [test, source-security, configuration, backend-image, frontend-image, observability-smoke]
     steps:
-      - run: echo "Tests, SAST, SCA, secret scan, configuration validation and image scan passed."
+      - run: echo "Tests, builds, SAST, SCA, secret scan, config validation, and both Trivy image gates passed."
+
+  publish:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: security-gate
+    steps:
+      - uses: actions/checkout@v7
+      - uses: docker/login-action@v4
+        with: {registry: ghcr.io, username: "${{ github.actor }}", password: "${{ secrets.GITHUB_TOKEN }}"}
+      - uses: docker/setup-qemu-action@v4
+      - uses: docker/setup-buildx-action@v4
+      - name: Publish backend SHA and latest tags
+        uses: docker/build-push-action@v7
+        with:
+          context: 20-final-devops-project/final-devops-project/backend
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: |
+            ${{ env.BACKEND_IMAGE }}:${{ github.sha }}
+            ${{ env.BACKEND_IMAGE }}:latest
+      - name: Publish frontend SHA and latest tags
+        uses: docker/build-push-action@v7
+        with:
+          context: 20-final-devops-project/final-devops-project/frontend
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: |
+            ${{ env.FRONTEND_IMAGE }}:${{ github.sha }}
+            ${{ env.FRONTEND_IMAGE }}:latest
 
   kubernetes-smoke-deploy:
     if: >-
-      always() &&
-      needs.security-gate.result == 'success' &&
+      always() && needs.security-gate.result == 'success' &&
       (needs.publish.result == 'success' || needs.publish.result == 'skipped')
     runs-on: ubuntu-latest
     needs: [security-gate, publish]
@@ -119,20 +230,20 @@ jobs:
       - name: Build source revision for non-publishing events
         if: github.event_name != 'push' || github.ref != 'refs/heads/main'
         run: |
-          docker build -f "$PROJECT/docker/Dockerfile" \
-            -t "final-devops-project:${GITHUB_SHA}" "$PROJECT"
-          echo "DEPLOY_IMAGE=final-devops-project:${GITHUB_SHA}" >> "$GITHUB_ENV"
+          docker build -t "release-tracker-backend:${GITHUB_SHA}" "$PROJECT/backend"
+          docker build -t "release-tracker-frontend:${GITHUB_SHA}" "$PROJECT/frontend"
+          echo "DEPLOY_BACKEND=release-tracker-backend:${GITHUB_SHA}" >> "$GITHUB_ENV"
+          echo "DEPLOY_FRONTEND=release-tracker-frontend:${GITHUB_SHA}" >> "$GITHUB_ENV"
       - uses: docker/login-action@v4
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Pull published immutable image
+        with: {registry: ghcr.io, username: "${{ github.actor }}", password: "${{ secrets.GITHUB_TOKEN }}"}
+      - name: Pull published immutable images
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          docker pull "${IMAGE}:${GITHUB_SHA}"
-          echo "DEPLOY_IMAGE=${IMAGE}:${GITHUB_SHA}" >> "$GITHUB_ENV"
+          docker pull "${BACKEND_IMAGE}:${GITHUB_SHA}"
+          docker pull "${FRONTEND_IMAGE}:${GITHUB_SHA}"
+          echo "DEPLOY_BACKEND=${BACKEND_IMAGE}:${GITHUB_SHA}" >> "$GITHUB_ENV"
+          echo "DEPLOY_FRONTEND=${FRONTEND_IMAGE}:${GITHUB_SHA}" >> "$GITHUB_ENV"
       - name: Create ephemeral Kubernetes cluster
         run: |
           cd "$RUNNER_TEMP"
@@ -141,45 +252,28 @@ jobs:
           sha256sum --check kind-linux-amd64.sha256sum
           sudo install -m 0755 kind-linux-amd64 /usr/local/bin/kind
           kind create cluster --wait 180s
-          kind load docker-image "$DEPLOY_IMAGE"
+          kind load docker-image "$DEPLOY_BACKEND" "$DEPLOY_FRONTEND"
       - name: Helm deployment and verification
         run: |
-          DEPLOY_REPOSITORY="${DEPLOY_IMAGE%:*}"
-          DEPLOY_TAG="${DEPLOY_IMAGE##*:}"
+          BACKEND_REPOSITORY="${DEPLOY_BACKEND%:*}"
+          FRONTEND_REPOSITORY="${DEPLOY_FRONTEND%:*}"
+          DEPLOY_TAG="${DEPLOY_BACKEND##*:}"
           helm upgrade --install final-app "$PROJECT/helm/final-app" \
-            --namespace final-devops --create-namespace --wait --timeout 5m \
-            --set image.repository="$DEPLOY_REPOSITORY" \
-            --set image.tag="$DEPLOY_TAG" \
-            --set image.pullPolicy=IfNotPresent \
+            --namespace final-devops --create-namespace --wait --timeout 6m \
+            --set backend.image.repository="$BACKEND_REPOSITORY" \
+            --set backend.image.tag="$DEPLOY_TAG" \
+            --set backend.image.pullPolicy=IfNotPresent \
+            --set frontend.image.repository="$FRONTEND_REPOSITORY" \
+            --set frontend.image.tag="$DEPLOY_TAG" \
+            --set frontend.image.pullPolicy=IfNotPresent \
             --set ingress.enabled=false \
             --set autoscaling.enabled=false \
-            --set persistence.enabled=false
-          kubectl rollout status deployment/final-app -n final-devops --timeout=180s
-          kubectl get deployment,pods,service,configmap,secret -n final-devops -o wide
+            --set postgres.persistence.enabled=false
+          kubectl rollout status deployment/final-app-database -n final-devops --timeout=180s
+          kubectl rollout status deployment/final-app-backend -n final-devops --timeout=180s
+          kubectl rollout status deployment/final-app-frontend -n final-devops --timeout=180s
+          kubectl get deployment,pods,service,secret -n final-devops -o wide
           helm test final-app -n final-devops --logs --timeout 3m
-
-  publish:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    needs: security-gate
-    steps:
-      - uses: actions/checkout@v7
-      - uses: docker/login-action@v4
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/setup-qemu-action@v4
-      - uses: docker/setup-buildx-action@v4
-      - uses: docker/build-push-action@v7
-        with:
-          context: 20-final-devops-project/final-devops-project
-          file: 20-final-devops-project/final-devops-project/docker/Dockerfile
-          push: true
-          platforms: linux/amd64,linux/arm64
-          tags: |
-            ${{ env.IMAGE }}:${{ github.sha }}
-            ${{ env.IMAGE }}:latest
 
   external-deploy:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.ENABLE_FINAL_DEPLOY == 'true'
@@ -196,10 +290,12 @@ jobs:
           printf '%s' "$KUBE_CONFIG_DATA" | base64 --decode > "$RUNNER_TEMP/kubeconfig"
           chmod 600 "$RUNNER_TEMP/kubeconfig"
           echo "KUBECONFIG=$RUNNER_TEMP/kubeconfig" >> "$GITHUB_ENV"
-      - name: Helm deployment and verification
+      - name: Deploy both immutable images
         run: |
           helm upgrade --install final-app "$PROJECT/helm/final-app" \
-            --namespace final-devops --create-namespace --wait --timeout 5m \
-            --set image.repository=${{ env.IMAGE }} --set image.tag=${{ github.sha }}
-          kubectl rollout status deployment/final-app -n final-devops --timeout=180s
-          helm test final-app -n final-devops
+            --namespace final-devops --create-namespace --wait --timeout 8m \
+            --set backend.image.repository="$BACKEND_IMAGE" --set backend.image.tag="$GITHUB_SHA" \
+            --set frontend.image.repository="$FRONTEND_IMAGE" --set frontend.image.tag="$GITHUB_SHA"
+          kubectl rollout status deployment/final-app-backend -n final-devops --timeout=180s
+          kubectl rollout status deployment/final-app-frontend -n final-devops --timeout=180s
+          helm test final-app -n final-devops --logs

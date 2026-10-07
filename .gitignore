@@ -20,7 +20,7 @@ build/
 target/
 __pycache__/
 *.py[cod]
-.venv/
+.venv
 venv/
 *.class
 
@@ -44,6 +44,8 @@ tls.crt
 *.tfstate
 *.tfstate.*
 *.tfplan
+*.tfvars
+!*.tfvars.example
 crash.log
 
 # Local security/build reports

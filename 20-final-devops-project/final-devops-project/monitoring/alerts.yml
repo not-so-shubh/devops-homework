@@ -1,17 +1,17 @@
 groups:
-  - name: final-app
+  - name: release-tracker
     rules:
-      - alert: FinalAppDown
-        expr: up{job="final-app"} == 0
+      - alert: ReleaseTrackerDown
+        expr: up{job="release-tracker-backend"} == 0
         for: 2m
         labels: {severity: critical}
         annotations: {summary: "Final application target is unavailable"}
-      - alert: FinalAppHighRestartRate
+      - alert: ReleaseTrackerHighRestartRate
         expr: increase(kube_pod_container_status_restarts_total{namespace="final-devops"}[10m]) > 2
         labels: {severity: warning}
         annotations: {summary: "Final application containers are restarting"}
-      - alert: FinalAppHighCPU
-        expr: rate(container_cpu_usage_seconds_total{namespace="final-devops",pod=~"final-app-.*"}[5m]) > 0.2
+      - alert: ReleaseTrackerHighErrorRate
+        expr: sum(rate(release_tracker_http_requests_total{status=~"5.."}[5m])) / clamp_min(sum(rate(release_tracker_http_requests_total[5m])), 1) > 0.05
         for: 5m
         labels: {severity: warning}
-        annotations: {summary: "Final application CPU is near its limit"}
+        annotations: {summary: "Release Tracker HTTP 5xx rate is above 5%"}

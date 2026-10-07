@@ -1,10 +1,10 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: final-app
+  name: release-tracker-backend
   namespace: final-devops
 spec:
-  scaleTargetRef: {apiVersion: apps/v1, kind: Deployment, name: final-app}
+  scaleTargetRef: {apiVersion: apps/v1, kind: Deployment, name: release-tracker-backend}
   minReplicas: 2
   maxReplicas: 8
   behavior:
@@ -18,9 +18,9 @@ spec:
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: final-app
+  name: release-tracker-backend
   namespace: final-devops
 spec:
   minAvailable: 1
   selector:
-    matchLabels: {app: final-app}
+    matchLabels: {app: release-tracker-backend}

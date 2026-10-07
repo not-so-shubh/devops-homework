@@ -37,9 +37,13 @@ REQUIRED_PATHS=(
   19-monitoring-observability-gitops/docker-compose.yml
   19-monitoring-observability-gitops/gitops/application.yaml
   20-final-devops-project/final-devops-project/README.md
+  20-final-devops-project/final-devops-project/backend/app/main.py
+  20-final-devops-project/final-devops-project/frontend/package-lock.json
+  20-final-devops-project/final-devops-project/docker-compose.yml
   20-final-devops-project/final-devops-project/kubernetes/kustomization.yaml
   20-final-devops-project/final-devops-project/helm/final-app/Chart.yaml
   20-final-devops-project/final-devops-project/terraform/main.tf
+  20-final-devops-project/final-devops-project/terraform/terraform.tfvars.example
   .github/workflows/ci-cd.yml
   .github/workflows/devsecops.yml
   .github/workflows/final-project.yml
@@ -64,10 +68,16 @@ if [[ "$SYNTAX_FAILED" -eq 0 ]]; then pass 'all shell scripts pass bash -n'; els
 PYTHON_FAILED=0
 for tests in \
   "$ROOT_DIR/15-cicd-github-actions/application/tests" \
-  "$ROOT_DIR/16-devsecops-pipeline/application/tests" \
-  "$ROOT_DIR/20-final-devops-project/final-devops-project/application/tests"; do
+  "$ROOT_DIR/16-devsecops-pipeline/application/tests"; do
   python3 -m unittest discover -s "$tests" -v || PYTHON_FAILED=1
 done
+if [[ -x "$ROOT_DIR/20-final-devops-project/final-devops-project/backend/.venv/bin/pytest" ]]; then
+  (cd "$ROOT_DIR/20-final-devops-project/final-devops-project/backend" && .venv/bin/pytest -q) || PYTHON_FAILED=1
+elif python3 -c 'import fastapi, pytest, sqlalchemy' >/dev/null 2>&1; then
+  (cd "$ROOT_DIR/20-final-devops-project/final-devops-project/backend" && python3 -m pytest -q) || PYTHON_FAILED=1
+else
+  blocked 'final-project Python dependencies unavailable; hosted workflow runs its pytest suite'
+fi
 if [[ "$PYTHON_FAILED" -eq 0 ]]; then pass 'all application unit tests pass'; else fail 'application unit tests failed'; fi
 
 printf '\n=== Safe demonstrations ===\n'
@@ -103,7 +113,8 @@ if command -v docker >/dev/null 2>&1 && docker compose version >/dev/null 2>&1; 
   for compose_file in \
     "$ROOT_DIR/05-docker-fundamentals/docker-compose.yml" \
     "$ROOT_DIR/07-docker-networking-volumes/container-networking/docker-compose.yml" \
-    "$ROOT_DIR/19-monitoring-observability-gitops/docker-compose.yml"; do
+    "$ROOT_DIR/19-monitoring-observability-gitops/docker-compose.yml" \
+    "$ROOT_DIR/20-final-devops-project/final-devops-project/docker-compose.yml"; do
     docker compose -f "$compose_file" config -q || COMPOSE_FAILED=1
   done
   if [[ "$COMPOSE_FAILED" -eq 0 ]]; then pass 'all Docker Compose configurations render'; else fail 'Docker Compose rendering failed'; fi
@@ -146,6 +157,11 @@ grep -q 'kind: Application' "$ROOT_DIR/20-final-devops-project/final-devops-proj
 grep -q 'trivy-action' "$ROOT_DIR/.github/workflows/final-project.yml" || STATIC_FAILED=1
 grep -q 'gitleaks' "$ROOT_DIR/.github/workflows/final-project.yml" || STATIC_FAILED=1
 grep -q 'aws_eks_cluster' "$ROOT_DIR/20-final-devops-project/final-devops-project/terraform/main.tf" || STATIC_FAILED=1
+grep -q '@app.post("/api/releases"' "$ROOT_DIR/20-final-devops-project/final-devops-project/backend/app/main.py" || STATIC_FAILED=1
+grep -q '@app.put("/api/releases/{release_id}"' "$ROOT_DIR/20-final-devops-project/final-devops-project/backend/app/main.py" || STATIC_FAILED=1
+grep -q '@app.delete("/api/releases/{release_id}"' "$ROOT_DIR/20-final-devops-project/final-devops-project/backend/app/main.py" || STATIC_FAILED=1
+grep -q 'release-tracker-backend' "$ROOT_DIR/.github/workflows/final-project.yml" || STATIC_FAILED=1
+grep -q 'release-tracker-frontend' "$ROOT_DIR/.github/workflows/final-project.yml" || STATIC_FAILED=1
 if [[ "$STATIC_FAILED" -eq 0 ]]; then pass 'HPA, runtime hardening, GitOps, security gates and cloud resources are present'; else fail 'assignment-critical control is missing'; fi
 
 printf '\n=== Summary ===\n'

@@ -1,76 +1,138 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: final-app
+  name: release-tracker-database
   namespace: final-devops
-  labels: {app: final-app}
+  labels: {app: release-tracker-database}
 spec:
-  replicas: 2
-  strategy:
-    type: RollingUpdate
-    rollingUpdate: {maxUnavailable: 0, maxSurge: 1}
+  replicas: 1
+  strategy: {type: Recreate}
   selector:
-    matchLabels: {app: final-app}
+    matchLabels: {app: release-tracker-database}
   template:
     metadata:
-      labels: {app: final-app}
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/path: /metrics
-        prometheus.io/port: "8080"
+      labels: {app: release-tracker-database}
     spec:
       automountServiceAccountToken: false
-      terminationGracePeriodSeconds: 20
       securityContext:
         runAsNonRoot: true
-        fsGroup: 10001
+        runAsUser: 70
+        runAsGroup: 70
+        fsGroup: 70
         seccompProfile: {type: RuntimeDefault}
       containers:
-        - name: app
-          image: ghcr.io/not-so-shubh/final-devops-project:latest
+        - name: postgres
+          image: postgres:17-alpine
           imagePullPolicy: Always
-          ports: [{name: http, containerPort: 8080}]
+          ports: [{name: postgres, containerPort: 5432}]
           envFrom:
-            - configMapRef: {name: final-app-config}
-          env:
-            - name: DEMO_TOKEN
-              valueFrom:
-                secretKeyRef: {name: final-app-secret, key: DEMO_TOKEN}
-          startupProbe:
-            httpGet: {path: /health, port: http}
-            periodSeconds: 2
-            failureThreshold: 30
-          readinessProbe:
-            httpGet: {path: /ready, port: http}
-            periodSeconds: 5
-          livenessProbe:
-            httpGet: {path: /health, port: http}
-            periodSeconds: 10
-          lifecycle:
-            preStop:
-              exec: {command: ["sh", "-c", "sleep 5"]}
+            - secretRef: {name: release-tracker-database}
+          readinessProbe: {exec: {command: ["pg_isready", "-U", "release_tracker", "-d", "release_tracker"]}, periodSeconds: 5}
+          livenessProbe: {tcpSocket: {port: postgres}, periodSeconds: 10}
           resources:
-            requests: {cpu: 25m, memory: 32Mi}
-            limits: {cpu: 250m, memory: 128Mi}
+            requests: {cpu: 50m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 512Mi}
           securityContext:
             allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
             capabilities: {drop: ["ALL"]}
           volumeMounts:
-            - {name: data, mountPath: /data}
+            - {name: data, mountPath: /var/lib/postgresql/data}
             - {name: tmp, mountPath: /tmp}
       volumes:
         - name: data
-          persistentVolumeClaim: {claimName: final-app-data}
+          persistentVolumeClaim: {claimName: release-tracker-postgres}
         - name: tmp
           emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: final-app
+  name: database
   namespace: final-devops
-  labels: {app: final-app}
 spec:
-  selector: {app: final-app}
+  selector: {app: release-tracker-database}
+  ports: [{name: postgres, port: 5432, targetPort: postgres}]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-tracker-backend
+  namespace: final-devops
+  labels: {app: release-tracker-backend}
+spec:
+  replicas: 2
+  selector:
+    matchLabels: {app: release-tracker-backend}
+  template:
+    metadata:
+      labels: {app: release-tracker-backend}
+      annotations: {prometheus.io/scrape: "true", prometheus.io/path: /metrics, prometheus.io/port: "8000"}
+    spec:
+      automountServiceAccountToken: false
+      securityContext: {runAsNonRoot: true, runAsUser: 10001, runAsGroup: 10001, seccompProfile: {type: RuntimeDefault}}
+      containers:
+        - name: backend
+          image: ghcr.io/not-so-shubh/release-tracker-backend:latest
+          imagePullPolicy: Always
+          ports: [{name: http, containerPort: 8000}]
+          env:
+            - name: DATABASE_URL
+              valueFrom: {secretKeyRef: {name: release-tracker-database, key: DATABASE_URL}}
+          startupProbe: {httpGet: {path: /health, port: http}, periodSeconds: 2, failureThreshold: 45}
+          readinessProbe: {httpGet: {path: /ready, port: http}, periodSeconds: 5}
+          livenessProbe: {httpGet: {path: /health, port: http}, periodSeconds: 10}
+          resources:
+            requests: {cpu: 50m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 384Mi}
+          securityContext: {allowPrivilegeEscalation: false, readOnlyRootFilesystem: true, capabilities: {drop: ["ALL"]}}
+          volumeMounts: [{name: tmp, mountPath: /tmp}]
+      volumes: [{name: tmp, emptyDir: {}}]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: final-devops
+  labels: {app: release-tracker-backend}
+spec:
+  selector: {app: release-tracker-backend}
+  ports: [{name: http, port: 8000, targetPort: http}]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-tracker-frontend
+  namespace: final-devops
+  labels: {app: release-tracker-frontend}
+spec:
+  replicas: 2
+  selector:
+    matchLabels: {app: release-tracker-frontend}
+  template:
+    metadata:
+      labels: {app: release-tracker-frontend}
+    spec:
+      automountServiceAccountToken: false
+      securityContext: {runAsNonRoot: true, runAsUser: 101, runAsGroup: 101, seccompProfile: {type: RuntimeDefault}}
+      containers:
+        - name: frontend
+          image: ghcr.io/not-so-shubh/release-tracker-frontend:latest
+          imagePullPolicy: Always
+          ports: [{name: http, containerPort: 8080}]
+          readinessProbe: {httpGet: {path: /, port: http}, periodSeconds: 5}
+          livenessProbe: {httpGet: {path: /, port: http}, periodSeconds: 10}
+          resources:
+            requests: {cpu: 25m, memory: 32Mi}
+            limits: {cpu: 200m, memory: 128Mi}
+          securityContext: {allowPrivilegeEscalation: false, readOnlyRootFilesystem: true, capabilities: {drop: ["ALL"]}}
+          volumeMounts: [{name: tmp, mountPath: /tmp}, {name: cache, mountPath: /var/cache/nginx}]
+      volumes: [{name: tmp, emptyDir: {}}, {name: cache, emptyDir: {}}]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: final-devops
+spec:
+  selector: {app: release-tracker-frontend}
   ports: [{name: http, port: 80, targetPort: http}]

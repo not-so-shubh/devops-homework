@@ -1,13 +1,13 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: final-app
+  name: release-tracker-backend
   namespace: monitoring
 spec:
   namespaceSelector:
     matchNames: ["final-devops"]
   selector:
-    matchLabels: {app: final-app}
+    matchLabels: {app: release-tracker-backend}
   endpoints:
     - port: http
       path: /metrics

@@ -1,28 +1,38 @@
-replicaCount: 2
-image:
-  repository: ghcr.io/not-so-shubh/final-devops-project
-  tag: latest
-  pullPolicy: Always
-config:
-  message: Final DevOps Project deployed with Helm
-  environment: production
-secret:
-  create: true
-  demoToken: lab-only-placeholder
-service:
-  port: 80
+backend:
+  replicaCount: 2
+  image:
+    repository: ghcr.io/not-so-shubh/release-tracker-backend
+    tag: latest
+    pullPolicy: Always
+  resources:
+    requests: {cpu: 50m, memory: 128Mi}
+    limits: {cpu: 500m, memory: 384Mi}
+frontend:
+  replicaCount: 2
+  image:
+    repository: ghcr.io/not-so-shubh/release-tracker-frontend
+    tag: latest
+    pullPolicy: Always
+  resources:
+    requests: {cpu: 25m, memory: 32Mi}
+    limits: {cpu: 200m, memory: 128Mi}
+postgres:
+  image: postgres:17-alpine
+  database: release_tracker
+  username: release_tracker
+  password: lab-only-change-me
+  storage: 2Gi
+  persistence:
+    enabled: true
 ingress:
   enabled: true
   className: nginx
-  host: final-devops.local
+  host: release-tracker.local
 autoscaling:
   enabled: true
   minReplicas: 2
   maxReplicas: 8
   targetCPU: 60
-persistence:
-  enabled: true
-  size: 1Gi
-resources:
-  requests: {cpu: 25m, memory: 32Mi}
-  limits: {cpu: 250m, memory: 128Mi}
+monitoring:
+  serviceMonitor:
+    enabled: false

@@ -1,0 +1,14 @@
+prometheus:
+  prometheusSpec:
+    serviceMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorNamespaceSelector: {}
+grafana:
+  enabled: true
+  sidecar:
+    dashboards:
+      enabled: true
+      label: grafana_dashboard
+  dashboardsConfigMaps:
+    default: release-tracker-dashboard
+alertmanager:
+  enabled: true

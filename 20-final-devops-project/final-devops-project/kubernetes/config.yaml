@@ -1,18 +1,12 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: final-app-config
-  namespace: final-devops
-data:
-  APP_MESSAGE: "Final DevOps Project running on Kubernetes"
-  APP_ENV: "production"
----
 # Lab-only placeholder. Production uses External Secrets/CSI and a managed secret store.
 apiVersion: v1
 kind: Secret
 metadata:
-  name: final-app-secret
+  name: release-tracker-database
   namespace: final-devops
 type: Opaque
 stringData:
-  DEMO_TOKEN: "lab-only-placeholder"
+  POSTGRES_DB: release_tracker
+  POSTGRES_USER: release_tracker
+  POSTGRES_PASSWORD: lab-only-change-me
+  DATABASE_URL: postgresql+psycopg://release_tracker:lab-only-change-me@database:5432/release_tracker

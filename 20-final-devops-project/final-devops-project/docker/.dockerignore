@@ -1,5 +1,0 @@
-.git
-**/__pycache__
-**/*.pyc
-terraform/.terraform
-evidence

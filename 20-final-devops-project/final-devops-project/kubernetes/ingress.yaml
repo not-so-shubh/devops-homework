@@ -1,22 +1,25 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: final-app
+  name: release-tracker
   namespace: final-devops
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   ingressClassName: nginx
-  tls:
-    - hosts: ["final-devops.local"]
-      secretName: final-devops-tls
   rules:
-    - host: final-devops.local
+    - host: release-tracker.local
       http:
         paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port: {number: 8000}
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: final-app
+                name: frontend
                 port: {number: 80}

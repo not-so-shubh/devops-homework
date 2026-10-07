@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-connectivity-test"
+  annotations: {"helm.sh/hook": test, "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded}
+spec:
+  restartPolicy: Never
+  automountServiceAccountToken: false
+  securityContext: {runAsNonRoot: true, runAsUser: 10001, seccompProfile: {type: RuntimeDefault}}
+  containers:
+    - name: verify
+      image: busybox:1.37
+      command: ["sh", "-c", "wget -qO- http://backend:8000/health | grep healthy && wget -qO- http://frontend/ | grep 'Release Tracker'"]
+      securityContext: {allowPrivilegeEscalation: false, readOnlyRootFilesystem: true, capabilities: {drop: ["ALL"]}}

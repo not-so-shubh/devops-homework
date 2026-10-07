@@ -1,6 +1,6 @@
 apiVersion: v2
 name: final-app
-description: Helm chart for the final DevOps project
+description: Production-style chart for the Release Tracker three-tier application
 type: application
-version: 1.0.0
-appVersion: "1.0.0"
+version: 2.0.0
+appVersion: "2.0.0"
