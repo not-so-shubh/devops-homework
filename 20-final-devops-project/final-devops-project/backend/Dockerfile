@@ -3,7 +3,10 @@ FROM python:3.13-alpine3.22
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-RUN addgroup -S appgroup && adduser -S -G appgroup -u 10001 appuser
+RUN apk upgrade --no-cache \
+    && python -m pip install --no-cache-dir --upgrade pip==26.2.1 \
+    && addgroup -S appgroup \
+    && adduser -S -G appgroup -u 10001 appuser
 WORKDIR /app
 
 COPY requirements.txt .
