@@ -15,8 +15,10 @@ Completed local evidence:
 - [Argo CD Synced/Healthy proof](04-argocd-sync.png)
 - [Argo CD configuration and deleted-Service self-healing](05-argocd-self-heal.png)
 - [Full Argo CD transcript](argocd-output.txt)
-- [Successful hosted final-project pipeline and multi-architecture image](../../../evidence/hosted-workflows/final-project-success.txt)
+- [Successful hosted final-project pipeline, two multi-architecture images and Kind deployment](../../../evidence/hosted-workflows/final-project-success.txt)
+- [Hosted Release Tracker UI](../../../evidence/hosted-workflows/release-tracker-observability/release-tracker-ui.png)
+- [Hosted populated Grafana dashboard](../../../evidence/hosted-workflows/release-tracker-observability/release-tracker-grafana.png)
 
-The next hosted pipeline also creates `release-tracker-observability-evidence`, containing genuine screenshots of the current React application and its populated Grafana dashboard. Those artifacts replace—not relabel—the older single-service screenshots once the run completes.
+GitHub Actions run [37647537916](https://github.com/not-so-shubh/devops-homework/actions/runs/37647537916) created the two checked-in observability screenshots from the running Compose stack. The same run published both immutable images, deployed the three-tier Helm release into Kind, rolled out all five application/database pods and passed the Helm connectivity test.
 
 AWS apply/output/destroy evidence must come from an authorized AWS account and is intentionally never fabricated. Use `scripts/run-aws-evidence.sh final` only after reviewing the cost and credential safeguards.

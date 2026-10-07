@@ -1,69 +1,66 @@
-HOSTED WORKFLOW EVIDENCE - FINAL PROJECT
-Commit: bd2c71e919862dc392f63710745e9d66f8dc3973
-Run: https://github.com/not-so-shubh/devops-homework/actions/runs/37212766713
+HOSTED WORKFLOW EVIDENCE - RELEASE TRACKER FINAL PROJECT
+Commit: 700936440d6f84134c2a4e99d912e793db7a95df
+Run: https://github.com/not-so-shubh/devops-homework/actions/runs/37647537916
+Conclusion: success
 
 Job conclusions:
-source-security	completed	success
-configuration	completed	success
-test	completed	success
-container-security	completed	success
-security-gate	completed	success
-publish	completed	success
-kubernetes-smoke-deploy	completed	success
-external-deploy	completed	skipped
+test                         completed  success
+source-security              completed  success
+configuration                completed  success
+frontend-image               completed  success
+backend-image                completed  success
+observability-smoke          completed  success
+security-gate                completed  success
+publish                      completed  success
+kubernetes-smoke-deploy      completed  success
+external-deploy              completed  skipped (optional permanent environment)
 
 Publish-before-deploy timing:
-publish	2026-10-04T15:23:40Z	2026-10-04T15:24:09Z	success
-kubernetes-smoke-deploy	2026-10-04T15:24:12Z	2026-10-04T15:25:24Z	success
+publish                      2026-10-07T15:55:08Z  2026-10-07T15:58:11Z  success
+kubernetes-smoke-deploy      2026-10-07T15:58:14Z  2026-10-07T15:59:47Z  success
 
-Kubernetes deployment steps:
-Set up job	completed	success
-Run actions/checkout@v7	completed	success
-Run azure/setup-helm@v5	completed	success
-Build source revision for non-publishing events	completed	skipped
-Run docker/login-action@v4	completed	success
-Pull published immutable image	completed	success
-Create ephemeral Kubernetes cluster	completed	success
-Helm deployment and verification	completed	success
-Post Run docker/login-action@v4	completed	success
-Post Run actions/checkout@v7	completed	success
-Complete job	completed	success
+Verified gates:
+- Eight backend tests and the frontend production build passed.
+- Bandit SAST, pip-audit SCA and Gitleaks passed.
+- Kubernetes schema validation, Helm lint/render and Terraform validation passed.
+- Separate Trivy HIGH/CRITICAL gates passed for the backend and frontend images.
+- Prometheus scraped non-zero application metrics and Grafana loaded the provisioned dashboard.
+- Both images were published with the immutable commit SHA before deployment.
 
-Registry pull and deployment proof:
-Run docker/login-action@v4	2026-10-04T15:24:15.9515348Z Login Succeeded!
-Pull published immutable image	2026-10-04T15:24:16.2895374Z bd2c71e919862dc392f63710745e9d66f8dc3973: Pulling from not-so-shubh/final-devops-project
-Pull published immutable image	2026-10-04T15:24:23.9836454Z Digest: sha256:4689bf3088ee974b2c40f016ac3853c69f7f23c3a3bfaf4b85a08e4a305653ac
-Pull published immutable image	2026-10-04T15:24:23.9852580Z Status: Downloaded newer image for ghcr.io/not-so-shubh/final-devops-project:bd2c71e919862dc392f63710745e9d66f8dc3973
-Create ephemeral Kubernetes cluster	2026-10-04T15:24:23.9923144Z kind load docker-image "$DEPLOY_IMAGE"
-Helm deployment and verification	2026-10-04T15:25:18.3868578Z deployment "final-app" successfully rolled out
-Helm deployment and verification	2026-10-04T15:25:18.4372428Z deployment.apps/final-app   2/2     2            2           6s    app          ghcr.io/not-so-shubh/final-devops-project:bd2c71e919862dc392f63710745e9d66f8dc3973   app.kubernetes.io/instance=final-app,app.kubernetes.io/name=final-app
-Helm deployment and verification	2026-10-04T15:25:22.6879664Z Phase:          Succeeded
-Helm deployment and verification	2026-10-04T15:25:22.6963879Z {"status":"healthy"}
+Registry pull proof:
+backend tag:  ghcr.io/not-so-shubh/release-tracker-backend:700936440d6f84134c2a4e99d912e793db7a95df
+backend digest: sha256:be0f0c4eab0bf6d1c6001494d37b607a405b67e498ea156bacfd09daf9a26197
+frontend tag: ghcr.io/not-so-shubh/release-tracker-frontend:700936440d6f84134c2a4e99d912e793db7a95df
+frontend digest: sha256:1cb2adb9418a8acb36d0c5e33a16969733944f68bee12611e865972da44504be
 
-Published image manifest:
-Name:      ghcr.io/not-so-shubh/final-devops-project:bd2c71e919862dc392f63710745e9d66f8dc3973
-MediaType: application/vnd.oci.image.index.v1+json
-Digest:    sha256:4689bf3088ee974b2c40f016ac3853c69f7f23c3a3bfaf4b85a08e4a305653ac
-           
-Manifests: 
-  Name:        ghcr.io/not-so-shubh/final-devops-project:bd2c71e919862dc392f63710745e9d66f8dc3973@sha256:8fa417766b6b715171c68d67ee236ef009e50c9b162c6ee0426a69427acc7f91
-  MediaType:   application/vnd.oci.image.manifest.v1+json
-  Platform:    linux/amd64
-               
-  Name:        ghcr.io/not-so-shubh/final-devops-project:bd2c71e919862dc392f63710745e9d66f8dc3973@sha256:8a6584ec08f5d4f28dfd1f3e0114cf9905098cee3789dea6643027381c5db662
-  MediaType:   application/vnd.oci.image.manifest.v1+json
-  Platform:    linux/arm64
-               
-  Name:        ghcr.io/not-so-shubh/final-devops-project:bd2c71e919862dc392f63710745e9d66f8dc3973@sha256:38b366e6b5dec931e81cfdbd3455f4564b64f4f31aaa1045f0071d04431f80a4
-  MediaType:   application/vnd.oci.image.manifest.v1+json
-  Platform:    unknown/unknown
-  Annotations: 
-    vnd.docker.reference.digest: sha256:8fa417766b6b715171c68d67ee236ef009e50c9b162c6ee0426a69427acc7f91
-    vnd.docker.reference.type:   attestation-manifest
-               
-  Name:        ghcr.io/not-so-shubh/final-devops-project:bd2c71e919862dc392f63710745e9d66f8dc3973@sha256:abfa8699927c29fe71ee2152e58419cd3b5340fd5d56a115b4104f8f726deb30
-  MediaType:   application/vnd.oci.image.manifest.v1+json
-  Platform:    unknown/unknown
-  Annotations: 
-    vnd.docker.reference.digest: sha256:8a6584ec08f5d4f28dfd1f3e0114cf9905098cee3789dea6643027381c5db662
-    vnd.docker.reference.type:   attestation-manifest
+Kubernetes deployment proof:
+STATUS: deployed
+deployment "final-app-database" successfully rolled out
+deployment "final-app-backend" successfully rolled out
+deployment "final-app-frontend" successfully rolled out
+
+deployment.apps/final-app-backend    2/2  backend   ghcr.io/not-so-shubh/release-tracker-backend:700936440d6f84134c2a4e99d912e793db7a95df
+deployment.apps/final-app-database   1/1  postgres  postgres:17-alpine
+deployment.apps/final-app-frontend   2/2  frontend  ghcr.io/not-so-shubh/release-tracker-frontend:700936440d6f84134c2a4e99d912e793db7a95df
+
+pod/final-app-backend-bb75c748b-fbfgc     1/1  Running
+pod/final-app-backend-bb75c748b-nzdmq     1/1  Running
+pod/final-app-database-6ff98f9cc4-4vpn8   1/1  Running
+pod/final-app-frontend-85cbc649b4-9vz82   1/1  Running
+pod/final-app-frontend-85cbc649b4-vvfhp   1/1  Running
+
+service/backend    ClusterIP  8000/TCP
+service/database   ClusterIP  5432/TCP
+service/frontend   ClusterIP  80/TCP
+
+Helm test:
+TEST SUITE: final-app-connectivity-test
+Phase: Succeeded
+
+Published multi-architecture image indexes:
+backend:  linux/amd64 + linux/arm64 + BuildKit attestations
+frontend: linux/amd64 + linux/arm64 + BuildKit attestations
+
+Observability artifacts checked into this evidence directory:
+release-tracker-observability/release-tracker-ui.png
+release-tracker-observability/release-tracker-grafana.png

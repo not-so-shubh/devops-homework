@@ -26,10 +26,11 @@ This audit distinguishes **implementation**, **local verification**, and **accou
 
 ## Hosted verification and account-dependent gates
 
-All three GitHub-hosted workflows completed successfully on commit `128ab19`:
+All three GitHub-hosted workflows have successful recorded runs. The upgraded final project passed on commit `7009364` in [run 37647537916](https://github.com/not-so-shubh/devops-homework/actions/runs/37647537916):
 
 - CI/CD Demo: tests, image build, artifact upload and GHCR publish passed.
 - DevSecOps Pipeline: unit tests, Bandit, pip-audit, Gitleaks, Trivy, the aggregate security gate and GHCR publish passed.
-- Final DevOps Project: tests, source security, Kubernetes schema validation, Helm checks, Terraform validation, container security, the aggregate security gate and GHCR publish passed.
+- Final DevOps Project: eight tests, frontend build, source security, Kubernetes schema validation, Helm checks, Terraform validation, two independent Trivy image gates, live Prometheus/Grafana checks, the aggregate security gate and both GHCR publishes passed.
+- The final pipeline then pulled the two immutable SHA-tagged images, deployed PostgreSQL plus two backend and two frontend replicas into a temporary Kind cluster, and passed the Helm connectivity test.
 
-The deploy jobs were intentionally skipped because no external Kubernetes credentials or explicit deployment opt-in were supplied. Direct GHCR package-list visibility was not asserted because the verification token lacks `read:packages`; the successful publish jobs are the recorded proof. An authorized AWS plan/apply/destroy and cloud console screenshots remain account-dependent and potentially billable. Run those only in the student's own AWS account, then add redacted evidence without credentials or private account details.
+Each hosted workflow includes a successful temporary Kubernetes deployment after registry publication. Only the optional permanent external deployment is skipped because no production kubeconfig or explicit opt-in was supplied. An authorized AWS plan/apply/destroy and cloud console screenshots remain account-dependent and potentially billable. Run those only in the student's own AWS account, then add redacted evidence without credentials or private account details.

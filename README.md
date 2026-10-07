@@ -45,7 +45,7 @@ The verifier checks required structure, shell/Python syntax, unit tests, Compose
 - [DevSecOps pipeline](.github/workflows/devsecops.yml)
 - [Final project pipeline](.github/workflows/final-project.yml)
 
-All workflows follow least-privilege permissions. Publishing uses the short-lived `GITHUB_TOKEN`; cluster deployment is disabled unless the documented variable and namespace-scoped kubeconfig secret are configured.
+All workflows follow least-privilege permissions. Publishing uses the short-lived `GITHUB_TOKEN`; every published image is exercised in a temporary Kind deployment, while deployment to a permanent external cluster stays disabled unless the documented variable and namespace-scoped kubeconfig secret are configured.
 
 ## Evidence policy
 

@@ -166,7 +166,9 @@ See [RUBRIC-CROSSWALK.md](RUBRIC-CROSSWALK.md) for a criterion-by-criterion map 
 
 ## Evidence gallery
 
-![Successful final-project pipeline](../../evidence/hosted-workflows/03-final-project-success.png)
+![Hosted Release Tracker application](../../evidence/hosted-workflows/release-tracker-observability/release-tracker-ui.png)
+
+![Populated Grafana dashboard](../../evidence/hosted-workflows/release-tracker-observability/release-tracker-grafana.png)
 
 ![Kubernetes and Helm deployment](evidence/01-kubernetes-helm.png)
 
