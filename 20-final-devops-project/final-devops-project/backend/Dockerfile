@@ -10,7 +10,8 @@ RUN apk upgrade --no-cache \
 WORKDIR /app
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir --disable-pip-version-check -r requirements.txt
+RUN pip install --no-cache-dir --disable-pip-version-check -r requirements.txt \
+    && pip uninstall --yes pip setuptools wheel
 COPY alembic.ini ./
 COPY alembic ./alembic
 COPY app ./app
