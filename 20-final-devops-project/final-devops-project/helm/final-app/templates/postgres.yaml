@@ -31,6 +31,9 @@ spec:
           ports: [{name: postgres, containerPort: 5432}]
           envFrom:
             - secretRef: {name: {{ .Release.Name }}-database}
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
           readinessProbe: {exec: {command: ["pg_isready", "-U", {{ .Values.postgres.username | quote }}, "-d", {{ .Values.postgres.database | quote }}]}, periodSeconds: 5}
           livenessProbe: {tcpSocket: {port: postgres}, periodSeconds: 10}
           resources:

@@ -162,9 +162,9 @@ jobs:
           curl -fsS 'http://127.0.0.1:3001/api/search?query=Release%20Tracker' | jq -e 'any(.uid == "release-tracker")'
       - name: Capture genuine application and Grafana screenshots
         run: |
-          google-chrome --headless --no-sandbox --disable-gpu --window-size=1440,1000 \
+          google-chrome --headless --no-sandbox --disable-gpu --virtual-time-budget=5000 --window-size=1440,1000 \
             --screenshot="$RUNNER_TEMP/release-tracker-ui.png" http://127.0.0.1:8088
-          google-chrome --headless --no-sandbox --disable-gpu --window-size=1440,1000 \
+          google-chrome --headless --no-sandbox --disable-gpu --virtual-time-budget=15000 --window-size=1440,1000 \
             --screenshot="$RUNNER_TEMP/release-tracker-grafana.png" \
             'http://127.0.0.1:3001/d/release-tracker/release-tracker?orgId=1&from=now-15m&to=now&kiosk'
       - if: always()
@@ -255,6 +255,17 @@ jobs:
           kind load docker-image "$DEPLOY_BACKEND" "$DEPLOY_FRONTEND"
       - name: Helm deployment and verification
         run: |
+          set -Eeuo pipefail
+          diagnose() {
+            echo "::group::Kubernetes failure diagnostics"
+            kubectl get deployment,pods,service,events -n final-devops -o wide || true
+            kubectl describe pods -n final-devops || true
+            for pod in $(kubectl get pods -n final-devops -o name 2>/dev/null); do
+              kubectl logs -n final-devops "$pod" --all-containers --tail=200 || true
+            done
+            echo "::endgroup::"
+          }
+          trap diagnose ERR
           BACKEND_REPOSITORY="${DEPLOY_BACKEND%:*}"
           FRONTEND_REPOSITORY="${DEPLOY_FRONTEND%:*}"
           DEPLOY_TAG="${DEPLOY_BACKEND##*:}"
